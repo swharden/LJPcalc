@@ -7,7 +7,7 @@ namespace LJPtest
         [Test]
         public void Test1()
         {
-            var x = new LJPmath.Class1();
+            var x = new LJPmath.Result();
             Assert.Pass();
         }
     }
