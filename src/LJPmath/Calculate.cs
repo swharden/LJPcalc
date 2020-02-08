@@ -10,6 +10,10 @@ namespace LJPmath
         public static Result NernstPlank(List<Ion> ionList)
         {
             Debug.WriteLine($"calculating LJP using the stationary Nernst-Planck equation for {ionList.Count} ions...");
+
+            foreach (Ion ion in ionList)
+                Debug.WriteLine(ion);
+
             var result = new Result();
             return result;
         }

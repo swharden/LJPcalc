@@ -16,9 +16,11 @@ namespace LJPconsole
                 new LJPmath.Ion("Cl", 18, 3.0568)       // Last
             };
 
+            // solve using the stationary Nernst-Planck equation
             var result = LJPmath.Calculate.NernstPlank(ionList);
             Debug.WriteLine(result);
 
+            // compare the result
             double expected_mV = -20.823125;
             Debug.WriteLine($"Calculated {result.ljp_mV} mV (expected {expected_mV} mV)");
         }
