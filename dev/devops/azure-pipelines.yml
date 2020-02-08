@@ -1,78 +1,81 @@
 trigger:
-- master
+  - master
 
 strategy:
   matrix:
     MacOS:
-      imageName: 'macOS-latest'
+      imageName: "macOS-latest"
     Linux:
-      imageName: 'ubuntu-latest'
+      imageName: "ubuntu-latest"
     Windows:
-      imageName: 'windows-latest'
+      imageName: "windows-latest"
 
 pool:
   vmImage: $(imageName)
 
 variables:
-  buildConfiguration: 'Release'
+  buildConfiguration: "Release"
 
 steps:
+  ### INSTALL NUGET
+  - task: NuGetToolInstaller@1
+    displayName: "Install NuGet"
 
-### INSTALL NUGET
-- task: NuGetToolInstaller@1
-  displayName: 'Install NuGet'
+  ### RESTORE NUGET PACKAGES
+  - task: NuGetCommand@2
+    displayName: "Restore LJPconsole Packages"
+    inputs:
+      restoreSolution: "src/LJPconsole/*.csproj"
 
-### RESTORE NUGET PACKAGES
-- task: NuGetCommand@2
-  displayName: 'Restore LJPconsole Packages'
-  inputs:
-    restoreSolution: 'src/LJPconsole/*.csproj'
-    
-### BUILD LJPmath
-- task: DotNetCoreCLI@2
-  displayName: 'Build LJPmath'
-  inputs:
-    command: 'build'
-    projects: 'src/LJPmath/*.csproj'
+  ### BUILD LJPmath
+  - task: DotNetCoreCLI@2
+    displayName: "Build LJPmath"
+    inputs:
+      command: "build"
+      projects: "src/LJPmath/*.csproj"
 
-### BUILD LJPtest
-- task: DotNetCoreCLI@2
-  displayName: 'Build LJPtest'
-  inputs:
-    command: 'build'
-    projects: 'src/LJPtest/*.csproj'
+  ### BUILD LJPtest
+  - task: DotNetCoreCLI@2
+    displayName: "Build LJPtest"
+    inputs:
+      command: "build"
+      projects: "src/LJPtest/*.csproj"
 
-### RUN LJPtest TESTS
-- task: DotNetCoreCLI@2
-  displayName: 'Run Tests'
-  inputs:
-    command: test
-    projects: 'src/LJPtest/*.csproj'
+  ### RUN LJPtest TESTS
+  - task: DotNetCoreCLI@2
+    displayName: "Run Tests"
+    inputs:
+      command: test
+      projects: "src/LJPtest/*.csproj"
 
-### BUILD LJPconsole
-- task: DotNetCoreCLI@2
-  displayName: 'Build LJPconsole'
-  inputs:
-    command: 'build'
-    projects: 'src/LJPconsole/*.csproj'
+  ### BUILD LJPconsole
+  - task: DotNetCoreCLI@2
+    displayName: "Build LJPconsole"
+    inputs:
+      command: "build"
+      projects: "src/LJPconsole/*.csproj"
 
-### BUILD LJPcalc (Windows only)
-- task: DotNetCoreCLI@2
-  displayName: 'Build LJPcalc for Windows'
-  inputs:
-    command: 'build'
-    projects: 'src/LJPcalc/*.csproj'
+  ### BUILD LJPcalc (Windows only)
+  - task: DotNetCoreCLI@2
+    displayName: "Build LJPcalc for Windows"
+    demands:
+      - Agent.OS -equals Windows_NT
+    inputs:
+      command: "build"
+      projects: "src/LJPcalc/*.csproj"
 
-### BUILD LJPapp for Android (Windows only)
-- task: XamarinAndroid@1
-  displayName: 'Build LJPapp for Android'
-  condition: contains(variables['agent.os'], 'Windows')
-  inputs:
-    projectFile: 'src/LJPapp/LJPapp/LJPapp.Android/*.csproj'
+  ### BUILD LJPapp for Android (Windows only)
+  - task: XamarinAndroid@1
+    displayName: "Build LJPapp for Android"
+    demands:
+      - Agent.OS -equals Windows_NT
+    inputs:
+      projectFile: "src/LJPapp/LJPapp/LJPapp.Android/*.csproj"
 
-### BUILD LJPapp for iPhone (MacOS only)
-- task: XamariniOS@2
-  displayName: 'Build LJPapp for iOS'
-  condition: contains(variables['agent.os'], 'Darwin')
-  inputs:
-    projectFile: 'src/LJPapp/LJPapp/LJPapp.iOS/*.csproj'
+  ### BUILD LJPapp for iPhone (MacOS only)
+  - task: XamariniOS@2
+    displayName: "Build LJPapp for iOS"
+    demands:
+      - Agent.OS -equals Darwin
+    inputs:
+      projectFile: "src/LJPapp/LJPapp/LJPapp.iOS/*.csproj"
