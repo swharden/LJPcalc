@@ -6,7 +6,8 @@ namespace LJPconsole
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var x = new LJPmath.Class1();
+            Console.WriteLine("DONE");
         }
     }
 }
