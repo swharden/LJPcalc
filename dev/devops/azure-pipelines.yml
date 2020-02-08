@@ -87,23 +87,23 @@ steps:
 
   ### MAC ONLY ################################################################
 
-  # RESTORE LJPapp PACKAGES
-  - task: NuGetCommand@2
-    displayName: "Restore iOS LJPapp (MacOS)"
-    condition: contains(variables['agent.os'], 'Darwin')
-    inputs:
-      restoreSolution: "src/LJPapp/LJPapp.sln"
+  # # RESTORE LJPapp PACKAGES
+  # - task: NuGetCommand@2
+  #   displayName: "Restore iOS LJPapp (MacOS)"
+  #   condition: contains(variables['agent.os'], 'Darwin')
+  #   inputs:
+  #     restoreSolution: "src/LJPapp/LJPapp.sln"
 
-  # BUILD LJPapp for iPhone
-  - task: XamariniOS@2
-    displayName: "Build iOS LJPapp (MacOS)"
-    condition: contains(variables['agent.os'], 'Darwin')
-    inputs:
-      projectFile: "src/LJPapp/LJPapp/LJPapp.iOS/*.csproj"
+  # # BUILD LJPapp for iPhone
+  # - task: XamariniOS@2
+  #   displayName: "Build iOS LJPapp (MacOS)"
+  #   condition: contains(variables['agent.os'], 'Darwin')
+  #   inputs:
+  #     projectFile: "src/LJPapp/LJPapp/LJPapp.iOS/*.csproj"
 
-  # BUILD LJPapp for iPhone
-  - task: XamariniOS@2
-    displayName: "Build iOS LJPapp (MacOS)"
-    condition: contains(variables['agent.os'], 'Darwin')
-    inputs:
-      projectFile: "src/LJPapp/LJPapp/LJPapp.sln"
+  # # BUILD LJPapp for iPhone
+  # - task: XamariniOS@2
+  #   displayName: "Build iOS LJPapp (MacOS)"
+  #   condition: contains(variables['agent.os'], 'Darwin')
+  #   inputs:
+  #     projectFile: "src/LJPapp/LJPapp/LJPapp.sln"
