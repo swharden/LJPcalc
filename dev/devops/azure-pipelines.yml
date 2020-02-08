@@ -17,45 +17,53 @@ variables:
   buildConfiguration: "Release"
 
 steps:
-  ### INSTALL NUGET
+  # INSTALL NUGET
   - task: NuGetToolInstaller@1
     displayName: "Install NuGet"
 
-  ### RESTORE NUGET PACKAGES
-  - task: NuGetCommand@2
-    displayName: "Restore LJPconsole Packages"
-    inputs:
-      restoreSolution: "src/LJPconsole/*.csproj"
-
-  ### BUILD LJPmath
+  # BUILD LJPmath
   - task: DotNetCoreCLI@2
     displayName: "Build LJPmath"
     inputs:
       command: "build"
       projects: "src/LJPmath/*.csproj"
 
-  ### BUILD LJPtest
+  # BUILD LJPtest
   - task: DotNetCoreCLI@2
     displayName: "Build LJPtest"
     inputs:
       command: "build"
       projects: "src/LJPtest/*.csproj"
 
-  ### RUN LJPtest TESTS
+  # RUN LJPtest TESTS
   - task: DotNetCoreCLI@2
     displayName: "Run Tests"
     inputs:
       command: test
       projects: "src/LJPtest/*.csproj"
 
-  ### BUILD LJPconsole
+  # RESTORE LJPconsole PACKAGES
+  - task: NuGetCommand@2
+    displayName: "Restore LJPconsole Packages"
+    inputs:
+      restoreSolution: "src/LJPconsole/*.csproj"
+
+  # BUILD LJPconsole
   - task: DotNetCoreCLI@2
     displayName: "Build LJPconsole"
     inputs:
       command: "build"
       projects: "src/LJPconsole/*.csproj"
 
-  ### BUILD LJPcalc (Windows only)
+  ### WINDOWS ONLY ############################################################
+
+  # RESTORE LJPcalc PACKAGES
+  - task: NuGetCommand@2
+    displayName: "Restore LJPcalc Packages"
+    inputs:
+      restoreSolution: "src/LJPcalc/*.csproj"
+
+  # BUILD LJPcalc
   - task: DotNetCoreCLI@2
     displayName: "Build LJPcalc for Windows"
     condition: contains(variables['agent.os'], 'Windows')
@@ -63,14 +71,30 @@ steps:
       command: "build"
       projects: "src/LJPcalc/*.csproj"
 
-  ### BUILD LJPapp for Android (Windows only)
+  # RESTORE LJPapp PACKAGES
+  - task: NuGetCommand@2
+    displayName: "Restore LJPapp for Android"
+    condition: contains(variables['agent.os'], 'Windows')
+    inputs:
+      restoreSolution: "src/LJPapp/LJPapp/LJPapp.Android/*.csproj"
+
+  # BUILD LJPapp for Android
   - task: XamarinAndroid@1
     displayName: "Build LJPapp for Android"
     condition: contains(variables['agent.os'], 'Windows')
     inputs:
       projectFile: "src/LJPapp/LJPapp/LJPapp.Android/*.csproj"
 
-  ### BUILD LJPapp for iPhone (MacOS only)
+  ### MAC ONLY ################################################################
+
+  # RESTORE LJPapp PACKAGES
+  - task: NuGetCommand@2
+    displayName: "Restore LJPapp for iOS"
+    condition: contains(variables['agent.os'], 'Darwin')
+    inputs:
+      restoreSolution: "src/LJPapp/LJPapp/LJPapp.iOS/*.csproj"
+
+  # BUILD LJPapp for iPhone
   - task: XamariniOS@2
     displayName: "Build LJPapp for iOS"
     condition: contains(variables['agent.os'], 'Darwin')
