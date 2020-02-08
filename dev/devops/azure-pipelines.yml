@@ -18,15 +18,15 @@ variables:
 
 steps:
 
-### INSTALL NUGET AND RESTORE PACKAGES
-
+### INSTALL NUGET
 - task: NuGetToolInstaller@1
   displayName: 'Install NuGet'
 
+### RESTORE NUGET PACKAGES
 - task: NuGetCommand@2
-  displayName: 'Full package restoration'
+  displayName: 'Restore LJPconsole Packages'
   inputs:
-    restoreSolution: 'src/LJPcalcSolution.sln'
+    restoreSolution: 'src/LJPconsole/*.csproj'
     
 ### BUILD LJPmath
 - task: DotNetCoreCLI@2
@@ -64,17 +64,15 @@ steps:
     projects: 'src/LJPcalc/*.csproj'
 
 ### BUILD LJPapp for Android (Windows only)
-- task: DotNetCoreCLI@2
+- task: XamarinAndroid@1
   displayName: 'Build LJPapp for Android'
   condition: contains(variables['agent.os'], 'Windows')
   inputs:
-    command: 'build'
-    projects: 'src/LJPapp/LJPapp/LJPapp.Android/*.csproj'
+    projectFile: 'src/LJPapp/LJPapp/LJPapp.Android/*.csproj'
 
 ### BUILD LJPapp for iPhone (MacOS only)
-- task: DotNetCoreCLI@2
+- task: XamariniOS@2
   displayName: 'Build LJPapp for iOS'
-  condition: contains(variables['agent.os'], 'Darw')
+  condition: contains(variables['agent.os'], 'Darwin')
   inputs:
-    command: 'build'
-    projects: 'src/LJPapp/LJPapp/LJPapp.iOS/*.csproj'
+    projectFile: 'src/LJPapp/LJPapp/LJPapp.iOS/*.csproj'
