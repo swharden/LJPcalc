@@ -65,7 +65,7 @@ steps:
 
   # BUILD LJPcalc
   - task: DotNetCoreCLI@2
-    displayName: "Build LJPcalc for Windows"
+    displayName: "Build LJPcalc (Windows)"
     condition: contains(variables['agent.os'], 'Windows')
     inputs:
       command: "build"
@@ -73,14 +73,14 @@ steps:
 
   # RESTORE LJPapp PACKAGES
   - task: NuGetCommand@2
-    displayName: "Restore LJPapp for Android"
+    displayName: "Restore Android LJPapp (Windows)"
     condition: contains(variables['agent.os'], 'Windows')
     inputs:
       restoreSolution: "src/LJPapp/LJPapp.sln"
 
   # BUILD LJPapp for Android
   - task: XamarinAndroid@1
-    displayName: "Build LJPapp for Android"
+    displayName: "Build Android LJPapp (Windows)"
     condition: contains(variables['agent.os'], 'Windows')
     inputs:
       projectFile: "src/LJPapp/LJPapp/LJPapp.Android/*.csproj"
@@ -89,14 +89,14 @@ steps:
 
   # RESTORE LJPapp PACKAGES
   - task: NuGetCommand@2
-    displayName: "Restore LJPapp for iOS"
+    displayName: "Restore iOS LJPapp (MacOS)"
     condition: contains(variables['agent.os'], 'Darwin')
     inputs:
       restoreSolution: "src/LJPapp/LJPapp.sln"
 
   # BUILD LJPapp for iPhone
   - task: XamariniOS@2
-    displayName: "Build LJPapp for iOS"
+    displayName: "Build iOS LJPapp (MacOS)"
     condition: contains(variables['agent.os'], 'Darwin')
     inputs:
       configuration: "Release"
