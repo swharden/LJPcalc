@@ -58,8 +58,7 @@ steps:
   ### BUILD LJPcalc (Windows only)
   - task: DotNetCoreCLI@2
     displayName: "Build LJPcalc for Windows"
-    demands:
-      - Agent.OS -equals Windows_NT
+    condition: contains(variables['agent.os'], 'Windows')
     inputs:
       command: "build"
       projects: "src/LJPcalc/*.csproj"
@@ -67,15 +66,13 @@ steps:
   ### BUILD LJPapp for Android (Windows only)
   - task: XamarinAndroid@1
     displayName: "Build LJPapp for Android"
-    demands:
-      - Agent.OS -equals Windows_NT
+    condition: contains(variables['agent.os'], 'Windows')
     inputs:
       projectFile: "src/LJPapp/LJPapp/LJPapp.Android/*.csproj"
 
   ### BUILD LJPapp for iPhone (MacOS only)
   - task: XamariniOS@2
     displayName: "Build LJPapp for iOS"
-    demands:
-      - Agent.OS -equals Darwin
+    condition: contains(variables['agent.os'], 'Darwin')
     inputs:
       projectFile: "src/LJPapp/LJPapp/LJPapp.iOS/*.csproj"
