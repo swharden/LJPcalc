@@ -76,7 +76,7 @@ steps:
     displayName: "Restore LJPapp for Android"
     condition: contains(variables['agent.os'], 'Windows')
     inputs:
-      restoreSolution: "src/LJPapp/LJPapp/LJPapp.Android/*.csproj"
+      restoreSolution: "src/LJPapp/LJPapp.sln"
 
   # BUILD LJPapp for Android
   - task: XamarinAndroid@1
@@ -92,7 +92,7 @@ steps:
     displayName: "Restore LJPapp for iOS"
     condition: contains(variables['agent.os'], 'Darwin')
     inputs:
-      restoreSolution: "src/LJPapp/LJPapp/LJPapp.iOS/*.csproj"
+      restoreSolution: "src/LJPapp/LJPapp.sln"
 
   # BUILD LJPapp for iPhone
   - task: XamariniOS@2
