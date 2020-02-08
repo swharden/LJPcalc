@@ -99,4 +99,5 @@ steps:
     displayName: "Build LJPapp for iOS"
     condition: contains(variables['agent.os'], 'Darwin')
     inputs:
+      configuration: "Release"
       projectFile: "src/LJPapp/LJPapp/LJPapp.iOS/*.csproj"
