@@ -99,5 +99,11 @@ steps:
     displayName: "Build iOS LJPapp (MacOS)"
     condition: contains(variables['agent.os'], 'Darwin')
     inputs:
-      configuration: "Release"
       projectFile: "src/LJPapp/LJPapp/LJPapp.iOS/*.csproj"
+
+  # BUILD LJPapp for iPhone
+  - task: XamariniOS@2
+    displayName: "Build iOS LJPapp (MacOS)"
+    condition: contains(variables['agent.os'], 'Darwin')
+    inputs:
+      projectFile: "src/LJPapp/LJPapp/LJPapp.sln"
