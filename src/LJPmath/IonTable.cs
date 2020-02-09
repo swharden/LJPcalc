@@ -117,9 +117,14 @@ namespace LJPmath
             if (name.Equals("Zn", StringComparison.InvariantCultureIgnoreCase)) { charge = +2; mu = 1.71304e+11; }
 
             if (charge == 0 || mu == 0)
-                throw new ArgumentException("ion not found");
+            {
+                Debug.WriteLine("Warning: ion not found");
+                return new Ion(name, attemptLookup: false);
+            }
             else
+            {
                 return new Ion(name, 0, 0, charge, mu, attemptLookup: false);
+            }
         }
     }
 }
