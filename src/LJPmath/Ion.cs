@@ -31,8 +31,12 @@ namespace LJPmath
                     mu = knownIon.mu;
             }
 
-            this.charge = (int)charge;
-            this.mu = (double)mu;
+            if (charge != null)
+                this.charge = (int)charge;
+
+            if (mu != null)
+                this.mu = (double)mu;
+
         }
 
         public override string ToString()
