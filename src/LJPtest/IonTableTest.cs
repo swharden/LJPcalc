@@ -7,6 +7,7 @@ namespace LJPtest
 {
     class IonTableTest
     {
+        [Test]
         public void Test_Lookup_ValuesMatchExpected()
         {
             var ionCl = new LJPmath.Ion("Cl");
@@ -14,6 +15,7 @@ namespace LJPtest
             Assert.That(ionCl.mu == 4.95159e+11);
         }
 
+        [Test]
         public void Test_Lookup_IsCaseInsensitive()
         {
             var ionZn = new LJPmath.Ion("Zn");
@@ -25,6 +27,7 @@ namespace LJPtest
             Assert.That(ionZn.mu == ionZnLower.mu);
         }
 
+        [Test]
         public void Test_Lookup_UnknownIon()
         {
             var ionZn = new LJPmath.Ion("Zn");
