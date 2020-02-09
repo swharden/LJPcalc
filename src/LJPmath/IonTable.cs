@@ -12,6 +12,8 @@ namespace LJPmath
             int charge = 0;
             double mu = 0;
 
+            // TODO: add tests for failed lookups
+
             // TODO: refactor this to be more elegant
 
             // TODO: find the source of this list and add a proper citation
