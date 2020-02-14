@@ -11,7 +11,7 @@ namespace LJPtest
         [OneTimeSetUp]
         public void SetUp()
         {
-            //System.IO.File.Copy("../../../")
+            System.IO.File.Copy("../../../../IonTable.csv", "./IonTable.csv");
         }
 
         [Test]
