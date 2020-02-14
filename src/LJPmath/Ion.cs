@@ -8,7 +8,6 @@ namespace LJPmath
     {
         // ion properies are immutable
         public readonly string name;
-        public readonly string description;
         public readonly int charge;
         public readonly double conductance;
         public readonly double mu;
@@ -36,19 +35,19 @@ namespace LJPmath
             this.cL = cL;
         }
 
-        public Ion(String name, String description, int charge, double conductance)
+        public Ion(String name, int charge, double conductance, double c0, double cL)
         {
             this.name = name;
-            this.description = description;
             this.charge = charge;
             this.conductance = conductance;
             mu = conductance / (Constants.Nav * Math.Pow(Constants.e, 2) * Math.Abs(charge));
+            this.c0 = c0;
+            this.cL = cL;
         }
 
         public override string ToString()
         {
-            string longName = (name == description) ? description : $"{description} ({name})";
-            return $"Ion {longName}: mu={mu}, phi={phi}, c0={c0}, cL={cL}";
+            return $"Ion {name}: mu={mu:0.000E+0}, phi={phi}, c0={c0}, cL={cL}";
         }
     }
 }

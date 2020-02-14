@@ -8,6 +8,12 @@ namespace LJPtest
 {
     class IonTableTest
     {
+        [OneTimeSetUp]
+        public void SetUp()
+        {
+            //System.IO.File.Copy("../../../")
+        }
+
         [Test]
         public void Test_NoFile_ThrowsException()
         {
@@ -29,18 +35,10 @@ namespace LJPtest
         }
 
         [Test]
-        public void Test_Contains_KnownIon()
-        {
-            var ionTable = new LJPmath.IonTable();
-            Console.WriteLine(ionTable);
-            Assert.True(ionTable.Contains("Glu"));
-        }
-
-        [Test]
         public void Test_Lookup_KnownIon()
         {
             var ionTable = new LJPmath.IonTable();
-            var ion = ionTable.Lookup("Glu");
+            var ion = ionTable.Lookup("glutamate");
             Console.WriteLine(ion);
             Assert.AreEqual(-1, ion.charge);
         }
@@ -49,7 +47,7 @@ namespace LJPtest
         public void Test_Lookup_IsCaseInsensitive()
         {
             var ionTable = new LJPmath.IonTable();
-            var ion = ionTable.Lookup("gLU");
+            var ion = ionTable.Lookup("gLuTaMaTe");
             Console.WriteLine(ion);
             Assert.AreEqual(-1, ion.charge);
         }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace LJPmath
 {
@@ -19,7 +21,9 @@ namespace LJPmath
             filePath = System.IO.Path.GetFullPath(csvFilePath);
             fileName = System.IO.Path.GetFileName(csvFilePath);
 
-            LoadFromFile(csvFilePath);
+            List<Ion> ionsUnsorted = ReadIonsFromFile(csvFilePath);
+            ions.AddRange(ionsUnsorted.OrderBy(ion => ion.name).ToList());
+            Debug.WriteLine($"Loaded {ions.Count} ions from {fileName}");
         }
 
         public override string ToString()
@@ -35,28 +39,24 @@ namespace LJPmath
         public Ion Lookup(string name)
         {
             foreach (Ion ion in ions)
-            {
                 if (string.Compare(name, ion.name, StringComparison.OrdinalIgnoreCase) == 0)
                     return ion;
-                if (string.Compare(name, ion.description, StringComparison.OrdinalIgnoreCase) == 0)
-                    return ion;
-            }
 
-            return new Ion(name, name, 0, 0);
+            return new Ion(name, 0, 0, 0, 0);
         }
 
-        private void LoadFromFile(String csvFilePath)
+        private List<Ion> ReadIonsFromFile(String csvFilePath)
         {
-            ions.Clear();
+            List<Ion> unsortedIons = new List<Ion>();
             String rawText = System.IO.File.ReadAllText(csvFilePath);
             String[] lines = rawText.Split('\n');
-            for (int i=1; i<lines.Length; i++)
+            for (int i = 1; i < lines.Length; i++)
             {
                 Ion ion = IonFromLine(lines[i]);
                 if (ion != null)
-                    ions.Add(ion);
+                    unsortedIons.Add(ion);
             }
-            Debug.WriteLine($"Loaded {ions.Count} ions from {System.IO.Path.GetFileName(csvFilePath)}");
+            return unsortedIons;
         }
 
         private Ion IonFromLine(String line)
@@ -64,17 +64,25 @@ namespace LJPmath
             line = line.Trim();
             if (line.StartsWith("#"))
                 return null;
+            if (line.Length < 5)
+                return null;
+
+            Regex CSVParser = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
+            String[] parts = CSVParser.Split(line);
+
+            if (parts[1] == "" || parts[2] == "")
+                return null;
 
             try
             {
-                string[] parts = line.Split(',');
                 Ion ion = new Ion(
-                        name: parts[0].Trim(),
-                        description: parts[1].Trim(),
-                        charge: int.Parse(parts[2]),
-                        conductance: double.Parse(parts[3])
+                        name: parts[0].Trim().Trim('"'),
+                        charge: int.Parse(parts[1]),
+                        conductance: double.Parse(parts[2]),
+                        cL: 0,
+                        c0: 0
                     );
-                return ion; 
+                return ion;
             }
             catch
             {
