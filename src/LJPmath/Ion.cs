@@ -6,42 +6,49 @@ namespace LJPmath
 {
     public class Ion
     {
-        private const double Nav = 6.02214076e23; // Avogadro's constant (no units)
-        private double particleCount1 { get { return conc1_M * Nav; } }
-        private double particleCount2 { get { return conc2_M * Nav; } }
-
-        public readonly double conc1_M;
-        public readonly double conc2_M;
-        public readonly int charge;
-        public readonly double mu;
+        // ion properies are immutable
         public readonly string name;
+        public readonly string description;
+        public readonly int charge;
+        public readonly double conductance;
+        public readonly double mu;
+        public const double cdadc = 1.0;
 
-        public Ion(string name, double conc1_M = 0, double conc2_M = 0, double? charge = null, double? mu = null, bool attemptLookup = true)
+        // only concentration is mutable
+        public double c0;
+        public double cL;
+        public double phi;
+
+        public Ion()
         {
-            this.conc1_M = conc1_M;
-            this.conc2_M = conc2_M;
+
+        }
+
+        public Ion(String name)
+        {
             this.name = name;
+        }
 
-            if (attemptLookup)
-            {
-                var knownIon = IonTable.Lookup(name);
-                if (charge is null)
-                    charge = knownIon.charge;
-                if (mu is null)
-                    mu = knownIon.mu;
-            }
+        public Ion(String name, double c0, double cL)
+        {
+            this.name = name;
+            this.c0 = c0;
+            this.cL = cL;
+        }
 
-            if (charge != null)
-                this.charge = (int)charge;
-
-            if (mu != null)
-                this.mu = (double)mu;
-
+        public Ion(String name, String description, int charge, double conductance)
+        {
+            this.name = name;
+            this.description = description;
+            this.charge = charge;
+            this.conductance = conductance;
+            mu = conductance / (Constants.Nav * Math.Pow(Constants.e, 2) * Math.Abs(charge));
         }
 
         public override string ToString()
         {
-            return ($"Ion {name}: charge = {charge}, mu = {mu}, c1 = {conc1_M} M, c2 = {conc2_M} M");
+            string longName = (name == description) ? description : $"{description} ({name})";
+            return $"Ion {longName}: mu={mu}, phi={phi}, c0={c0}, cL={cL}";
         }
     }
 }

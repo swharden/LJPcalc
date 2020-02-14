@@ -6,4 +6,8 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /y /d  &quot;$(SolutionDir)IonTable.csv&quot; &quot;$(ProjectDir)$(OutDir)&quot;" />
+  </Target>
+
 </Project>

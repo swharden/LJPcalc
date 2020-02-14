@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace LJPtest
@@ -8,32 +9,76 @@ namespace LJPtest
     class IonTableTest
     {
         [Test]
-        public void Test_Lookup_ValuesMatchExpected()
+        public void Test_NoFile_ThrowsException()
         {
-            var ionCl = new LJPmath.Ion("Cl");
-            Assert.That(ionCl.charge == -1);
-            Assert.That(ionCl.mu == 4.95159e+11);
+            Assert.Throws<ArgumentException>(() => new LJPmath.IonTable("badFileName.csv"));
+        }
+
+        [Test]
+        public void Test_EmptyConstructor_IsFine()
+        {
+            var ionTable = new LJPmath.IonTable();
+            Console.WriteLine(ionTable);
+        }
+
+        [Test]
+        public void Test_ConstructorFilename_IsFine()
+        {
+            var ionTable = new LJPmath.IonTable("IonTable.csv");
+            Console.WriteLine(ionTable);
+        }
+
+        [Test]
+        public void Test_Contains_KnownIon()
+        {
+            var ionTable = new LJPmath.IonTable();
+            Console.WriteLine(ionTable);
+            Assert.True(ionTable.Contains("Glu"));
+        }
+
+        [Test]
+        public void Test_Lookup_KnownIon()
+        {
+            var ionTable = new LJPmath.IonTable();
+            var ion = ionTable.Lookup("Glu");
+            Console.WriteLine(ion);
+            Assert.AreEqual(-1, ion.charge);
         }
 
         [Test]
         public void Test_Lookup_IsCaseInsensitive()
         {
-            var ionZn = new LJPmath.Ion("Zn");
-            var ionZnUpper = new LJPmath.Ion("ZN");
-            var ionZnLower = new LJPmath.Ion("zn");
-
-            Assert.That(ionZn.mu == ionZnUpper.mu);
-            Assert.That(ionZn.mu == ionZnLower.mu);
-            Assert.That(ionZn.mu == ionZnLower.mu);
+            var ionTable = new LJPmath.IonTable();
+            var ion = ionTable.Lookup("gLU");
+            Console.WriteLine(ion);
+            Assert.AreEqual(-1, ion.charge);
         }
 
         [Test]
-        public void Test_Lookup_UnknownIon()
+        public void Test_Lookup_ByDescription()
         {
-            var ionZn = new LJPmath.Ion("Zn");
-            var ionUnknown = new LJPmath.Ion("lolz");
+            var ionTable = new LJPmath.IonTable();
+            var ion = ionTable.Lookup("Glutamate");
+            Console.WriteLine(ion);
+            Assert.AreEqual(-1, ion.charge);
+        }
 
-            Assert.That(ionZn.mu != ionUnknown.mu);
+        [Test]
+        public void Test_Lookup_FailsWithoutCrashing()
+        {
+            var ionTable = new LJPmath.IonTable();
+            var ion = ionTable.Lookup("adfasdfasdfasdf");
+            Console.WriteLine(ion);
+            Assert.AreEqual(0, ion.charge);
+        }
+
+        [Test]
+        public void Test_Lookup_AcceptsNull()
+        {
+            var ionTable = new LJPmath.IonTable();
+            var ion = ionTable.Lookup(null);
+            Console.WriteLine(ion);
+            Assert.AreEqual(0, ion.charge);
         }
     }
 }
