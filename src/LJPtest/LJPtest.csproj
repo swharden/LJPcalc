@@ -15,8 +15,4 @@
     <ProjectReference Include="..\LJPmath\LJPmath.csproj" />
   </ItemGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="del &quot;$(ProjectDir)$(OutDir)&quot;*.csv" />
-  </Target>
-
 </Project>
