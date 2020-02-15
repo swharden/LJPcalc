@@ -9,6 +9,11 @@ namespace LJPconsole
     {
         static void Main(string[] args)
         {
+            Linalg.Test_SolveRandomDataset_SolutionIsValid();
+        }
+
+        private static void RunLjpCalcTest()
+        {
             var ionTable = new IonTable();
 
             var ionSet = new List<Ion>
