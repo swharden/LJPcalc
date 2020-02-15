@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace LJPconsole
@@ -71,6 +72,10 @@ namespace LJPconsole
                     DisplayIonSet();
                 else if (command.Equals("ionset", StringComparison.OrdinalIgnoreCase))
                     DisplayIonSet();
+                else if (command.Equals("site", StringComparison.OrdinalIgnoreCase))
+                    LaunchSite();
+                else if (command.Equals("www", StringComparison.OrdinalIgnoreCase))
+                    LaunchSite();
                 else
                     CommandUnknown();
             }
@@ -193,13 +198,14 @@ namespace LJPconsole
             Version ver = typeof(Program).Assembly.GetName().Version;
 
             Console.WriteLine();
-            Console.WriteLine($"  LJPcalc console (version {ver}) by Scott Harden");
+            Console.WriteLine($"  LJPcalc console (version {ver.Major}.{ver.Minor}) by Scott Harden");
             Console.WriteLine();
             Console.WriteLine("  General commands:");
             Console.WriteLine("    exit, quit - exit the program");
             Console.WriteLine("    help, ? - display this message");
             Console.WriteLine("    ions - display the current ion set");
             Console.WriteLine("    demo - populate the ion list with demonstration ion set");
+            Console.WriteLine("    site - launch the LJPcalc website");
             Console.WriteLine();
             Console.WriteLine("  Modifying the ion list:");
             Console.WriteLine("    add [ion, c0, cL] - add an ion (using the ion table)");
@@ -242,5 +248,26 @@ namespace LJPconsole
         }
 
         #endregion
+
+        private void LaunchSite()
+        {
+            string url = "https://github.com/swharden/LJPcalc";
+            Console.WriteLine($"Launching: {url}");
+            try
+            {
+                Process.Start(url);
+            }
+            catch
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                    Process.Start("xdg-open", url);
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                    Process.Start("open", url);
+                else
+                    throw;
+            }
+        }
     }
 }
