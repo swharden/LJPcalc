@@ -31,7 +31,8 @@ namespace LJPtest
             ionSet = ionTable.Lookup(ionSet);
 
             double ljp_mV = Calculate.Ljp(ionSet) * 1000;
-            Assert.AreEqual(-20.82388089, ljp_mV, 1e-6);
+            //Assert.AreEqual(-20.82388089, ljp_mV, 1e-6); // JLJP result (using inaccurate Nav)
+            Assert.AreEqual(-20.79558643, ljp_mV, 1e-6);
         }
 
         [Test]
@@ -60,7 +61,8 @@ namespace LJPtest
             };
 
             double ljp_mV = Calculate.Ljp(ionSet) * 1000;
-            Assert.AreEqual(-20.82388089, ljp_mV, 1e-6);
+            //Assert.AreEqual(-20.82388089, ljp_mV, 1e-6); // JLJP result (using inaccurate Nav)
+            Assert.AreEqual(-20.79558643, ljp_mV, 1e-6);
         }
 
         private double MolsPerCubicMeter(double mM)
@@ -86,7 +88,9 @@ namespace LJPtest
             var ionTable = new IonTable();
             ionSet = ionTable.Lookup(ionSet);
             double ljp_mV = Calculate.Ljp(ionSet) * 1000;
-            Assert.AreEqual(-20.82388089, ljp_mV, 1e-6);
+
+            //Assert.AreEqual(-20.82388089, ljp_mV, 1e-6); // JLJP result (using inaccurate Nav)
+            Assert.AreEqual(-20.79558643, ljp_mV, 1e-6);
         }
 
         [Test]
