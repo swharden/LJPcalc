@@ -8,18 +8,27 @@ namespace LJPtest
 {
     class LjpCalculationTest
     {
+        [OneTimeSetUp]
+        public void SetUp()
+        {
+            System.IO.File.Delete("IonTable.csv");
+            System.IO.File.Copy("../../../../IonTable.csv", "./IonTable.csv");
+        }
+
         [Test]
         public void Test_LjpCalculationMatches_ExampleFromScreenshot()
         {
             /* Test came from screenshot on original JLJP website */
 
-            var ionTable = new IonTable();
             var ionSet = new List<Ion>
             {
-                new Ion(ionTable.Lookup("Zn"), 9, 0.0284),
-                new Ion(ionTable.Lookup("K"), 0, 3),
-                new Ion(ionTable.Lookup("Cl"), 18, 3.0568)
+                new Ion("Zn", 9, 0.0284),
+                new Ion("K", 0, 3),
+                new Ion("Cl", 18, 3.0568)
             };
+
+            var ionTable = new IonTable();
+            ionSet = ionTable.Lookup(ionSet);
 
             double ljp_mV = Calculate.LjpForIons(ionSet) * 1000;
             Assert.AreEqual(-20.82388089, ljp_mV, 1e-6);
@@ -64,21 +73,19 @@ namespace LJPtest
         {
             /* From JLJP: https://github.com/swharden/JLJP/blob/2.0.0/src/Example.java */
 
-            var ionTable = new IonTable();
+            Ion Zn = new Ion("Zn", MolsPerCubicMeter(9), MolsPerCubicMeter(0.0284));
+            Ion K = new Ion("K", MolsPerCubicMeter(0), MolsPerCubicMeter(3));
+            Ion Cl = new Ion("Cl", MolsPerCubicMeter(18), MolsPerCubicMeter(3.0568));
 
-            Ion Zn = new Ion(ionTable.Lookup("Zn"), MolsPerCubicMeter(9), MolsPerCubicMeter(0.0284));
             //Zn.setCdadc("-1.0+2.0/3.0*(atan((Zn-5.45776)*0.408978)*2.35004+3.0-atan(-5.45776*0.408978)*2.35004)");
-
-            Ion K = new Ion(ionTable.Lookup("K"), MolsPerCubicMeter(0), MolsPerCubicMeter(3));
             //K.setCdadc("1.0");
-
-            Ion Cl = new Ion(ionTable.Lookup("Cl"), MolsPerCubicMeter(18), MolsPerCubicMeter(3.0568));
             //Cl.setCdadc("1.0/2.0+1.0/6.0*(atan((Zn-5.45776)*0.408978)*2.35004+3.0-atan(-5.45776*0.408978)*2.35004)");
+            // if custom cdadcs are used the LJP will be -16.65
 
             var ionSet = new List<Ion> { Zn, K, Cl };
+            var ionTable = new IonTable();
+            ionSet = ionTable.Lookup(ionSet);
             double ljp_mV = Calculate.LjpForIons(ionSet) * 1000;
-
-            // if custom cdadcs are used the LJP will be -16.65
             Assert.AreEqual(-20.82388089, ljp_mV, 1e-6);
         }
 
