@@ -23,6 +23,17 @@ namespace LJPmath
 
         }
 
+        public Ion(Ion ion)
+        {
+            this.name = ion.name;
+            this.charge = ion.charge;
+            this.conductance = ion.conductance;
+            this.mu = ion.mu;
+            this.c0 = ion.c0;
+            this.cL = ion.cL;
+            this.phi = ion.phi;
+        }
+
         public Ion(String name)
         {
             this.name = name;
