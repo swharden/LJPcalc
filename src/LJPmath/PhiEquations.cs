@@ -44,7 +44,7 @@ namespace LJPmath
 
         public void equations(double[] x, double[] f)
         {
-            double ljp_V = Calculate.calculateJunctionVoltage(list, x, f);
+            Calculate.LjpForIons(list, x, f);
             for (int j = 0; j < ionCount - 2; j++)
             {
                 Ion ion = list[j];

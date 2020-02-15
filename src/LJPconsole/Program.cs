@@ -23,7 +23,7 @@ namespace LJPconsole
                 new Ion(ionTable.Lookup("Cl"), 18, 3.0568) // last becomes "last"
             };
 
-            double calculated_mV = Calculate.SolveAndCalculateLJP(ionSet) * 1000;
+            double calculated_mV = Calculate.LjpForIons(ionSet) * 1000;
             Console.WriteLine($"LJP: {calculated_mV} mV"); // -20.8238808914194
 
             Console.WriteLine("\npress ENTER to exit...");
