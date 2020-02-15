@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LJPmath;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -8,12 +9,20 @@ namespace LJPconsole
     {
         static void Main(string[] args)
         {
-            LJPmath.IonTable ionTable = new LJPmath.IonTable();
-            Debug.WriteLine(ionTable);
-            foreach (LJPmath.Ion ion in ionTable.ions)
-                Debug.WriteLine(ion);
-            Debug.WriteLine(ionTable.Lookup("hepes"));
-            Debug.WriteLine(ionTable.Lookup("fake"));
+            var ionTable = new IonTable();
+
+            var ionSet = new List<Ion>
+            {
+                new Ion(ionTable.Lookup("Zn"), 9, 0.0284),
+                new Ion(ionTable.Lookup("K"), 0, 3), // second from last is "X"
+                new Ion(ionTable.Lookup("Cl"), 18, 3.0568) // last becomes "last"
+            };
+
+            //double calculated_mV = Calculate.SolveAndCalculateLjp(ionSet) * 1000;
+            //Console.WriteLine($"LJP: {calculated_mV} mV");
+
+            Console.WriteLine("\npress ENTER to exit...");
+            Console.ReadLine();
         }
     }
 }
