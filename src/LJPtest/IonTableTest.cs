@@ -106,7 +106,7 @@ namespace LJPtest
                 new JljpIon() { name = "ClO4", charge = -1, mu = 436695000000 },
                 new JljpIon() { name = "CN", charge = -1, mu = 506125000000 },
                 new JljpIon() { name = "CNO", charge = -1, mu = 419176000000 },
-                //new JljpIon() { name = "CO3", charge = -2, mu = 224836000000 }, // JLJP CHARGE IS ERROR
+                new JljpIon() { name = "CO3", charge = -2, mu = 224836000000 },
                 new JljpIon() { name = "Co", charge = 2, mu = 178442000000 },
                 new JljpIon() { name = "Co(CN)6", charge = -3, mu = 213914000000 },
                 new JljpIon() { name = "Co(NH3)6", charge = 3, mu = 220402000000 },
