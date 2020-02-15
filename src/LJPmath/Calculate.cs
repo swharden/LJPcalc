@@ -6,15 +6,23 @@ namespace LJPmath
 {
     public class Calculate
     {
-        public static double SolveAndCalculateLJP(List<Ion> list)
+        public static double LjpForIons(List<Ion> ionSet)
         {
 
-            int ionCount = list.Count;
+            foreach (Ion ion in ionSet)
+            {
+                if (ion.charge == 0)
+                    throw new ArgumentException("ion charge cannot be zero");
+                if (ion.mu == 0)
+                    throw new ArgumentException("ion mu cannot be zero");
+            }
+
+            int ionCount = ionSet.Count;
             int ionCountMinusOne = ionCount - 1;
             int ionCountMinusTwo = ionCount - 2;
 
-            Ion secondFromLastIon = list[list.Count - 2];
-            Ion LastIon = list[list.Count - 1];
+            Ion secondFromLastIon = ionSet[ionSet.Count - 2];
+            Ion LastIon = ionSet[ionSet.Count - 1];
 
             // phis will be solved for all ions except the last two
             double[] phis = new double[ionCountMinusTwo];
@@ -22,30 +30,30 @@ namespace LJPmath
             // phis to solve are initialized to the concentration difference
             for (int j = 0; j < phis.Length; j++)
             {
-                Ion ion = list[j];
+                Ion ion = ionSet[j];
                 phis[j] = ion.cL - ion.c0;
             }
 
             // all phis except the last two get solved
             if (ionCount > 2)
             {
-                var phiEquations = new PhiEquations(list) as IEquationSystem;
+                var phiEquations = new PhiEquations(ionSet) as IEquationSystem;
                 Solver s = new Solver(phiEquations);
                 s.solve(phis);
             }
 
             // calculate LJP
             double[] cLs = new double[phis.Length];
-            double ljp_V = calculateJunctionVoltage(list, phis, cLs);
+            double ljp_V = LjpForIons(ionSet, phis, cLs);
             if (ljp_V == Double.NaN)
                 throw new Exception("ERROR: Singularity (calculation aborted)");
 
             // update ions based on what was just calculated
             for (int j = 0; j < phis.Length; j++)
             {
-                Ion ion = list[j];
+                Ion ion = ionSet[j];
                 ion.phi = phis[j];
-                // ion.cL = cLs[j];
+                ion.cL = cLs[j];
             }
 
             // second from last ion phi is concentration difference
@@ -55,7 +63,7 @@ namespace LJPmath
             double totalChargeWeightedPhi = 0.0;
             for (int j = 0; j < ionCountMinusOne; j++)
             {
-                Ion ion = list[j];
+                Ion ion = ionSet[j];
                 totalChargeWeightedPhi += ion.phi * ion.charge;
             }
             LastIon.phi = -totalChargeWeightedPhi / LastIon.charge;
@@ -64,7 +72,7 @@ namespace LJPmath
             double totalChargeWeightedCL = 0.0;
             for (int j = 0; j < ionCountMinusOne; j++)
             {
-                Ion ion = list[j];
+                Ion ion = ionSet[j];
                 totalChargeWeightedCL += ion.cL * ion.charge;
             }
             LastIon.cL = -totalChargeWeightedCL / LastIon.charge;
@@ -72,7 +80,7 @@ namespace LJPmath
             return ljp_V;
         }
 
-        public static double calculateJunctionVoltage(List<Ion> list, double[] startingPhis, double[] startingCLs)
+        public static double LjpForIons(List<Ion> list, double[] startingPhis, double[] startingCLs)
         {
 
             double cdadc = 1.0; // fine for low concentrations
