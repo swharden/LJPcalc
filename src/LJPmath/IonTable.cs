@@ -36,11 +36,27 @@ namespace LJPmath
             return (Lookup(name).charge != 0);
         }
 
+        public List<Ion> Lookup(List<Ion> ionList)
+        {
+            for (int i = 0; i < ionList.Count; i++)
+                ionList[i] = Lookup(ionList[i]);
+            return ionList;
+        }
+
+        public Ion Lookup(Ion ion)
+        {
+            foreach (Ion tableIon in ions)
+                if (string.Compare(ion.name, tableIon.name, StringComparison.OrdinalIgnoreCase) == 0)
+                    return new Ion(tableIon.name, tableIon.charge, tableIon.conductance, ion.c0, ion.cL);
+
+            return new Ion(ion);
+        }
+
         public Ion Lookup(string name)
         {
-            foreach (Ion ion in ions)
-                if (string.Compare(name, ion.name, StringComparison.OrdinalIgnoreCase) == 0)
-                    return ion;
+            foreach (Ion tableIon in ions)
+                if (string.Compare(name, tableIon.name, StringComparison.OrdinalIgnoreCase) == 0)
+                    return tableIon;
 
             return new Ion(name, 0, 0, 0, 0);
         }
