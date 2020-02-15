@@ -6,7 +6,7 @@ namespace LJPmath
 {
     public class Calculate
     {
-        public static double LjpForIons(List<Ion> ionSet)
+        public static double Ljp(List<Ion> ionSet)
         {
 
             foreach (Ion ion in ionSet)
