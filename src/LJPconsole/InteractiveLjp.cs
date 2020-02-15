@@ -97,7 +97,7 @@ namespace LJPconsole
 
         #region modify ion table
 
-        private void CommandAdd(string suffix, bool displayTable = true)
+        private void CommandAdd(string suffix)
         {
             try
             {
@@ -119,9 +119,6 @@ namespace LJPconsole
 
                 Console.WriteLine($"Adding {ion}");
                 ionSet.Add(ion);
-
-                if (displayTable)
-                    DisplayIonSet();
             }
             catch
             {
@@ -130,7 +127,7 @@ namespace LJPconsole
 
         }
 
-        private void CommandRemove(string suffix, bool displayTable = true)
+        private void CommandRemove(string suffix)
         {
             try
             {
@@ -140,8 +137,6 @@ namespace LJPconsole
                     {
                         Console.WriteLine($"Removing: {ionSet[i]}");
                         ionSet.RemoveAt(i);
-                        if (displayTable)
-                            DisplayIonSet();
                         return;
                     }
                 }
@@ -153,22 +148,20 @@ namespace LJPconsole
             }
         }
 
-        private void CommandClear(bool displayTable = true)
+        private void CommandClear()
         {
             Console.WriteLine("Clearing ion set...");
             ionSet.Clear();
-            if (displayTable)
-                DisplayIonSet();
         }
 
         private void Demo()
         {
             Console.WriteLine("Loading demo ion set...");
-            CommandClear(false);
-            CommandAdd("Zn 9 0.0284", false);
-            CommandAdd("K 0 3", false);
-            CommandAdd("Cl 18 3.0568", false);
-            CommandCalculate();
+            EvaluateCommand("clear");
+            EvaluateCommand("add Zn 9 0.0284");
+            EvaluateCommand("add K 0 3");
+            EvaluateCommand("add Cl 18 3.0568");
+            EvaluateCommand("ljp");
         }
 
         #endregion
