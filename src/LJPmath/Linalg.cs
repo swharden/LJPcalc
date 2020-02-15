@@ -8,33 +8,6 @@ namespace LJPmath
     public class Linalg
     {
 
-        public static void main(String[] args)
-        {
-            Test_SolveRandomDataset_SolutionIsValid();
-        }
-
-        public static void Test_SolveRandomDataset_SolutionIsValid()
-        {
-            Random rand = new Random(0);
-
-            int arrayLength = 10;
-            double[,] input2d = RandomArray2d(arrayLength, arrayLength, rand);
-            double[] input1d = RandomArray1d(arrayLength, rand);
-
-            double[] solution = Solve(input2d, input1d);
-            double[] product = Product(input2d, solution);
-
-            Debug.WriteLine("\tSOLUTION\tPRODUCT\t\tDIFFERENCE");
-            for (int row = 0; row < arrayLength; row++)
-            {
-                double difference = Math.Abs(product[row] - input1d[row]);
-                Debug.WriteLine($"\t{product[row]:#.#######}\t{input1d[row]:#.#######}\t{difference:E}\t");
-
-                if (difference > 1E-10)
-                    throw new InvalidOperationException("solution and product are greatly different");
-            }
-        }
-
         public static double[,] RandomArray2d(int arrayLength, int arrayHeight, Random rand)
         {
             double[,] M = new double[arrayLength, arrayHeight];
