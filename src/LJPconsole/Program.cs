@@ -9,7 +9,7 @@ namespace LJPconsole
     {
         static void Main(string[] args)
         {
-
+            RunLjpCalcTest();
         }
 
         private static void RunLjpCalcTest()
@@ -23,8 +23,8 @@ namespace LJPconsole
                 new Ion(ionTable.Lookup("Cl"), 18, 3.0568) // last becomes "last"
             };
 
-            //double calculated_mV = Calculate.SolveAndCalculateLjp(ionSet) * 1000;
-            //Console.WriteLine($"LJP: {calculated_mV} mV");
+            double calculated_mV = Calculate.SolveAndCalculateLJP(ionSet) * 1000;
+            Console.WriteLine($"LJP: {calculated_mV} mV"); // -20.8238808914194
 
             Console.WriteLine("\npress ENTER to exit...");
             Console.ReadLine();
