@@ -78,7 +78,7 @@ namespace LJPmath
                 Ion ion = new Ion(
                         name: parts[0].Trim().Trim('"'),
                         charge: int.Parse(parts[1]),
-                        conductance: double.Parse(parts[2]),
+                        conductance: double.Parse(parts[2]) * 1E-4,
                         cL: 0,
                         c0: 0
                     );
