@@ -72,15 +72,6 @@ namespace LJPtest
             Assert.AreEqual(0, ion.charge);
         }
 
-        [Test]
-        public void Test_Lookup_AcceptsNull()
-        {
-            var ionTable = new LJPmath.IonTable();
-            var ion = ionTable.Lookup(null);
-            Console.WriteLine(ion);
-            Assert.AreEqual(0, ion.charge);
-        }
-
         struct JljpIon
         {
             public string name;
