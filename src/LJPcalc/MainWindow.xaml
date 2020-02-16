@@ -6,10 +6,10 @@
         xmlns:local="clr-namespace:LJPcalc"
         mc:Ignorable="d"
         Title="LJPcalc" 
-        Height="400" 
-        MinHeight="400"
-        Width="800"
-        MinWidth="800"
+        Height="500" 
+        MinHeight="500"
+        Width="850"
+        MinWidth="850"
         >
 
     <Grid>
