@@ -22,6 +22,7 @@ namespace LJPcalc
     {
         public readonly List<Ion> ionSet = new List<Ion>();
         public event EventHandler IonSetChanged = delegate { };
+        public event EventHandler AboutButtonClicked = delegate { };
 
         public IonSetControl()
         {
@@ -33,21 +34,6 @@ namespace LJPcalc
         public void AddIon(Ion ion)
         {
             ionSet.Add(ion);
-            UpdateGuiFromIonSet();
-        }
-
-        private void DemoButton_Click(object sender, RoutedEventArgs e)
-        {
-            ionSet.Clear();
-
-            ionSet.Add(new Ion("Zn", 9, 0.0284));
-            ionSet.Add(new Ion("K", 0, 3));
-            ionSet.Add(new Ion("Cl", 18, 3.0568));
-
-            var ionTable = new IonTable();
-            for (int i = 0; i < ionSet.Count; i++)
-                ionSet[i] = ionTable.Lookup(ionSet[i]);
-
             UpdateGuiFromIonSet();
         }
 
@@ -97,6 +83,88 @@ namespace LJPcalc
             MoveUpButton.IsEnabled = isItemSelected && !firstItemSelected;
             MoveDownButton.IsEnabled = isItemSelected && !lastItemSelected;
             RemoveButton.IsEnabled = isItemSelected;
+        }
+
+        private void MoreButton_Click(object sender, RoutedEventArgs e)
+        {
+            MoreButton.ContextMenu.IsOpen = true;
+        }
+
+        private void ExampleButton_Click(object sender, RoutedEventArgs e)
+        {
+            ExampleButton.ContextMenu.IsOpen = true;
+        }
+
+        private void LoadExample_JLJP(object sender, RoutedEventArgs e)
+        {
+            // values from JLJP screenshot: https://a.fsdn.com/con/app/proj/jljp/screenshots/GUI.png/max/max/1.jpg
+            var ionTable = new IonTable();
+            ionSet.Clear();
+            ionSet.Add(ionTable.Lookup(new Ion("Zn", 9, 2.84E-2)));
+            ionSet.Add(ionTable.Lookup(new Ion("K", 0, 3)));
+            ionSet.Add(ionTable.Lookup(new Ion("Cl", 18, 3.062)));
+            UpdateGuiFromIonSet();
+        }
+
+        private void LoadExample_NgAndBarry(object sender, RoutedEventArgs e)
+        {
+            // values from Ng and Barry (1994) Table 2: https://doi.org/10.1016/0165-0270(94)00087-W
+            var ionTable = new IonTable();
+            ionSet.Clear();
+            ionSet.Add(ionTable.Lookup(new Ion("Ca", 50, 0)));
+            ionSet.Add(ionTable.Lookup(new Ion("Cl", 200, 100)));
+            ionSet.Add(ionTable.Lookup(new Ion("Mg", 50, 0)));
+            ionSet.Add(ionTable.Lookup(new Ion("Li", 0, 100)));
+            UpdateGuiFromIonSet();
+        }
+
+        private void LoadExample_JPWin(object sender, RoutedEventArgs e)
+        {
+            // ion set shown in JPCalcWin manual (page 7): https://tinyurl.com/wk7otn7
+            var ionTable = new IonTable();
+            ionSet.Clear();
+            ionSet.Add(ionTable.Lookup(new Ion("Na", 10, 145)));
+            ionSet.Add(ionTable.Lookup(new Ion("Cl", 10, 145)));
+            ionSet.Add(ionTable.Lookup(new Ion("Cs", 135, 0)));
+            ionSet.Add(ionTable.Lookup(new Ion("F", 135, 0)));
+            UpdateGuiFromIonSet();
+        }
+
+        private void LaunchBrowser_CalculationNotes(object sender, RoutedEventArgs e)
+        {
+            LaunchBrowser("https://github.com/swharden/LJPcalc#theory");
+        }
+
+        private void LaunchBrowser_LJPcalc(object sender, RoutedEventArgs e)
+        {
+            LaunchBrowser("https://github.com/swharden/LJPcalc");
+        }
+        
+
+        private void LaunchBrowser(string url)
+        {
+            // A cross-platform .NET-Core-safe function to launch a URL in the browser
+            Console.WriteLine($"Launching: {url}");
+            try
+            {
+                Process.Start(url);
+            }
+            catch
+            {
+                if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
+                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+                else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux))
+                    Process.Start("xdg-open", url);
+                else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX))
+                    Process.Start("open", url);
+                else
+                    throw;
+            }
+        }
+
+        private void OnAboutButtonClicked(object sender, RoutedEventArgs e)
+        {
+            AboutButtonClicked(null, EventArgs.Empty);
         }
     }
 }
