@@ -29,7 +29,11 @@ namespace LJPcalc
             try
             {
                 // do this to not modify the original ion set
-                List<Ion> clonedIonSet = new List<Ion>(ionSet);
+                List<Ion> clonedIonSet = new List<Ion>();
+                foreach (Ion ion in ionSet)
+                    clonedIonSet.Add(new Ion(ion));
+
+                // perform math on the cloned set (mutates it)
                 double ljp = LJPmath.Calculate.Ljp(clonedIonSet);
 
                 if (double.IsNormal(ljp))
