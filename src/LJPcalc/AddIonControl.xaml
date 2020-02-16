@@ -15,10 +15,21 @@
 
 
         <GroupBox Header="Ion Table" Grid.Column="0">
-            <ListBox x:Name="ionTableListbox" SelectionChanged="IonTableListbox_SelectionChanged"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <ListBox Grid.Row="0" x:Name="ionTableListbox" 
+                         SelectionChanged="IonTableListbox_SelectionChanged"
+                         />
+                <!--
+                <Button Grid.Row="1" Content="Edit Ion Table" Margin="5" Padding="5, 3, 5, 3" />
+                -->
+            </Grid>
         </GroupBox>
 
-        <GroupBox Header="Add Ion" Grid.Column="1">
+        <GroupBox Header="Add Ion" Grid.Column="1" Margin="5, 0, 5, 0">
 
             <Grid>
                 <Grid.RowDefinitions>
