@@ -67,9 +67,10 @@ namespace LJPcalc
             UpdateGuiFromIonSet();
         }
 
-        private void UpdateGuiFromIonSet()
+        private void UpdateGuiFromIonSet(bool refresh = true)
         {
-            dataGrid1.Items.Refresh();
+            if (refresh)
+                dataGrid1.Items.Refresh();
             dataGrid1_SelectionChanged(null, null);
             IonSetChanged(ionSet, EventArgs.Empty);
         }
@@ -128,6 +129,11 @@ namespace LJPcalc
             ionSet.Add(ionTable.Lookup(new Ion("Cs", 135, 0)));
             ionSet.Add(ionTable.Lookup(new Ion("F", 135, 0)));
             UpdateGuiFromIonSet();
+        }
+
+        private void dataGrid1_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            UpdateGuiFromIonSet(refresh: false);
         }
 
         private void LaunchBrowser_CalculationNotes(object sender, RoutedEventArgs e)

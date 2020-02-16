@@ -1,6 +1,7 @@
 ﻿using LJPmath;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -49,12 +50,15 @@ namespace LJPcalc
                     clonedIonSet.Add(new Ion(ion));
 
                 // perform math on the cloned set (mutates it)
+                Stopwatch stopwatch = Stopwatch.StartNew();
                 double ljp = LJPmath.Calculate.Ljp(clonedIonSet);
+                double elapsedSec = (double)stopwatch.ElapsedTicks / Stopwatch.Frequency;
+                string benchmarkMessage = string.Format("solved for LJP in {0:0.000} ms", elapsedSec * 1000.0);
 
                 if (double.IsNormal(ljp))
                 {
                     ResultLabel.Content = $"LJP = {ljp * 1000:0.000} mV";
-                    DetailText.Text = "values produced during calculation:\r\n";
+                    DetailText.Text = $"{benchmarkMessage}\r\n";
                     foreach (Ion ion in clonedIonSet)
                         DetailText.Text += $"{ion}\r\n";
                 }
