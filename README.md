@@ -6,6 +6,8 @@ LJPcalc is a free and open source liquid junction potential (LJP) calculator.
 
 > ⚠️ **This application is a work in progress.** Users are encouraged to use the LJP console application while the LJPcalc GUI is being developed.
 
+![](src/LJPcalc/screenshot.jpg)
+
 ## LJP Console
 
 **LJP console** is a cross-platform console application for calculating liquid junction potential from a set of ions of given concentration on each side of the junction.

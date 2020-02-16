@@ -6,4 +6,8 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LJPmath\LJPmath.csproj" />
+  </ItemGroup>
+
 </Project>

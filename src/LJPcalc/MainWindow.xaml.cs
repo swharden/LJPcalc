@@ -23,6 +23,28 @@ namespace LJPcalc
         public MainWindow()
         {
             InitializeComponent();
+
+            Version version = typeof(AboutControl).Assembly.GetName().Version;
+            Title = $"LJPcalc {version.Major}.{version.Minor}";
+        }
+
+        #region menu item bindings
+        private void MenuItemExit_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void MenuItemAbout_Click(object sender, RoutedEventArgs e)
+        {
+            aboutControl1.Visibility = Visibility.Visible;
+            mainControl1.Visibility = Visibility.Collapsed;
+        }
+        #endregion
+
+        private void aboutControl1_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            aboutControl1.Visibility = Visibility.Collapsed;
+            mainControl1.Visibility = Visibility.Visible;
         }
     }
 }
