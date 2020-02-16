@@ -25,7 +25,7 @@ A cross-platform console version of LJPcalc is available which supports Windows,
 
 [**NernstApp**](https://github.com/swharden/NernstApp) is a Nernst potential calculator for Android
 
-## LJP Theory
+## Theory
 
 ### Calculation Method
 
