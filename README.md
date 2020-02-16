@@ -54,39 +54,38 @@ LJP = -20.8238808914194 mV
 
 > ⚠️ The LJPcalc mobile app is still under development.
 
-**NernstApp** is a Nernst potential calculator for Android: https://github.com/swharden/NernstApp
+[**NernstApp**](https://github.com/swharden/NernstApp) is a Nernst potential calculator for Android
 
 ## LJP Theory
 
 ### Calculation Method
 
-LJPcalc calculates LJP according to the stationary Nernst-Planck equation which is regarded as superior to the Henderson equation (used by most commercial LJP calculators) as described in [Marino et al., 2014](https://arxiv.org/abs/1403.3640).
+LJPcalc calculates the liquid junction potential according to the stationary Nernst-Planck equation which is typically regarded as superior to the simpler Goldman and Henderson equations used by most commercial LJP calculators. Both equations produce nearly identical LJPs, but the Henderson equation begins to under-estimate the LJP as ion concentration difference across the junction increases.
 
 ### Ion Sequence
 
-When adding a set of ions it is important to consider these facts about their sequence:
+When calculating LJP for a set of ions it is important to note the following facts. Additional information can be found in [Marino et al., 2014](https://arxiv.org/abs/1403.3640) which describes the exact computational methods employed by LJPcalc.
 
-* **The last ion's concentrations will be recalculated** - The concentrations the user provides will be overridden by those required to achieve electro-neutrality of the ion set. 
-* **The second-to-last ion's concentration cannot be equal on both sides** - this is because... why?
+* **The last ion's concentrations will be recalculated.** LJPcalc will override the concentrations the user provides for the last ion in the set, replacing them with those calculated to achieve electro-neutrality of the ion set.
 
-More information can be found in [Marino et al., 2014](https://arxiv.org/abs/1403.3640) which describes the LJP calculation method employed by LJPcalc in great detail.
+* **The second-to-last ion's concentration cannot be equal on both sides.** This requirement ensures LJPcalc can properly solve for the final ion.
 
 
-## Source Code Project Structure
-
-Project | Platform | Purpose
----|---|---
-**`LJPmath`** | [.NET Standard](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) | Platform-independent library to calculate LJP
-**`LJPconsole`** | [.NET Core](https://en.wikipedia.org/wiki/.NET_Core) | Cross-platform console-based LJP calculator
-**`LJPcalc`** | [.NET Core](https://en.wikipedia.org/wiki/.NET_Core) | Graphical LJP calculator for Windows (WPF)
-**`LJPapp`** | [Xamarin.Forms](https://dotnet.microsoft.com/apps/xamarin/xamarin-forms) | Mobile app for iPhone and Android
-**`LJPtest`** | [.NET Core](https://en.wikipedia.org/wiki/.NET_Core) | Tests for the LJPmath module
+### References
+* **[Marino et al. (2014)](https://arxiv.org/abs/1403.3640)** - describes a computational method to calculate LJP according to the stationary Nernst-Planck equation. The JAVA software described in this manuscript is open-source and now on GitHub ([JLJP](https://github.com/swharden/jljp)). Figure 1 directly compares LJP calculated by the Nernst-Planck vs. Henderson equation.
+* **[Perram and Stiles (2006)](https://pubs.rsc.org/en/content/articlelanding/2006/cp/b601668e)** - A review of several methods used to calculate liquid junction potential. This manuscript provides excellent context for the history of LJP calculations and describes the advantages and limitations of each.
+* **[Shinagawa (1980)](https://www.ncbi.nlm.nih.gov/pubmed/7401663)** _"Invalidity of the Henderson diffusion equation shown by the exact solution of the Nernst-Planck equations"_ - a manuscript which argues that the Henderson equation is inferior to solved Nernst-Planck-Poisson equations due to how it accounts for ion flux in the charged diffusion zone.
+* **[Lin (2011)](http://www.sci.osaka-cu.ac.jp/~ohnita/2010/TCLin.pdf)** _"The Poisson The Poisson-Nernst-Planck (PNP) system for ion transport (PNP) system for ion transport"_ - a PowerPoint presentation which reviews mathematical methods to calculate LJP with notes related to its application in measuring voltage across cell membranes.
+* **[Nernst-Planck equation](https://en.wikipedia.org/wiki/Nernst%E2%80%93Planck_equation)** (Wikipedia)
+* **[Goldman Equation](https://en.wikipedia.org/wiki/Goldman_equation)** (Wikipedia)
 
 ## Citing LJPcalc
 
 If LJPcalc facilitated your research, consider citing this project by name so it can benefit others too:
 
-> "Liquid junction potential was calculated according to the stationary Nernst-Planck equation using LJPcalc version 1.2 by Scott Harden and Doriano Brogioli."
+> "Liquid junction potential was calculated according to the stationary Nernst-Planck equation using LJPcalc¹"
+>
+> [1] Harden, SW and Brogioli, D (2020). LJPcalc v1.0. [Online]. Available: https://github.com/swharden/LJPcalc, Accessed on: Feb. 16, 2020.
 
 ## Authors
 LJPcalc was created by [Scott W Harden](http://swharden.com/) in 2020. LJPcalc began as C# port of [JLJP](https://github.com/swharden/JLJP) by [Doriano Brogioli](https://sites.google.com/site/dbrogioli/) originally published on SourceForge in 2013. LJPcalc is heavily influenced by [Marino et al., 2014](https://arxiv.org/abs/1403.3640).
