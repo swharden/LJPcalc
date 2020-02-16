@@ -25,6 +25,9 @@ namespace LJPcalc
             InitializeComponent();
             addIonControl1.IonAdded += OnAddIon;
             ionSetControl1.IonSetChanged += OnIonSetChanged;
+
+            ionSetControl1.AddIon(new Ion());
+            ionSetControl1.ClearIons();
         }
 
         private void OnAddIon(object sender, EventArgs e)

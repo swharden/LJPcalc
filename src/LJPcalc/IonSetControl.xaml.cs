@@ -37,6 +37,12 @@ namespace LJPcalc
             UpdateGuiFromIonSet();
         }
 
+        public void ClearIons()
+        {
+            ionSet.Clear();
+            UpdateGuiFromIonSet();
+        }
+
         private void RemoveButton_Click(object sender, RoutedEventArgs e)
         {
             ionSet.RemoveAt(dataGrid1.SelectedIndex);
@@ -171,6 +177,11 @@ namespace LJPcalc
         private void OnAboutButtonClicked(object sender, RoutedEventArgs e)
         {
             AboutButtonClicked(null, EventArgs.Empty);
+        }
+
+        private void OnClearIonSet(object sender, RoutedEventArgs e)
+        {
+            ClearIons();
         }
     }
 }

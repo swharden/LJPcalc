@@ -65,6 +65,8 @@
                     <Button x:Name="MoreButton" Click="MoreButton_Click" Content="More" Padding="5, 3, 5, 3">
                         <Button.ContextMenu>
                             <ContextMenu>
+                                <MenuItem Header="Clear Ion Set" Click="OnClearIonSet" />
+                                <Separator />
                                 <MenuItem Header="About LJPcalc" Click="OnAboutButtonClicked" />
                                 <MenuItem Header="LJPcalc on GitHub" Click="LaunchBrowser_LJPcalc" />
                             </ContextMenu>
