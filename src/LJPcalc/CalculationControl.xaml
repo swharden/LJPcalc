@@ -16,7 +16,7 @@
                 </Grid.RowDefinitions>
 
                 <Label Name="ResultLabel" Content="LJP = 123.45 mV" FontSize="24" Grid.Row="0" />
-                <TextBox Name="DetailText" Foreground="Gray" IsReadOnly="True" Grid.Row="1" Background="Transparent" />
+                <TextBox Name="DetailText" Foreground="Gray" IsReadOnly="True" Grid.Row="1" Background="Transparent" BorderThickness="0" Padding="3, 0, 3, 0"/>
             </Grid>
         </GroupBox>
     </Grid>
