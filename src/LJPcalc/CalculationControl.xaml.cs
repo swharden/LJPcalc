@@ -1,8 +1,11 @@
 ﻿using LJPmath;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -12,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace LJPcalc
 {
@@ -25,8 +29,41 @@ namespace LJPcalc
             InitializeComponent();
         }
 
+        List<Ion> clonedIonSet;
+        public double result = 0;
+        public string ionTableText;
+        public string resultMessage;
+
+        private void Calculate()
+        {
+            try
+            {
+                Stopwatch stopwatch = Stopwatch.StartNew();
+                result = LJPmath.Calculate.Ljp(clonedIonSet);
+                double elapsedSec = (double)stopwatch.ElapsedTicks / Stopwatch.Frequency;
+                ionTableText = "";
+                foreach (Ion ion in clonedIonSet)
+                    ionTableText += $"{ion}\r\n";
+                resultMessage = string.Format("solved for LJP in {0:0.000} ms", elapsedSec * 1000.0);
+            }
+            catch (Exception ex)
+            {
+                resultMessage = $"LJP cannot be calculated from this combination of ions.\n\n{ex}";
+            }
+        }
+
+        public void DisplayResult()
+        {
+            ResultLabel.Content = (double.IsNormal(result)) ? $"LJP = {result * 1000:0.000} mV" : "ERROR";
+            DetailText.Text = ionTableText + resultMessage;
+        }
+
         public void Calculate(List<Ion> ionSet)
         {
+            clonedIonSet = new List<Ion>();
+            foreach (Ion ion in ionSet)
+                clonedIonSet.Add(new Ion(ion));
+
             if (ionSet.Count < 2)
             {
                 ResultLabel.Content = "Invalid ion set...";
@@ -42,37 +79,15 @@ namespace LJPcalc
                 return;
             }
 
-            try
-            {
-                // do this to not modify the original ion set
-                List<Ion> clonedIonSet = new List<Ion>();
-                foreach (Ion ion in ionSet)
-                    clonedIonSet.Add(new Ion(ion));
+            ResultLabel.Content = "Calculating...";
+            DetailText.Text = $"";
+            foreach (Ion ion in clonedIonSet)
+                DetailText.Text += $"{ion}\r\n";
 
-                // perform math on the cloned set (mutates it)
-                Stopwatch stopwatch = Stopwatch.StartNew();
-                double ljp = LJPmath.Calculate.Ljp(clonedIonSet);
-                double elapsedSec = (double)stopwatch.ElapsedTicks / Stopwatch.Frequency;
-                string benchmarkMessage = string.Format("solved for LJP in {0:0.000} ms", elapsedSec * 1000.0);
+            var task = new Task(Calculate);
+            task.ContinueWith((Calculate) => DisplayResult(), TaskScheduler.FromCurrentSynchronizationContext());
+            task.Start();
 
-                if (double.IsNormal(ljp))
-                {
-                    ResultLabel.Content = $"LJP = {ljp * 1000:0.000} mV";
-                    DetailText.Text = $"{benchmarkMessage}\r\n";
-                    foreach (Ion ion in clonedIonSet)
-                        DetailText.Text += $"{ion}\r\n";
-                }
-                else
-                {
-                    ResultLabel.Content = "ERROR";
-                    DetailText.Text = $"LJP cannot be calculated from this combination of ions.";
-                }
-            }
-            catch (Exception ex)
-            {
-                ResultLabel.Content = "ERROR";
-                DetailText.Text = $"LJP cannot be calculated from this combination of ions.\n\n{ex}";
-            }
         }
     }
 }
