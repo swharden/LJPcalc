@@ -5,8 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LJPcalc"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="LJPcalc" Height="400" Width="700">
 
+    <Grid>
+        <local:AboutControl Grid.Row="1" x:Name="aboutControl1" Visibility="Collapsed" MouseUp="aboutControl1_MouseUp"/>
+        <local:MainControl Grid.Row="1" x:Name="mainControl1" Visibility="Visible" Padding="6" />
     </Grid>
+
 </Window>
