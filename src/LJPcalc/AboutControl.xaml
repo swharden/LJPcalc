@@ -7,14 +7,16 @@
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="400">
 
-    <DockPanel>
+    <DockPanel MouseUp="DockPanel_MouseUp">
         <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
             <StackPanel Orientation="Horizontal">
                 <Label Content="LJPcalc" FontSize="32" Padding="2, 0, 0, 0"/>
                 <Label Name="versionLabel" Content="1.2.3.4" FontSize="12" Foreground="Gray" VerticalAlignment="Bottom" />
             </StackPanel>
             <Label Content="by Scott Harden and Doriano Brogioli" FontSize="12" Foreground="Gray" />
+            <!--
             <Button Content="JLJP on GitHub" FontSize="12" Margin="6, 30, 6, 30" Padding="6, 2, 6, 2" HorizontalAlignment="Left"/>
+            -->
         </StackPanel>
     </DockPanel>
 

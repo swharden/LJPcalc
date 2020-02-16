@@ -25,5 +25,11 @@ namespace LJPcalc
             Version version = typeof(AboutControl).Assembly.GetName().Version;
             versionLabel.Content = $"{version.Major}.{version.Minor}";
         }
+
+        public event EventHandler HideAboutScreen = delegate { };
+        private void DockPanel_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            HideAboutScreen(null, EventArgs.Empty);
+        }
     }
 }

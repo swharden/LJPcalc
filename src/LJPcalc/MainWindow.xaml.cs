@@ -26,25 +26,20 @@ namespace LJPcalc
 
             Version version = typeof(AboutControl).Assembly.GetName().Version;
             Title = $"LJPcalc {version.Major}.{version.Minor}";
+
+            ljpControl1.ionSetControl1.AboutButtonClicked += AboutShow;
         }
 
-        #region menu item bindings
-        private void MenuItemExit_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
-        private void MenuItemAbout_Click(object sender, RoutedEventArgs e)
+        private void AboutShow(object sender, EventArgs e)
         {
             aboutControl1.Visibility = Visibility.Visible;
-            mainControl1.Visibility = Visibility.Collapsed;
+            ljpControl1.Visibility = Visibility.Collapsed;
         }
-        #endregion
 
-        private void aboutControl1_MouseUp(object sender, MouseButtonEventArgs e)
+        private void AboutHide(object sender, MouseButtonEventArgs e)
         {
             aboutControl1.Visibility = Visibility.Collapsed;
-            mainControl1.Visibility = Visibility.Visible;
+            ljpControl1.Visibility = Visibility.Visible;
         }
     }
 }

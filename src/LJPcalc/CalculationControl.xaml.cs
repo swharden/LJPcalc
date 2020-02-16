@@ -26,6 +26,21 @@ namespace LJPcalc
 
         public void Calculate(List<Ion> ionSet)
         {
+            if (ionSet.Count < 2)
+            {
+                ResultLabel.Content = "Invalid ion set...";
+                DetailText.Text = $"At least 2 ions are required to calculate LJP";
+                return;
+            }
+
+            Ion secondFromLastIon = ionSet[ionSet.Count - 2];
+            if (secondFromLastIon.c0 == secondFromLastIon.cL)
+            {
+                ResultLabel.Content = "Invalid ion set...";
+                DetailText.Text = $"Second from last ion cannot have equal C0 and CL";
+                return;
+            }
+
             try
             {
                 // do this to not modify the original ion set

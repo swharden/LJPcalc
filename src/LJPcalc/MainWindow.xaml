@@ -13,8 +13,8 @@
         >
 
     <Grid>
-        <local:AboutControl Grid.Row="1" x:Name="aboutControl1" Visibility="Collapsed" MouseUp="aboutControl1_MouseUp"/>
-        <local:MainControl Grid.Row="1" x:Name="mainControl1" Visibility="Visible" Padding="6" />
+        <local:AboutControl Grid.Row="1" x:Name="aboutControl1" Visibility="Collapsed" MouseUp="AboutHide" Background="White"/>
+        <local:MainControl Grid.Row="1" x:Name="ljpControl1" Visibility="Visible" Padding="6" />
     </Grid>
 
 </Window>
