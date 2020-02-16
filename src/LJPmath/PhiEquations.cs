@@ -44,7 +44,7 @@ namespace LJPmath
 
         public void equations(double[] x, double[] f)
         {
-            Calculate.LjpForIons(list, x, f);
+            Calculate.Ljp(list, x, f);
             for (int j = 0; j < ionCount - 2; j++)
             {
                 Ion ion = list[j];

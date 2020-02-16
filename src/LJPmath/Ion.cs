@@ -6,17 +6,18 @@ namespace LJPmath
 {
     public class Ion
     {
-        // ion properies are immutable
-        public readonly string name = "?";
-        public readonly int charge = 0;
-        public readonly double conductance = 0;
-        public readonly double mu = 0;
-        public const double cdadc = 1.0;
+        public string name { get; private set; } = "?";
+        public int charge { get; private set; } = 0;
+        public double conductance { get; private set; } = 0;
+        public double mu { get; private set; } = 0;
+        public double cdadc { get; } = 1.0;
 
-        // only concentration is mutable
-        public double c0 = 0;
-        public double cL = 0;
-        public double phi = 0;
+        public double c0 { get; set; } = 0;
+        public double cL { get; set; } = 0;
+        public double phi { get; set; } = 0;
+
+        public string chargeWithSign { get { return (charge > 0) ? "+" + charge.ToString() : charge.ToString(); } }
+        public string nameWithCharge { get { return $"{name} ({chargeWithSign})"; } }
 
         public Ion()
         {
@@ -68,8 +69,7 @@ namespace LJPmath
 
         public override string ToString()
         {
-            string chargeString = (charge < 0) ? charge.ToString() : "+" + charge.ToString();
-            return $"Ion {name} ({chargeString}): mu={mu:0.000E+0}, phi={phi}, c0={c0}, cL={cL}";
+            return $"Ion {nameWithCharge}: mu={mu:0.000E+0}, phi={phi:0.000}, c0={c0:0.000}, cL={cL:0.000}";
         }
     }
 }

@@ -24,6 +24,9 @@ namespace LJPmath
             Ion secondFromLastIon = ionSet[ionSet.Count - 2];
             Ion LastIon = ionSet[ionSet.Count - 1];
 
+            if (secondFromLastIon.c0 == secondFromLastIon.cL)
+                throw new InvalidOperationException("second from last ion concentrations cannot be equal");
+
             // phis will be solved for all ions except the last two
             double[] phis = new double[ionCountMinusTwo];
 
@@ -44,7 +47,7 @@ namespace LJPmath
 
             // calculate LJP
             double[] cLs = new double[phis.Length];
-            double ljp_V = LjpForIons(ionSet, phis, cLs);
+            double ljp_V = Ljp(ionSet, phis, cLs);
             if (ljp_V == Double.NaN)
                 throw new Exception("ERROR: Singularity (calculation aborted)");
 
@@ -80,7 +83,7 @@ namespace LJPmath
             return ljp_V;
         }
 
-        public static double LjpForIons(List<Ion> list, double[] startingPhis, double[] startingCLs)
+        public static double Ljp(List<Ion> list, double[] startingPhis, double[] startingCLs)
         {
 
             double cdadc = 1.0; // fine for low concentrations

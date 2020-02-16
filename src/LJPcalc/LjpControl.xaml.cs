@@ -1,5 +1,7 @@
-﻿using System;
+﻿using LJPmath;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,6 +23,20 @@ namespace LJPcalc
         public MainControl()
         {
             InitializeComponent();
+            addIonControl1.IonAdded += OnAddIon;
+            ionSetControl1.IonSetChanged += OnIonSetChanged;
+        }
+
+        private void OnAddIon(object sender, EventArgs e)
+        {
+            Ion ion = (Ion)sender;
+            ionSetControl1.AddIon(ion);
+        }
+
+        private void OnIonSetChanged(object sender, EventArgs e)
+        {
+            List<Ion> ionSet = (List<Ion>)sender;
+            calculationControl1.Calculate(ionSet);
         }
     }
 }

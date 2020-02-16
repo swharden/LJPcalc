@@ -5,35 +5,51 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LJPcalc"
              mc:Ignorable="d" 
-             d:DesignHeight="350" d:DesignWidth="300
-             ">
+             d:DesignHeight="350" d:DesignWidth="400">
 
-    <GroupBox Header="Add Ion">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.5*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-            <ListBox x:Name="ionTableListbox" Grid.Column="0"/>
 
-            <StackPanel Grid.Column="1" Margin="6, 0, 0, 0">
-                <Label Content="Name:" />
-                <TextBox>NaH2PO4</TextBox>
-                <Label Content="Charge:" />
-                <TextBox>-2</TextBox>
-                <Label Content="Conductivity:" />
-                <TextBox>12.345</TextBox>
-                <Label Content="Mu:" />
-                <TextBox>12.345</TextBox>
-                <Label Content="C0 (mM):" />
-                <TextBox>12.345</TextBox>
-                <Label Content="CL (mM):" />
-                <TextBox>12.345</TextBox>
-                <Button Content="Add »" Margin="0, 10, 0, 0"/>
-            </StackPanel>
+        <GroupBox Header="Ion Table" Grid.Column="0">
+            <ListBox x:Name="ionTableListbox" SelectionChanged="IonTableListbox_SelectionChanged"/>
+        </GroupBox>
 
-        </Grid>
-    </GroupBox>
+        <GroupBox Header="Add Ion" Grid.Column="1">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <StackPanel Margin="5, 0, 5, 0" Grid.Row="0">
+                    <Label Content="Name:" Padding="0, 10, 0, 0"/>
+                    <TextBox x:Name="NameTextbox" TextChanged="Textbox_TextChanged">NaH2PO4</TextBox>
+                    <Label Content="Charge:" Padding="0, 10, 0, 0" />
+                    <TextBox x:Name="ChargeTextbox" TextChanged="Textbox_TextChanged">-2</TextBox>
+                    <Label Content="Conductivity:" Padding="0, 10, 0, 0" />
+                    <TextBox x:Name="ConductivityTextbox" TextChanged="Textbox_TextChanged">12.345</TextBox>
+                    <Label Content="Mobility:" Padding="0, 10, 0, 0" />
+                    <TextBox x:Name="MuTextbox" IsEnabled="False">12.345</TextBox>
+                    <Label Content="Concentration 0:" Padding="0, 10, 0, 0" />
+                    <TextBox x:Name="C0Textbox" TextChanged="Textbox_TextChanged">12.345</TextBox>
+                    <Label Content="Concentration L:" Padding="0, 10, 0, 0" />
+                    <TextBox x:Name="CLTextbox" TextChanged="Textbox_TextChanged">12.345</TextBox>
+                </StackPanel>
+                <Button x:Name="AddIonButtn" 
+                        Content="Add »" 
+                        Grid.Row="1" 
+                        Margin="5" 
+                        Padding="5, 3, 5, 3" 
+                        Click="AddIonButtn_Click"
+                        />
+            </Grid>
+        </GroupBox>
+            
+
+    </Grid>
 
 </UserControl>

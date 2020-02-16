@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LJPmath;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -14,15 +15,16 @@ using System.Windows.Shapes;
 
 namespace LJPcalc
 {
-    /// <summary>
-    /// Interaction logic for AddIonControl.xaml
-    /// </summary>
     public partial class AddIonControl : UserControl
     {
+        IonTable ionTable;
+
         public AddIonControl()
         {
             InitializeComponent();
             LoadIonTable();
+            C0Textbox.Text = "0.0";
+            CLTextbox.Text = "0.0";
         }
 
         private void LoadIonTable()
@@ -31,16 +33,74 @@ namespace LJPcalc
 
             try
             {
-                var ionTable = new LJPmath.IonTable();
-                Debug.WriteLine(ionTable);
+                ionTable = new IonTable();
                 foreach (var ion in ionTable.ions)
                     ionTableListbox.Items.Add(ion.name);
+
+                // pre-select an item
+                ionTableListbox.SelectedItem = ionTableListbox.Items[0];
+                ionTableListbox.ScrollIntoView(ionTableListbox.SelectedItem);
             }
             catch
             {
                 ionTableListbox.Items.Add("ERROR");
                 ionTableListbox.IsEnabled = false;
             }
+        }
+
+        private void IonTableListbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Ion ion = ionTable.Lookup(ionTableListbox.SelectedItem.ToString());
+            NameTextbox.Text = ion.name.ToString();
+            ChargeTextbox.Text = ion.charge.ToString();
+            ConductivityTextbox.Text = ion.conductance.ToString("E");
+            MuTextbox.Text = ion.mu.ToString("E");
+        }
+
+        Ion GetIonFromTextbox()
+        {
+            try
+            {
+                Ion ion = new Ion(
+                    name: NameTextbox.Text,
+                    charge: int.Parse(ChargeTextbox.Text),
+                    conductance: double.Parse(ConductivityTextbox.Text),
+                    c0: double.Parse(C0Textbox.Text),
+                    cL: double.Parse(CLTextbox.Text)
+                    );
+                return ion;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private void Textbox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Ion ion = GetIonFromTextbox();
+            if (ion is null)
+            {
+                if (MuTextbox != null)
+                    MuTextbox.Text = "";
+                if (AddIonButtn != null)
+                    AddIonButtn.IsEnabled = false;
+            }
+            else
+            {
+                if (MuTextbox != null)
+                    MuTextbox.Text = ion.mu.ToString("E");
+                if (AddIonButtn != null)
+                    AddIonButtn.IsEnabled = true;
+            }
+        }
+
+        public event EventHandler IonAdded = delegate { };
+
+        private void AddIonButtn_Click(object sender, RoutedEventArgs e)
+        {
+            Ion ion = GetIonFromTextbox();
+            IonAdded(ion, EventArgs.Empty);
         }
     }
 }
