@@ -2,11 +2,12 @@
 
 [![Build Status](https://dev.azure.com/swharden/swharden/_apis/build/status/swharden.LJPcalc?branchName=master)](https://dev.azure.com/swharden/swharden/_build/latest?definitionId=7&branchName=master)
 
-LJPcalc is a free and open source liquid junction potential (LJP) calculator.
-
-> ⚠️ **This application is a work in progress.** Users are encouraged to use the LJP console application while the LJPcalc GUI is being developed.
+LJPcalc is a free and open source liquid junction potential (LJP) calculator. LJPcalc is available as a click-to-run EXE for Windows and a console application for Linux and MacOS.
 
 ![](src/LJPcalc/screenshot.jpg)
+
+### Download LJPcalc.exe
+> ⚠️ **This project is still early in development.** A download link will be added when development completes. Until then users must download and build LJPcalc from source code.
 
 ## LJP Console
 
@@ -49,11 +50,27 @@ Cl        -1     76.31     4.95159   -14.99577 3.05681   18
 LJP = -20.8238808914194 mV
 ```
 
-NOTE: The concentration of the last ion is overridden by that required to achieve electro-neutrality of the ion set. The second-to-last ion is (???). See [Marino et al., 2014](https://arxiv.org/abs/1403.3640) for details.
+## LJPcalc Mobile App
 
-## LJP Theory 
+> ⚠️ The LJPcalc mobile app is still under development.
+
+**NernstApp** is a Nernst potential calculator for Android: https://github.com/swharden/NernstApp
+
+## LJP Theory
+
+### Calculation Method
 
 LJPcalc calculates LJP according to the stationary Nernst-Planck equation which is regarded as superior to the Henderson equation (used by most commercial LJP calculators) as described in [Marino et al., 2014](https://arxiv.org/abs/1403.3640).
+
+### Ion Sequence
+
+When adding a set of ions it is important to consider these facts about their sequence:
+
+* **The last ion's concentrations will be recalculated** - The concentrations the user provides will be overridden by those required to achieve electro-neutrality of the ion set. 
+* **The second-to-last ion's concentration cannot be equal on both sides** - this is because... why?
+
+More information can be found in [Marino et al., 2014](https://arxiv.org/abs/1403.3640) which describes the LJP calculation method employed by LJPcalc in great detail.
+
 
 ## Source Code Project Structure
 
