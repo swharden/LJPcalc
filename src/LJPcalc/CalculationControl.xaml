@@ -6,16 +6,19 @@
              xmlns:local="clr-namespace:LJPcalc"
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="300">
-    
-    <GroupBox Grid.Row="0" Header="Calculation">
-        <StackPanel>
-            <Label Name="ResultLabel" Content="LJP = 123.45 mV" FontSize="24" />
-            <ScrollViewer HorizontalScrollBarVisibility="Auto">
-                <TextBlock Name="DetailText" Foreground="Gray">
-                    calculation details
-                </TextBlock>
-            </ScrollViewer>
-        </StackPanel>
-    </GroupBox>
-    
+
+    <Grid>
+        <GroupBox Header="Calculation">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Label Name="ResultLabel" Content="LJP = 123.45 mV" FontSize="24" Grid.Row="0" />
+                <TextBox Name="DetailText" Foreground="Gray" IsReadOnly="True" Grid.Row="1" Background="Transparent" />
+            </Grid>
+        </GroupBox>
+    </Grid>
+
 </UserControl>
