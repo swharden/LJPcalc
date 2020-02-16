@@ -16,7 +16,19 @@ namespace LJPmath
         public IonTable(String csvFilePath = "IonTable.csv")
         {
             if (!System.IO.File.Exists(csvFilePath))
-                throw new ArgumentException("csv file does not exist");
+            {
+                string baseName = System.IO.Path.GetFileName(csvFilePath);
+                string pathFourFoldersUp = "../../../../" + baseName;
+                if (System.IO.File.Exists(pathFourFoldersUp))
+                {
+                    Debug.WriteLine($"copying table from {pathFourFoldersUp}");
+                    System.IO.File.Copy(pathFourFoldersUp, baseName);
+                }
+                else
+                {
+                    throw new ArgumentException("csv file does not exist");
+                }
+            }
 
             filePath = System.IO.Path.GetFullPath(csvFilePath);
             fileName = System.IO.Path.GetFileName(csvFilePath);
