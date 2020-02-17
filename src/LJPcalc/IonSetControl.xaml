@@ -47,33 +47,23 @@
                     <Button x:Name="MoveUpButton" Click="MoveUpButton_Click" Content="⬆" Margin="0, 0, 5, 0" Padding="5, 3, 5, 3" />
                     <Button x:Name="MoveDownButton" Click="MoveDownButton_Click" Content="⬇" Margin="0, 0, 5, 0" Padding="5, 3, 5, 3"/>
                     <Button x:Name="RemoveButton" Click="RemoveButton_Click" Content="❌" Margin="0, 0, 5, 0" Padding="5, 3, 5, 3"/>
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button x:Name="ExampleButton" Click="ExampleButton_Click" Content="Example" Margin="0, 0, 5, 0" Padding="5, 3, 5, 3">
-                        <Button.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="JLJP screenshot" Click="LoadExample_JLJP"/>
-                                <MenuItem Header="Ng and Barry, 1994" Click="LoadExample_NgAndBarry" />
-                                <MenuItem Header="JPWin screenshot" Click="LoadExample_JPWin" />
-                            </ContextMenu>
-                        </Button.ContextMenu>
-                    </Button>
-
-                    <Button x:Name="MoreButton" Click="MoreButton_Click" Content="More" Padding="5, 3, 5, 3">
+                    <Button x:Name="ExampleButton" Click="ExampleButton_Click" Content="Set" Margin="0, 0, 5, 0" Padding="5, 3, 5, 3">
                         <Button.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Clear Ion Set" Click="OnClearIonSet" />
+                                <Separator />
+                                <MenuItem Header="Load example: JLJP screenshot" Click="LoadExample_JLJP"/>
+                                <MenuItem Header="Load example: Ng and Barry, 1994" Click="LoadExample_NgAndBarry" />
+                                <MenuItem Header="Load example: JPWin screenshot" Click="LoadExample_JPWin" />
+                                <Separator />
                                 <MenuItem Header="Recalculate" Click="dataGrid1_CurrentCellChanged" />
-                                <Separator />
-                                <MenuItem Header="About LJPcalc" Click="OnAboutButtonClicked" />
-                                <Separator />
-                                <MenuItem Header="Calculation Theory" Click="LaunchBrowser_CalculationNotes" />
-                                <MenuItem Header="LJPcalc on GitHub" Click="LaunchBrowser_LJPcalc" />
+                                <MenuItem Header="LJP Calculation Theory" Click="LaunchBrowser_CalculationNotes" />
                             </ContextMenu>
                         </Button.ContextMenu>
                     </Button>
                 </StackPanel>
+
+                <Button Content="About LJPcalc" Padding="5, 3, 5, 3" Click="OnAboutButtonClicked" HorizontalAlignment="Right"/>
 
             </DockPanel>
 

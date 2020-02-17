@@ -92,11 +92,6 @@ namespace LJPcalc
             RemoveButton.IsEnabled = isItemSelected;
         }
 
-        private void MoreButton_Click(object sender, RoutedEventArgs e)
-        {
-            MoreButton.ContextMenu.IsOpen = true;
-        }
-
         private void ExampleButton_Click(object sender, RoutedEventArgs e)
         {
             ExampleButton.ContextMenu.IsOpen = true;
@@ -182,6 +177,11 @@ namespace LJPcalc
         private void dataGrid1_CurrentCellChanged(object sender, EventArgs e)
         {
             UpdateGuiFromIonSet(refresh: false);
+        }
+
+        private void MoreButton_Click_1(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
