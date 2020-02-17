@@ -45,9 +45,9 @@
                     <TextBox x:Name="ConductivityTextbox" TextChanged="Textbox_TextChanged">12.345</TextBox>
                     <Label Content="Mobility:" Padding="0, 10, 0, 0" />
                     <TextBox x:Name="MuTextbox" IsEnabled="False">12.345</TextBox>
-                    <Label Content="Concentration 0:" Padding="0, 10, 0, 0" />
+                    <Label Content="Concentration c0 (mM):" Padding="0, 10, 0, 0" />
                     <TextBox x:Name="C0Textbox" TextChanged="Textbox_TextChanged">12.345</TextBox>
-                    <Label Content="Concentration L:" Padding="0, 10, 0, 0" />
+                    <Label Content="Concentration cL (mM):" Padding="0, 10, 0, 0" />
                     <TextBox x:Name="CLTextbox" TextChanged="Textbox_TextChanged">12.345</TextBox>
                 </StackPanel>
                 <Button x:Name="AddIonButtn" 
