@@ -23,13 +23,13 @@
                       HorizontalGridLinesBrush="LightGray"
                       VerticalGridLinesBrush="LightGray"
                       SelectionChanged="dataGrid1_SelectionChanged"
-                      CellEditEnding="dataGrid1_CellEditEnding"
+                      CurrentCellChanged="dataGrid1_CurrentCellChanged"
                       >
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Ion" Width="*" Binding="{Binding nameWithCharge}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Mobility" Width="*" Binding="{Binding mu, StringFormat=E4}" IsReadOnly="True" />
-                    <DataGridTextColumn Header="C0 (mM)" Width="*" Binding="{Binding c0, StringFormat=F4}" IsReadOnly="False" />
-                    <DataGridTextColumn Header="CL (mM)" Width="*" Binding="{Binding cL, StringFormat=F4}" IsReadOnly="False" />
+                    <DataGridTextColumn Header="c0 (mM)" Width="*" Binding="{Binding c0, StringFormat=F4}" IsReadOnly="False" />
+                    <DataGridTextColumn Header="cL (mM)" Width="*" Binding="{Binding cL, StringFormat=F4}" IsReadOnly="False" />
                 </DataGrid.Columns>
 
                 <!-- prevent selected cell from having a bold outline -->
@@ -56,8 +56,6 @@
                                 <MenuItem Header="JLJP screenshot" Click="LoadExample_JLJP"/>
                                 <MenuItem Header="Ng and Barry, 1994" Click="LoadExample_NgAndBarry" />
                                 <MenuItem Header="JPWin screenshot" Click="LoadExample_JPWin" />
-                                <Separator />
-                                <MenuItem Header="Calculation Theory" Click="LaunchBrowser_CalculationNotes" />
                             </ContextMenu>
                         </Button.ContextMenu>
                     </Button>
@@ -66,8 +64,11 @@
                         <Button.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Clear Ion Set" Click="OnClearIonSet" />
+                                <MenuItem Header="Recalculate" Click="dataGrid1_CurrentCellChanged" />
                                 <Separator />
                                 <MenuItem Header="About LJPcalc" Click="OnAboutButtonClicked" />
+                                <Separator />
+                                <MenuItem Header="Calculation Theory" Click="LaunchBrowser_CalculationNotes" />
                                 <MenuItem Header="LJPcalc on GitHub" Click="LaunchBrowser_LJPcalc" />
                             </ContextMenu>
                         </Button.ContextMenu>

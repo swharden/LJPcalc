@@ -137,11 +137,6 @@ namespace LJPcalc
             UpdateGuiFromIonSet();
         }
 
-        private void dataGrid1_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
-        {
-            UpdateGuiFromIonSet(refresh: false);
-        }
-
         private void LaunchBrowser_CalculationNotes(object sender, RoutedEventArgs e)
         {
             LaunchBrowser("https://github.com/swharden/LJPcalc#theory");
@@ -182,6 +177,11 @@ namespace LJPcalc
         private void OnClearIonSet(object sender, RoutedEventArgs e)
         {
             ClearIons();
+        }
+
+        private void dataGrid1_CurrentCellChanged(object sender, EventArgs e)
+        {
+            UpdateGuiFromIonSet(refresh: false);
         }
     }
 }
