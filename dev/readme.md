@@ -1,5 +1,7 @@
 # LJPcalc Developer Notes
 
+LJPcalc requires the .NET Core 3.0 runtime (or SDK): https://dotnet.microsoft.com/download
+
 ### Source Code Project Structure
 
 Project | Platform | Purpose
