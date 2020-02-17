@@ -52,7 +52,7 @@
                     <TextBox x:Name="CLTextbox" TextChanged="Textbox_TextChanged">12.345</TextBox>
                 </StackPanel>
                 <Button x:Name="AddIonButtn" 
-                        Content="Add »" 
+                        Content="Add Ion to Set 🡢" 
                         Grid.Row="1" 
                         Margin="5" 
                         Padding="5, 3, 5, 3" 
