@@ -44,10 +44,10 @@
 
             <DockPanel Grid.Row="1">
                 <StackPanel Orientation="Horizontal">
-                    <Button x:Name="MoveUpButton" Click="MoveUpButton_Click" Content="⬆" Margin="0, 0, 5, 0" Padding="5, 3, 5, 3" />
-                    <Button x:Name="MoveDownButton" Click="MoveDownButton_Click" Content="⬇" Margin="0, 0, 5, 0" Padding="5, 3, 5, 3"/>
-                    <Button x:Name="RemoveButton" Click="RemoveButton_Click" Content="❌" Margin="0, 0, 5, 0" Padding="5, 3, 5, 3"/>
-                    <Button x:Name="ExampleButton" Click="ExampleButton_Click" Content="Set" Margin="0, 0, 5, 0" Padding="5, 3, 5, 3">
+                    <Button x:Name="MoveUpButton" Click="MoveUpButton_Click" Content="⬆" Margin="0, 0, 5, 0" Padding="5, 3, 5, 3" ToolTip="move selected ion upward"/>
+                    <Button x:Name="MoveDownButton" Click="MoveDownButton_Click" Content="⬇" Margin="0, 0, 5, 0" Padding="5, 3, 5, 3" ToolTip="move selected ion downward"/>
+                    <Button x:Name="RemoveButton" Click="RemoveButton_Click" Content="❌" Margin="0, 0, 5, 0" Padding="5, 3, 5, 3" ToolTip="delete selected ion"/>
+                    <Button x:Name="ExampleButton" Click="ExampleButton_Click" Content="Set" Margin="0, 0, 5, 0" Padding="5, 3, 5, 3" ToolTip="additional ion set options">
                         <Button.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Clear Ion Set" Click="OnClearIonSet" />
@@ -63,7 +63,7 @@
                     </Button>
                 </StackPanel>
 
-                <Button Content="About LJPcalc" Padding="5, 3, 5, 3" Click="OnAboutButtonClicked" HorizontalAlignment="Right"/>
+                <Button Content="About" Padding="5, 3, 5, 3" Click="OnAboutButtonClicked" HorizontalAlignment="Right" ToolTip="About LJPcalc"/>
 
             </DockPanel>
 
