@@ -58,6 +58,7 @@ namespace LJPcalc
             DetailText.Text = ionTableText + resultMessage;
         }
 
+
         public void Calculate(List<Ion> ionSet)
         {
             clonedIonSet = new List<Ion>();
@@ -68,6 +69,23 @@ namespace LJPcalc
             {
                 ResultLabel.Content = "Incomplete ion set";
                 DetailText.Text = $"At least 2 ions are required to calculate LJP";
+                return;
+            }
+
+            bool isAllAnions = true;
+            bool isAllCations = true;
+            foreach (Ion ion in ionSet)
+            {
+                if (ion.charge < 0)
+                    isAllCations = false;
+                if (ion.charge > 0)
+                    isAllAnions = false;
+            }
+
+            if (isAllAnions || isAllCations)
+            {
+                ResultLabel.Content = "Unbalanced ion set";
+                DetailText.Text = $"The ion set must contain both anions and cations";
                 return;
             }
 

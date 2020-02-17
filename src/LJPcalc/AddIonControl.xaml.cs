@@ -35,7 +35,7 @@ namespace LJPcalc
             {
                 ionTable = new IonTable();
                 foreach (var ion in ionTable.ions)
-                    ionTableListbox.Items.Add(ion.name);
+                    ionTableListbox.Items.Add(ion.nameWithCharge);
 
                 // pre-select an item
                 ionTableListbox.SelectedItem = ionTableListbox.Items[0];
@@ -50,7 +50,7 @@ namespace LJPcalc
 
         private void IonTableListbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Ion ion = ionTable.Lookup(ionTableListbox.SelectedItem.ToString());
+            Ion ion = ionTable.ions[ionTableListbox.SelectedIndex];
             NameTextbox.Text = ion.name.ToString();
             ChargeTextbox.Text = ion.charge.ToString();
             ConductivityTextbox.Text = ion.conductance.ToString("E");
