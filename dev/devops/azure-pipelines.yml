@@ -78,6 +78,14 @@ steps:
     inputs:
       restoreSolution: "src/LJPapp/LJPapp.sln"
 
+  # BUILD LJPresearch
+  - task: DotNetCoreCLI@2
+    displayName: "Build LJPresearch (Windows)"
+    condition: contains(variables['agent.os'], 'Windows')
+    inputs:
+      command: "build"
+      projects: "src/LJPresearch/*.csproj"
+      
   # BUILD LJPapp for Android
   - task: XamarinAndroid@1
     displayName: "Build Android LJPapp (Windows)"
