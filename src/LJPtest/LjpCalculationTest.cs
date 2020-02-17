@@ -289,5 +289,81 @@ namespace LJPtest
             double ljp_mV = Calculate.Ljp(ionSet) * 1000;
             Assert.AreEqual(+8.71, ljp_mV, 0.5);
         }
+
+        [Test]
+        public void Test_LjpCalculationMatches_Harper001()
+        {
+            // ion set from Harper (1985) Table I
+            // https://pubs.acs.org/doi/pdf/10.1021/j100255a022
+
+            var ionSet = new List<Ion>
+            {
+                new Ion("Na", 0.0995, 0.00499),
+                new Ion("Cl", 0.0995, 0.00499)
+            };
+
+            var ionTable = new IonTable();
+            ionSet = ionTable.Lookup(ionSet);
+
+            double ljp_mV = Calculate.Ljp(ionSet) * 1000;
+            Assert.AreEqual(-15.6, ljp_mV, 0.5);
+        }
+
+        [Test]
+        public void Test_LjpCalculationMatches_Harper002()
+        {
+            // ion set from Harper (1985) Table I
+            // https://pubs.acs.org/doi/pdf/10.1021/j100255a022
+
+            var ionSet = new List<Ion>
+            {
+                new Ion("H", .1, .00345),
+                new Ion("Cl", .1, .00345)
+            };
+
+            var ionTable = new IonTable();
+            ionSet = ionTable.Lookup(ionSet);
+
+            double ljp_mV = Calculate.Ljp(ionSet) * 1000;
+            Assert.AreEqual(55.5, ljp_mV, 0.5);
+        }
+
+        [Test]
+        public void Test_LjpCalculationMatches_Harper003()
+        {
+            // ion set from Harper (1985) Table I
+            // https://pubs.acs.org/doi/pdf/10.1021/j100255a022
+
+            var ionSet = new List<Ion>
+            {
+                new Ion("Ca", .29, .00545),
+                new Ion("Cl", .29*2, .00545*2)
+            };
+
+            var ionTable = new IonTable();
+            ionSet = ionTable.Lookup(ionSet);
+
+            double ljp_mV = Calculate.Ljp(ionSet) * 1000;
+            Assert.AreEqual(-35, ljp_mV, 0.5);
+        }
+
+        [Test]
+        public void Test_LjpCalculationMatches_Harper004()
+        {
+            // ion set from Harper (1985) Table I
+            // https://pubs.acs.org/doi/pdf/10.1021/j100255a022
+
+            var ionSet = new List<Ion>
+            {
+                new Ion("Zn", .4, .0186),
+                new Ion("SO4", .4, .0186),
+            };
+
+            var ionTable = new IonTable();
+            ionSet = ionTable.Lookup(ionSet);
+
+            double ljp_mV = Calculate.Ljp(ionSet) * 1000;
+            Assert.AreEqual(-8.1, ljp_mV, 0.5);
+        }
     }
 }
