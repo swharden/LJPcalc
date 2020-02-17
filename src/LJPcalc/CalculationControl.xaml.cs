@@ -44,7 +44,7 @@ namespace LJPcalc
                 ionTableText = "";
                 foreach (Ion ion in clonedIonSet)
                     ionTableText += $"{ion}\r\n";
-                resultMessage = string.Format("LJP = {1} mV (solved in {0:0.000} ms)", elapsedSec * 1000.0, result * 1000.0);
+                resultMessage = string.Format("LJP = {1} mV (solved in {0:0.00} ms)", elapsedSec * 1000.0, result * 1000.0);
             }
             catch (Exception ex)
             {
