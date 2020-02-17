@@ -102,5 +102,10 @@ namespace LJPcalc
             Ion ion = GetIonFromTextbox();
             IonAdded(ion, EventArgs.Empty);
         }
+
+        private void ionTableListbox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            AddIonButtn_Click(null, null);
+        }
     }
 }

@@ -22,6 +22,7 @@
                 </Grid.RowDefinitions>
                 <ListBox Grid.Row="0" x:Name="ionTableListbox" 
                          SelectionChanged="IonTableListbox_SelectionChanged"
+                         MouseDoubleClick="ionTableListbox_MouseDoubleClick"
                          />
                 <!--
                 <Button Grid.Row="1" Content="Edit Ion Table" Margin="5" Padding="5, 3, 5, 3" />
