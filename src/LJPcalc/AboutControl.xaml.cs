@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -30,6 +31,70 @@ namespace LJPcalc
         private void DockPanel_MouseUp(object sender, MouseButtonEventArgs e)
         {
             HideAboutScreen(null, EventArgs.Empty);
+        }
+
+        private void UrlLaunch(string url)
+        {
+            try
+            {
+                Process.Start(url);
+            }
+            catch
+            {
+                if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
+                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+                else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux))
+                    Process.Start("xdg-open", url);
+                else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX))
+                    Process.Start("open", url);
+                else
+                    throw;
+            }
+        }
+
+        private void Link_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            UrlLaunch("https://github.com/swharden/LJPcalc");
+        }
+
+        private void Label_MouseEnter(object sender, MouseEventArgs e)
+        {
+            urlLabel.Foreground = Brushes.Blue;
+        }
+
+        private void Label_MouseLeave(object sender, MouseEventArgs e)
+        {
+            urlLabel.Foreground = Brushes.Gray;
+        }
+
+        private void urlScott_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            UrlLaunch("https://www.swharden.com/wp/about-scott/");
+        }
+
+        private void urlScott_MouseEnter(object sender, MouseEventArgs e)
+        {
+            urlScott.Foreground = Brushes.Blue;
+        }
+
+        private void urlScott_MouseLeave(object sender, MouseEventArgs e)
+        {
+            urlScott.Foreground = Brushes.Gray;
+        }
+
+        private void urlDoriano_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            UrlLaunch("https://sites.google.com/site/dbrogioli/");
+        }
+
+        private void urlDoriano_MouseEnter(object sender, MouseEventArgs e)
+        {
+            urlDoriano.Foreground = Brushes.Blue;
+        }
+
+        private void urlDoriano_MouseLeave(object sender, MouseEventArgs e)
+        {
+            urlDoriano.Foreground = Brushes.Gray;
         }
     }
 }

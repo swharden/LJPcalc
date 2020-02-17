@@ -13,7 +13,19 @@
                 <Label Content="LJPcalc" FontSize="32" Padding="2, 0, 0, 0"/>
                 <Label Name="versionLabel" Content="1.2.3.4" FontSize="12" Foreground="Gray" VerticalAlignment="Bottom" />
             </StackPanel>
-            <Label Content="by Scott Harden and Doriano Brogioli" FontSize="12" Foreground="Gray" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="3, 10, 3, 10">
+                <Label Content="by" Foreground="Gray" Padding="0"/>
+                <Label Name="urlScott" Content=" Scott Harden " Foreground="Gray" Padding="0"
+                       MouseUp="urlScott_MouseUp" MouseEnter="urlScott_MouseEnter" MouseLeave="urlScott_MouseLeave"
+                       />
+                <Label Content="and" Foreground="Gray"  Padding="0"/>
+                <Label Name="urlDoriano" Content=" Doriano Brogioli " Foreground="Gray" Padding="0"
+                       MouseUp="urlDoriano_MouseUp" MouseEnter="urlDoriano_MouseEnter" MouseLeave="urlDoriano_MouseLeave"
+                       />
+            </StackPanel>
+            <Label Name="urlLabel"  Padding="3" Foreground="Gray" 
+                   Content="https://www.GitHub.com/swharden/LJPcalc" 
+                   MouseUp="Link_MouseUp" MouseEnter="Label_MouseEnter" MouseLeave="Label_MouseLeave"/>
             <!--
             <Button Content="JLJP on GitHub" FontSize="12" Margin="6, 30, 6, 30" Padding="6, 2, 6, 2" HorizontalAlignment="Left"/>
             -->
