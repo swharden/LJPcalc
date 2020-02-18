@@ -6,9 +6,8 @@ namespace LJPmath
 {
     public class Calculate
     {
-        public static double Ljp(List<Ion> ionSet)
+        public static double Ljp(List<Ion> ionSet, double temperatureC = 25)
         {
-
             foreach (Ion ion in ionSet)
             {
                 if (ion.charge == 0)
@@ -40,14 +39,14 @@ namespace LJPmath
             // all phis except the last two get solved
             if (ionCount > 2)
             {
-                var phiEquations = new PhiEquations(ionSet) as IEquationSystem;
+                var phiEquations = new PhiEquations(ionSet, temperatureC) as IEquationSystem;
                 Solver s = new Solver(phiEquations);
                 s.solve(phis);
             }
 
             // calculate LJP
             double[] cLs = new double[phis.Length];
-            double ljp_V = Ljp(ionSet, phis, cLs);
+            double ljp_V = Ljp(ionSet, phis, cLs, temperatureC);
             if (ljp_V == Double.NaN)
                 throw new Exception("ERROR: Singularity (calculation aborted)");
 
@@ -83,8 +82,9 @@ namespace LJPmath
             return ljp_V;
         }
 
-        public static double Ljp(List<Ion> list, double[] startingPhis, double[] startingCLs)
+        public static double Ljp(List<Ion> list, double[] startingPhis, double[] startingCLs, double temperatureC)
         {
+            double KT = Constants.boltzmann * (temperatureC + Constants.zeroCinK);
 
             double cdadc = 1.0; // fine for low concentrations
 
@@ -144,7 +144,7 @@ namespace LJPmath
 
                 rhoCl = -Linalg.ScalarProduct(rhos, charges) / zCl;
 
-                double DCl = lastIon.mu * Constants.KT * cdadc;
+                double DCl = lastIon.mu * KT * cdadc;
                 double vCl = zCl * Constants.e * lastIon.mu * rhoCl;
 
                 double[] v = new double[ionCountMinusOne];
@@ -158,7 +158,7 @@ namespace LJPmath
                 {
                     for (int k = 0; k < ionCountMinusOne; k++)
                         mD[j, k] = 0.0;
-                    mD[j, j] = mus[j] * Constants.KT * cdadc;
+                    mD[j, j] = mus[j] * KT * cdadc;
                     v[j] = charges[j] * Constants.e * mus[j] * rhos[j];
                 }
 

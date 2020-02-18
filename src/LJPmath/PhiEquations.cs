@@ -9,12 +9,14 @@ namespace LJPmath
         private List<Ion> list;
         private int ionCount;
         private double[] sigma;
+        private double temperatureC;
 
-        public PhiEquations(List<Ion> list)
+        public PhiEquations(List<Ion> list, double temperatureC)
         {
-
             this.list = list;
             ionCount = list.Count;
+
+            this.temperatureC = temperatureC;
 
             // determine smallest nonzero cL of all ions
             double smallestCL = Double.PositiveInfinity;
@@ -44,7 +46,7 @@ namespace LJPmath
 
         public void equations(double[] x, double[] f)
         {
-            Calculate.Ljp(list, x, f);
+            Calculate.Ljp(list, x, f, temperatureC);
             for (int j = 0; j < ionCount - 2; j++)
             {
                 Ion ion = list[j];
