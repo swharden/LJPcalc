@@ -10,37 +10,35 @@ namespace LJPmath
     public class IonTable
     {
         public readonly List<Ion> ions = new List<Ion>();
-        private readonly string filePath;
-        private readonly string fileName;
 
-        public IonTable(String csvFilePath = "IonTable.csv")
+        public IonTable(String filePath = "IonTable.md", bool sortAlphabetically = true)
         {
-            if (!System.IO.File.Exists(csvFilePath))
+            if (!System.IO.File.Exists(filePath))
             {
-                string baseName = System.IO.Path.GetFileName(csvFilePath);
+                string baseName = System.IO.Path.GetFileName(filePath);
                 string pathFourFoldersUp = "../../../../" + baseName;
                 if (System.IO.File.Exists(pathFourFoldersUp))
-                {
-                    Debug.WriteLine($"copying table from {pathFourFoldersUp}");
-                    System.IO.File.Copy(pathFourFoldersUp, baseName);
-                }
+                    filePath = pathFourFoldersUp;
                 else
-                {
-                    throw new ArgumentException("csv file does not exist");
-                }
+                    throw new ArgumentException("ion table file does not exist");
             }
 
-            filePath = System.IO.Path.GetFullPath(csvFilePath);
-            fileName = System.IO.Path.GetFileName(csvFilePath);
+            ions = ReadIonsFromFile(filePath);
+            if (sortAlphabetically)
+                Sort();
+            Debug.WriteLine($"Loaded {ions.Count} ions from {filePath}");
+        }
 
-            List<Ion> ionsUnsorted = ReadIonsFromFile(csvFilePath);
-            ions.AddRange(ionsUnsorted.OrderBy(ion => ion.name).ToList());
-            Debug.WriteLine($"Loaded {ions.Count} ions from {fileName}");
+        private void Sort()
+        {
+            var sortedIons = ions.OrderBy(ion => ion.name).ToList();
+            ions.Clear();
+            ions.AddRange(sortedIons);
         }
 
         public override string ToString()
         {
-            return $"Ion table ({fileName}) containing {ions.Count} ions";
+            return $"Ion table containing {ions.Count} ions";
         }
 
         public bool Contains(string name)
@@ -73,22 +71,43 @@ namespace LJPmath
             return new Ion(name, 0, 0, 0, 0);
         }
 
-        private List<Ion> ReadIonsFromFile(String csvFilePath)
+        private List<Ion> ReadIonsFromFile(String ionFilePath)
         {
             List<Ion> unsortedIons = new List<Ion>();
-            String rawText = System.IO.File.ReadAllText(csvFilePath);
+            String rawText = System.IO.File.ReadAllText(ionFilePath);
             String[] lines = rawText.Split('\n');
             for (int i = 1; i < lines.Length; i++)
             {
-                Ion ion = IonFromLine(lines[i]);
+                Ion ion = IonFromMarkdownLine(lines[i]);
                 if (ion != null)
                     unsortedIons.Add(ion);
             }
             return unsortedIons;
         }
 
-        private Ion IonFromLine(String line)
+        public List<Ion> GetDuplicates()
         {
+            var duplicateNames = new List<string>();
+
+            var seenNames = new List<string>();
+            foreach (Ion ion in ions)
+                if (seenNames.Contains(ion.name))
+                    duplicateNames.Add(ion.name);
+                else
+                    seenNames.Add(ion.name);
+
+            var duplicateIons = new List<Ion>();
+            foreach (Ion ion in ions)
+                if (duplicateNames.Contains(ion.name))
+                    duplicateIons.Add(ion);
+
+            return duplicateIons;
+        }
+
+        [Obsolete]
+        private Ion IonFromCsvLine(String line)
+        {
+            line = line.Replace("\t", "");
             line = line.Trim();
             if (line.StartsWith("#"))
                 return null;
@@ -98,18 +117,61 @@ namespace LJPmath
             Regex CSVParser = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
             String[] parts = CSVParser.Split(line);
 
+            if (parts.Length != 3)
+                Console.WriteLine($"WARNING improperly formatted ion table line:\n{line}");
+
             if (parts[1] == "" || parts[2] == "")
                 return null;
 
+            const double K_CONDUCTANCE = 73.5;
+
             try
             {
-                Ion ion = new Ion(
-                        name: parts[0].Trim().Trim('"'),
-                        charge: int.Parse(parts[1]),
-                        conductance: double.Parse(parts[2]) * 1E-4,
-                        cL: 0,
-                        c0: 0
-                    );
+                string name = parts[0].Trim().Trim('"');
+                int charge = int.Parse(parts[1]);
+
+                string conductanceString = parts[2].Replace(" ", "");
+                bool isNormalizedToK = (conductanceString.EndsWith("*K", StringComparison.OrdinalIgnoreCase));
+                conductanceString = conductanceString.Replace("*K", "");
+                double conductance = double.Parse(conductanceString) * 1E-4;
+                if (isNormalizedToK)
+                    conductance *= K_CONDUCTANCE;
+
+                Ion ion = new Ion(name, charge, conductance, cL: 0, c0: 0);
+                return ion;
+            }
+            catch
+            {
+                Debug.WriteLine($"Could not parse line: {line}");
+                return null;
+            }
+        }
+
+        private Ion IonFromMarkdownLine(String line)
+        {
+            const double K_CONDUCTANCE = 73.5;
+
+            var parts = line.Split('|');
+            if (parts.Length != 3)
+                return null;
+
+            string strCond = parts[2];
+            strCond = strCond.Replace(" ", "").ToUpper();
+            bool isNormalizedToK = false;
+            if (strCond.Contains("*K"))
+            {
+                strCond = strCond.Replace("*K", "");
+                isNormalizedToK = true;
+            }
+
+            try
+            {
+                string name = parts[0].Trim();
+                int charge = int.Parse(parts[1]);
+                double conductance = double.Parse(strCond) * 1E-4;
+                if (isNormalizedToK)
+                    conductance *= K_CONDUCTANCE;
+                Ion ion = new Ion(name, charge, conductance, cL: 0, c0: 0);
                 return ion;
             }
             catch
