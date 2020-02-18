@@ -9,17 +9,10 @@ namespace LJPtest
     [TestFixture]
     class IonTableTest
     {
-        [OneTimeSetUp]
-        public void SetUp()
-        {
-            System.IO.File.Delete("IonTable.csv");
-            System.IO.File.Copy("../../../../IonTable.csv", "./IonTable.csv");
-        }
-
         [Test]
         public void Test_NoFile_ThrowsException()
         {
-            Assert.Throws<ArgumentException>(() => new LJPmath.IonTable("badFileName.csv"));
+            Assert.Throws<ArgumentException>(() => new LJPmath.IonTable("badFileName.md"));
         }
 
         [Test]
@@ -32,7 +25,7 @@ namespace LJPtest
         [Test]
         public void Test_ConstructorFilename_IsFine()
         {
-            var ionTable = new LJPmath.IonTable("IonTable.csv");
+            var ionTable = new LJPmath.IonTable("IonTable.md");
             Console.WriteLine(ionTable);
         }
 

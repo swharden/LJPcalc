@@ -8,13 +8,6 @@ namespace LJPtest
 {
     class LjpCalculationTest
     {
-        [OneTimeSetUp]
-        public void SetUp()
-        {
-            System.IO.File.Delete("IonTable.csv");
-            System.IO.File.Copy("../../../../IonTable.csv", "./IonTable.csv");
-        }
-
         [Test]
         public void Test_LjpCalculationMatches_ExampleFromScreenshot()
         {
