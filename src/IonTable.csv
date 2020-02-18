@@ -2,18 +2,9 @@ name, valency, conductance(E-4)
 ,,
 ,,
 UNSW Medicine IONIC MOBILITY TABLES (Table 2),,
+to reverse K normalization all values there are multiplied by the K mobility (73.5),,
 https://medicalsciences.med.unsw.edu.au/research/research-services/ies/ionicmobilitytables,,
-NMDG,1,0.33
-Tris,1,0.4
-Aspartate,-1,0.3
-Gluconate,-1,0.33
-Glutamate,-1,0.26
-HEPES,-1,0.3
-Isethionate,-1,0.52
-MES,-1,0.37
-MOPS,-1,0.35
-EGTA(2-),-2,0.24
-EGTA(3-),-3,0.25
+
 ,,
 ,,
 TABLE 8.32 of Langes Handbook of Chemistry,,
