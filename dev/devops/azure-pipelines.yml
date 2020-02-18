@@ -60,6 +60,7 @@ steps:
   # RESTORE LJPcalc PACKAGES
   - task: NuGetCommand@2
     displayName: "Restore LJPcalc Packages"
+    condition: contains(variables['agent.os'], 'Windows')
     inputs:
       restoreSolution: "src/LJPcalc/*.csproj"
 
