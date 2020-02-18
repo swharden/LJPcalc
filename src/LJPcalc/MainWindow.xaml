@@ -8,8 +8,8 @@
         Title="LJPcalc" 
         Height="500" 
         MinHeight="500"
-        Width="850"
-        MinWidth="850"
+        Width="950"
+        MinWidth="950"
         >
 
     <Grid>

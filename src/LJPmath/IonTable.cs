@@ -79,11 +79,15 @@ namespace LJPmath
             List<Ion> unsortedIons = new List<Ion>();
             String rawText = System.IO.File.ReadAllText(ionFilePath);
             String[] lines = rawText.Split('\n');
+            List<string> ionsSeen = new List<string>();
             for (int i = 1; i < lines.Length; i++)
             {
                 Ion ion = IonFromMarkdownLine(lines[i]);
-                if (ion != null && !Contains(ion.name))
+                if (ion != null && !ionsSeen.Contains(ion.name))
+                {
+                    ionsSeen.Add(ion.name);
                     unsortedIons.Add(ion);
+                }
             }
             return unsortedIons;
         }
@@ -156,6 +160,9 @@ namespace LJPmath
 
             var parts = line.Split('|');
             if (parts.Length != 3)
+                return null;
+
+            if (parts[1] == "---" || parts[1] == "Charge")
                 return null;
 
             string strCond = parts[2];
