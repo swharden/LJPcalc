@@ -37,6 +37,8 @@ namespace LJPcalc
                 foreach (var ion in ionTable.ions)
                     ionTableListbox.Items.Add(ion.nameWithCharge);
 
+                //ionTableGroupBox.Header = $"Ion Table ({ionTableListbox.Items.Count})";
+
                 // pre-select an item
                 ionTableListbox.SelectedItem = ionTableListbox.Items[0];
                 ionTableListbox.ScrollIntoView(ionTableListbox.SelectedItem);
