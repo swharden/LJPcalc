@@ -180,104 +180,104 @@ Trimethylacetate,-1,31.9
 # To reverse K normalization all values there are multiplied by the K mobility (73.5),,
 # ,,
 # Table 1,,
-Choline,					+1,		0.51,		
-Cs,							+1,		1.050,		
-K,							+1,		1.000,		
-Li,							+1,		0.526,		
-NH4 (Ammonium)				+1,		1.001,		
-Na,							+1,		0.682,		
-Rb,							+1,		1.059,		
-TEA (TetraethylAmmonium),	+1,		0.444,		
-TMA (TetramethylAmmonium),	+1,		0.611,		
-Acetate,					-1,		0.556,		
-Benzoate,					-1,		0.441,		
-Br,							-1,		1.063,		
-Cl,							-1,		1.0382,	
-ClO4 (Perchlorate),			-1,		0.916,		
-F,							-1,		0.753,		
-H2PO,						-1,		0.450,		
-HCO3,						-1,		0.605,		
-I,							-1,		1.0456,		
-NO3 (Nitrate),				-1,		0.972,		
-Picrate,					-1,		0.411,		
-Propionate,					-1,		0.487,		
-SCN (Thiocyanate),			-1,		0.901,
-Co,							+2,		0.367,	
-Mg,							+2,		0.361,		
-HPO4,						-2,		0.390,		
-SO4 (Sulphate),				-2,		0.544,		
-## ,,
+Choline,1,0.51*K
+Cs,1,1.05*K
+K,1,1*K
+Li,1,0.526*K
+NH4 (Ammonium),1,1.001*K
+Na,1,0.682*K
+Rb,1,1.059*K
+TEA (TetraethylAmmonium),1,0.444*K
+TMA (TetramethylAmmonium),1,0.611*K
+Acetate,-1,0.556*K
+Benzoate,-1,0.441*K
+Br,-1,1.063*K
+Cl,-1,1.0382*K
+ClO4 (Perchlorate),-1,0.916*K
+F,-1,0.753*K
+H2PO,-1,0.45*K
+HCO3,-1,0.605*K
+I,-1,1.0456*K
+NO3 (Nitrate),-1,0.972*K
+Picrate,-1,0.411*K
+Propionate,-1,0.487*K
+SCN (Thiocyanate),-1,0.901*K
+Co,2,0.367*K
+Mg,2,0.361*K
+HPO4,-2,0.39*K
+SO4 (Sulphate),-2,0.544*K
+,,
 ## Table 2,,
-NMDG,						+1,		0.33
-Tris,						+1,		0.4
-Aspartate,					-1,		0.3
-Gluconate,					-1,		0.33
-Glutamate,					-1,		0.26
-HEPES,						-1,		0.3
-Isethionate,				-1,		0.52
-MES,						-1,		0.37
-MOPS,						-1,		0.35
-EGTA(2-),					-2,		0.24
-EGTA(3-),					-3,		0.25
-## ,,
+NMDG,1,0.33*K
+Tris,1,0.4*K
+Aspartate,-1,0.3*K
+Gluconate,-1,0.33*K
+Glutamate,-1,0.26*K
+HEPES,-1,0.3*K
+Isethionate,-1,0.52*K
+MES,-1,0.37*K
+MOPS,-1,0.35*K
+EGTA(2-),-2,0.24*K
+EGTA(3-),-3,0.25*K
+,,
 ## Table 3,,
-Thallium,					+1,		1.02
-Butyrate,					-1,		0.44
-Citrate,					-3,		0.318
-2-(Methyl-Amino) Ethanol,	+1,		0.490
-N-Methylethanolamine,		+1,		0.490
-## ,,
+Thallium,1,1.02*K
+Butyrate,-1,0.44*K
+Citrate,-3,0.318*K
+2-(Methyl-Amino) Ethanol,1,0.49*K
+N-Methylethanolamine,1,0.49*K
+,,
 ## Table 4,,
-Ag,							+1,		0.842
-Diethylammonium,			+1,		0.57
-Dimethylammonium,			+1,		0.705
-Ethyltrimethylammonium,		+1,		0.551
-H,							+1,		4.757
-Piperidinium,				+1,		0.506
-Tetrabutylammonium,			+1,		0.265
-Tetrapropylammonium,		+1,		0.318
-Triethylammonium,			+1,		0.467
-Trimethylammonium,			+1,		0.643
-Bromoacetate,				-1,		0.533
-Bromobenzoate,				-1,		0.41
-Chloroacetate,				-1,		0.541
-CNO (Cyanate),				-1,		0.879
-Cyanoacetate,				-1,		0.59
-Dichloroacetate,			-1,		0.521
-Ethylsulfate,				-1,		0.539
-Ethylsulfonate,				-1,		0.539
-Fluoroacetate,				-1,		0.604
-Fluorobenzoate,				-1,		0.45
-Formate,					-1,		0.743
-Iodoacetate,				-1,		0.552
-Lactate,					-1,		0.528
-Methylsulfate,				-1,		0.664
-methanesulfonate,			-1,		0.664
-Methylsulfonate,			-1,		0.664
-OH (hydroxide),				-1,		2.69
-ReO4 (Rhenate),				-1,		0.747
-Salicylate,					-1,		0.49
-Trichloroacetate,			-1,		0.476
-Cd,							+2,		0.37
-Cu,							+2,		0.365
-Fe,							+2,		0.37
-Hg,							+2,		0.433
-Mn,							+2,		0.364
-Ni,							+2,		0.337
-Pb,							+2,		0.48
-Malate,						-2,		0.4
-Maleate,					-2,		0.421
-Oxalate,					-2,		0.504
-Succinate,					-2,		0.4
-Gd,							+3,		0.305
-Fe,							+3,		0.308
-La,							+3,		0.316
-Citrate,					-3,		0.318
-ATP (Adenosine 5'-Triphosphate),	-2,		0.15
-ATP (Adenosine 5'-Triphosphate),	-3,		0.15
-ATP (Adenosine 5'-Triphosphate),	-4,		0.15
-## ,,
+Ag,1,0.842*K
+Diethylammonium,1,0.57*K
+Dimethylammonium,1,0.705*K
+Ethyltrimethylammonium,1,0.551*K
+H,1,4.757*K
+Piperidinium,1,0.506*K
+Tetrabutylammonium,1,0.265*K
+Tetrapropylammonium,1,0.318*K
+Triethylammonium,1,0.467*K
+Trimethylammonium,1,0.643*K
+Bromoacetate,-1,0.533*K
+Bromobenzoate,-1,0.41*K
+Chloroacetate,-1,0.541*K
+CNO (Cyanate),-1,0.879*K
+Cyanoacetate,-1,0.59*K
+Dichloroacetate,-1,0.521*K
+Ethylsulfate,-1,0.539*K
+Ethylsulfonate,-1,0.539*K
+Fluoroacetate,-1,0.604*K
+Fluorobenzoate,-1,0.45*K
+Formate,-1,0.743*K
+Iodoacetate,-1,0.552*K
+Lactate,-1,0.528*K
+Methylsulfate,-1,0.664*K
+methanesulfonate,-1,0.664*K
+Methylsulfonate,-1,0.664*K
+OH (hydroxide),-1,2.69*K
+ReO4 (Rhenate),-1,0.747*K
+Salicylate,-1,0.49*K
+Trichloroacetate,-1,0.476*K
+Cd,2,0.37*K
+Cu,2,0.365*K
+Fe,2,0.37*K
+Hg,2,0.433*K
+Mn,2,0.364*K
+Ni,2,0.337*K
+Pb,2,0.48*K
+Malate,-2,0.4*K
+Maleate,-2,0.421*K
+Oxalate,-2,0.504*K
+Succinate,-2,0.4*K
+Gd,3,0.305*K
+Fe,3,0.308*K
+La,3,0.316*K
+Citrate,-3,0.318*K
+ATP (Adenosine 5'-Triphosphate),-2,0.15*K
+ATP (Adenosine 5'-Triphosphate),-3,0.15*K
+ATP (Adenosine 5'-Triphosphate),-4,0.15*K
+,,
 ## Table 5,,
-2-AP (2-aminopyridine), 	+1,		.45
-3-AP (3-aminopyridine), 	+1,		.46
-4-AP (4-aminopyridine), 	+2,		.29
+2-AP (2-aminopyridine),1,0.45*K
+3-AP (3-aminopyridine),1,0.46*K
+4-AP (4-aminopyridine),2,0.29*K
