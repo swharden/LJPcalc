@@ -67,7 +67,7 @@ namespace LJPcalc
 
             if (ionSet.Count < 2)
             {
-                ResultLabel.Content = "Incomplete ion set";
+                ResultLabel.Content = "⚠️ Incomplete ion set";
                 DetailText.Text = $"At least 2 ions are required to calculate LJP";
                 return;
             }
@@ -84,7 +84,7 @@ namespace LJPcalc
 
             if (isAllAnions || isAllCations)
             {
-                ResultLabel.Content = "Unbalanced ion set";
+                ResultLabel.Content = "⚠️ Unbalanced ion set";
                 DetailText.Text = $"The ion set must contain both anions and cations";
                 return;
             }
@@ -92,7 +92,7 @@ namespace LJPcalc
             Ion secondFromLastIon = ionSet[ionSet.Count - 2];
             if (secondFromLastIon.c0 == secondFromLastIon.cL)
             {
-                ResultLabel.Content = "Invalid ion set";
+                ResultLabel.Content = "⚠️ Invalid ion set";
                 DetailText.Text = $"Second from last ion cannot have equal C0 and CL";
                 return;
             }
