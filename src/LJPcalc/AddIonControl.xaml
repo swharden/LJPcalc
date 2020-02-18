@@ -42,7 +42,7 @@
                     <TextBox x:Name="NameTextbox" TextChanged="Textbox_TextChanged">NaH2PO4</TextBox>
                     <Label Content="Charge:" Padding="0, 10, 0, 0" />
                     <TextBox x:Name="ChargeTextbox" TextChanged="Textbox_TextChanged">-2</TextBox>
-                    <Label Content="Conductivity:" Padding="0, 10, 0, 0" />
+                    <Label Content="Conductivity: (E-4)" Padding="0, 10, 0, 0" />
                     <TextBox x:Name="ConductivityTextbox" TextChanged="Textbox_TextChanged">12.345</TextBox>
                     <Label Content="Mobility:" Padding="0, 10, 0, 0" />
                     <TextBox x:Name="MuTextbox" IsEnabled="False">12.345</TextBox>

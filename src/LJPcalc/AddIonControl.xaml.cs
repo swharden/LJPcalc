@@ -55,7 +55,9 @@ namespace LJPcalc
             Ion ion = ionTable.ions[ionTableListbox.SelectedIndex];
             NameTextbox.Text = ion.name.ToString();
             ChargeTextbox.Text = ion.charge.ToString();
-            ConductivityTextbox.Text = ion.conductance.ToString("E");
+            ConductivityTextbox.Text = (ion.conductance * 1E4).ToString("F8").Trim('0');
+            if (ConductivityTextbox.Text.EndsWith("."))
+                ConductivityTextbox.Text += "0";
             MuTextbox.Text = ion.mu.ToString("E");
         }
 
