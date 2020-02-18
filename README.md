@@ -29,7 +29,7 @@ A cross-platform console version of LJPcalc is available which supports Windows,
 
 ### Calculation Method
 
-LJPcalc calculates the liquid junction potential according to the stationary Nernst-Planck equation which is typically regarded as superior to the simpler Goldman and Henderson equations used by most commercial LJP calculators. Both equations produce nearly identical LJPs, but the Henderson equation begins to under-estimate the LJP as ion concentration difference across the junction increases.
+LJPcalc calculates the liquid junction potential according to the stationary Nernst-Planck equation which is typically regarded as superior to the simpler Henderson equation used by most commercial LJP calculators. Both equations produce nearly identical LJPs, but the Henderson equation becomes inaccurate as ion concentrations increase, and also when calculating LJP for solutions containing polyvalent ions.
 
 ### Ion Sequence
 
