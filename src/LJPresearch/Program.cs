@@ -8,11 +8,10 @@ namespace LJPresearch
     {
         static void Main(string[] args)
         {
-            //Figure_EffectOfTemperature();
-            Figure_EffectOfTemperatureSimple();
+            Figure_EffectOfTemperature_DifferentMobilities();
         }
 
-        public static void Figure_EffectOfTemperatureSimple()
+        public static void Figure_EffectOfTemperature_Simple()
         {
             var ionTable = new IonTable();
 
@@ -37,7 +36,55 @@ namespace LJPresearch
             Console.WriteLine($"Saved: {filePath}");
         }
 
-        public static void Figure_EffectOfTemperature()
+        public static void Figure_EffectOfTemperature_DifferentMobilities()
+        {
+            double[] temps = ScottPlot.DataGen.Consecutive(50);
+            double[] ljps25C = new double[temps.Length];
+            double[] ljps18C = new double[temps.Length];
+            double[] ljps0C = new double[temps.Length];
+
+            for (int i = 0; i < temps.Length; i++)
+            {
+                Console.WriteLine($"Calculating for {temps[i]}C...");
+
+                var ionSet0C = new List<Ion> {
+                    new Ion("Zn", 2, 28, 9, 0.0284),
+                    new Ion("K", 1, 40.3, 0, 3),
+                    new Ion("Cl", -1, 41.4, 18, 3.0568)
+                };
+                ljps0C[i] = Calculate.Ljp(ionSet0C, temps[i]) * 1000;
+
+                var ionSet18C = new List<Ion> {
+                    new Ion("Zn", 2, 45.0, 9, 0.0284),
+                    new Ion("K", 1, 64.6, 0, 3),
+                    new Ion("Cl", -1, 65.5, 18, 3.0568)
+                };
+                ljps18C[i] = Calculate.Ljp(ionSet18C, temps[i]) * 1000;
+
+                var ionSet25C = new List<Ion> {
+                    new Ion("Zn", 2, 52.8, 9, 0.0284),
+                    new Ion("K", 1, 73.5, 0, 3),
+                    new Ion("Cl", -1, 76.31, 18, 3.0568)
+                };
+                ljps25C[i] = Calculate.Ljp(ionSet25C, temps[i]) * 1000;
+
+            }
+
+            var plt = new ScottPlot.Plot(600, 400);
+            plt.PlotScatter(temps, ljps25C, label: "25C mobilities");
+            plt.PlotScatter(temps, ljps18C, label: "18C mobilities");
+            plt.PlotScatter(temps, ljps0C, label: "0C mobilities");
+            plt.Legend(location: ScottPlot.legendLocation.lowerLeft);
+            plt.Title("JLJP Screenshot Ion Set");
+            plt.YLabel("Junction Potential (mV)");
+            plt.XLabel("Temperature (C)");
+
+            string filePath = System.IO.Path.GetFullPath("Figure_EffectOfTemperature_DifferentMobilities.png");
+            plt.SaveFig(filePath);
+            Console.WriteLine($"Saved: {filePath}");
+        }
+
+        public static void Figure_EffectOfTemperature_SeveralSets()
         {
             /* this study calculates one of several known ionSets at every temperature between 0C and 50C */
 
