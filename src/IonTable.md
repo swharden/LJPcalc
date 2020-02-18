@@ -2,6 +2,7 @@
 
 * All conductances on this page assume ambient temperature (~25C).
 * Conductances normalized to K (73.5) are suffixed with "*K".
+* Ions higher in the list are used when duplicates are present.
 
 ### **Langes Handbook of Chemistry**
 Fifteenth Edition, Table 8.32, page 997\
