@@ -43,7 +43,10 @@ namespace LJPmath
 
         public bool Contains(string name)
         {
-            return (Lookup(name).charge != 0);
+            foreach (Ion tableIon in ions)
+                if (string.Compare(name, tableIon.name, StringComparison.OrdinalIgnoreCase) == 0)
+                    return true;
+            return false;
         }
 
         public List<Ion> Lookup(List<Ion> ionList)
@@ -79,7 +82,7 @@ namespace LJPmath
             for (int i = 1; i < lines.Length; i++)
             {
                 Ion ion = IonFromMarkdownLine(lines[i]);
-                if (ion != null)
+                if (ion != null && !Contains(ion.name))
                     unsortedIons.Add(ion);
             }
             return unsortedIons;
