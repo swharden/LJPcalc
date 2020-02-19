@@ -1,15 +1,18 @@
-# LJPcalc Ion Conductance and Mobility Table
+# LJPcalc Ion Charge and Conductivity Library
 
-* All conductances on this page assume ambient temperature (~25C).
-* Conductances normalized to K (73.5) are suffixed with "*K".
-* Ions higher in the list are used when duplicates are present.
+### Notes
+* This document provides a table supplying [elementary charge](https://en.wikipedia.org/wiki/Elementary_charge) and [molar conductivity](https://en.wikipedia.org/wiki/Molar_conductivity) for common ions.
+* All conductivities on this page assume ambient temperature (~25C).
+* Conductivities normalized to K (73.5) are suffixed with "*K".
+* Ions higher in the list are used by LJPcalc when duplicates are present.
 * Uncharged molecules (like glucose) don't conduct electricity in solution and therefore do not influence LJP
+* Large charged molecules (like EGTA, glucose, and phosphocreatine) have low mobilities so their influence on LJP is negligible when solutions contain appreciable concentrations of small ions. Therefore, large molecules can be omitted from LJP calculations for most biological applications.
 
 ### **Langes Handbook of Chemistry**
 Fifteenth Edition, Table 8.32, page 997\
 http://fptl.ru/biblioteka/spravo4niki/dean.pdf
 
-Inorganic Cations|Charge|Conductance (E-4)
+Inorganic Cations|Charge|Conductivity (E-4)
 ---|---|---
 Ag|+1|61.9
 Al|+3|61
@@ -59,7 +62,7 @@ Y|+3|62
 Yb|+3|65.2
 Zn|+2|52.8
 
-Inorganic Anions|Charge|Conductance (E-4)
+Inorganic Anions|Charge|Conductivity (E-4)
 ---|---|---
 Au(CN)2|-1|50
 Au(CN)4|-1|36
@@ -117,7 +120,7 @@ S2O6|-2|93
 S2O8|-2|86
 WO4|-2|69.4
 
-Organic Cations|Charge|Conductance (E-4)
+Organic Cations|Charge|Conductivity (E-4)
 ---|---|---
 Decylpyridinium|+1|29.5
 Diethylammonium|+1|42
@@ -139,7 +142,7 @@ Trimethylammonium|+1|47.2
 Trimethylsulfonium|+1|51.4
 Tripropylammonium|+1|26.1
 
-Organic Anions|Charge|Conductance (E-4)
+Organic Anions|Charge|Conductivity (E-4)
 ---|---|---
 Acetate|-1|41
 Benzoate|-1|32.4
@@ -194,7 +197,7 @@ Trimethylacetate|-1|31.9
 ### UNSW Medicine
 https://medicalsciences.med.unsw.edu.au/research/research-services/ies/ionicmobilitytables
 
-Ion Table 1|Charge|Conductance (E-4)
+Ion Table 1|Charge|Conductivity (E-4)
 ---|---|---
 Choline|+1|0.51*K
 Cs|+1|1.05*K
@@ -223,7 +226,7 @@ Mg|+2|0.361*K
 HPO4|-2|0.39*K
 SO4 (Sulphate)|-2|0.544*K
 
-Ion Table 2|Charge|Conductance (E-4)
+Ion Table 2|Charge|Conductivity (E-4)
 ---|---|---
 NMDG|+1|0.33*K
 Tris|+1|0.4*K
@@ -237,7 +240,7 @@ MOPS|-1|0.35*K
 EGTA(2-)|-2|0.24*K
 EGTA(3-)|-3|0.25*K
 
-Ion Table 3|Charge|Conductance (E-4)
+Ion Table 3|Charge|Conductivity (E-4)
 ---|---|---
 Thallium|+1|1.02*K
 Butyrate|-1|0.44*K
@@ -245,7 +248,7 @@ Citrate|-3|0.318*K
 2-(Methyl-Amino) Ethanol|+1|0.49*K
 N-Methylethanolamine|+1|0.49*K
 
-Ion Table 4|Charge|Conductance (E-4)
+Ion Table 4|Charge|Conductivity (E-4)
 ---|---|---
 Ag|+1|0.842*K
 Diethylammonium|+1|0.57*K
@@ -296,7 +299,7 @@ ATP (Adenosine 5'-Triphosphate)|-2|0.15*K
 ATP (Adenosine 5'-Triphosphate)|-3|0.15*K
 ATP (Adenosine 5'-Triphosphate)|-4|0.15*K
 
-Ion Table 5|Charge|Conductance (E-4)
+Ion Table 5|Charge|Conductivity (E-4)
 ---|---|---
 2-AP (2-aminopyridine)|+1|0.45*K
 3-AP (3-aminopyridine)|+1|0.46*K
