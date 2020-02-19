@@ -5,11 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LJPcalc"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="900">
+             d:DesignHeight="600" d:DesignWidth="900">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250" />
-            <ColumnDefinition Width="200" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
@@ -17,35 +16,61 @@
             <ListBox  Grid.Column="0" x:Name="ionTableListbox" SelectionChanged="TableIonSelected" MouseDoubleClick="TableIonDoubleClicked"/>
         </GroupBox>
 
-        <StackPanel Grid.Column="1">
-            <GroupBox Header="Add Ion" Margin="5, 0, 5, 0">
-                <StackPanel Margin="5, 0, 5, 0" Grid.Row="0">
-                    <Label Content="Name:" Padding="0, 10, 0, 3" />
-                    <TextBox x:Name="NameTextbox" TextChanged="AddIonNameChanged" Text="NaH2PO4" />
-                    <Label Content="Charge:" Padding="0, 10, 0, 3" />
-                    <TextBox x:Name="ChargeTextbox" TextChanged="AddIonChargeChanged">-2</TextBox>
-                    <Label Content="Conductivity (10⁻⁴·m²·S/mol):" Padding="0, 10, 0, 3" />
-                    <TextBox x:Name="ConductivityTextbox" TextChanged="AddIonCondChanged" Grid.Column="0" VerticalAlignment="Center">12.345</TextBox>
-                    <Label Content="Mobility (m²/V/s):" Padding="0, 10, 0, 3" />
-                    <TextBox x:Name="MuTextbox" IsEnabled="False" Grid.Column="0" VerticalAlignment="Center">12.345</TextBox>
-                    <Label Content="Concentration 0 (mM):" Padding="0, 10, 0, 3" />
-                    <TextBox x:Name="C0Textbox" TextChanged="AddIonC0Changed" Grid.Column="0" VerticalAlignment="Center">12.345</TextBox>
-                    <Label Content="Concentration L (mM):" Padding="0, 10, 0, 3" />
-                    <TextBox x:Name="CLTextbox" TextChanged="AddIonCLChanged" Grid.Column="0" VerticalAlignment="Center">12.345</TextBox>
-                    <Button x:Name="AddIonButtn" Content="Add Ion to Set 🡢" Margin="0, 20, 0, 6" Padding="5, 3, 5, 3" Click="AddIon"/>
-                </StackPanel>
-            </GroupBox>
-        </StackPanel>
-
-        <Grid Grid.Column="2">
+        <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
-            <GroupBox Header="Ion Set" Grid.Row="0">
+            <GroupBox Header="Create Ion" Margin="5, 0, 5, 0" Grid.Row="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Row="0" Grid.Column="0" Content="Name:" HorizontalAlignment="Right" />
+                    <TextBox Grid.Row="0" Grid.Column="1" x:Name="NameTextbox" TextChanged="AddIonNameChanged" Text="NaH2PO4" VerticalAlignment="Center"/>
+
+                    <Label Grid.Row="1" Grid.Column="0" Content="Charge:" HorizontalAlignment="Right" />
+                    <TextBox Grid.Row="1" Grid.Column="1" x:Name="ChargeTextbox" TextChanged="AddIonChargeChanged" Text="-2" VerticalAlignment="Center"/>
+
+                    <Label Grid.Row="0" Grid.Column="2" Content="Conductivity:" HorizontalAlignment="Right" Margin="15, 0, 0, 0"/>
+                    <TextBox Grid.Row="0" Grid.Column="3" x:Name="ConductivityTextbox" TextChanged="AddIonCondChanged" VerticalAlignment="Center" Text="12.345" />
+                    <Label Grid.Row="0" Grid.Column="4" Content="10⁻⁴·m²·S/mol" />
+
+                    <Label Grid.Row="1" Grid.Column="2" Content="Mobility:" HorizontalAlignment="Right" />
+                    <TextBox Grid.Row="1" Grid.Column="3" x:Name="MobilityTextbox" TextChanged="AddIonCondChanged" VerticalAlignment="Center" Text="12.345" />
+                    <Label Grid.Row="1" Grid.Column="4" Content="m²/V/s" />
+
+                    <Label Grid.Row="0" Grid.Column="5" Content="c0:" HorizontalAlignment="Right" Margin="15, 0, 0, 0" />
+                    <TextBox Grid.Row="0" Grid.Column="6" x:Name="C0Textbox" TextChanged="AddIonC0Changed" VerticalAlignment="Center" Text="12.345" />
+                    <Label Grid.Row="0" Grid.Column="7" Content="mM" />
+
+                    <Label Grid.Row="1" Grid.Column="5" Content="cL:" HorizontalAlignment="Right" />
+                    <TextBox Grid.Row="1" Grid.Column="6" x:Name="CLTextbox" TextChanged="AddIonCLChanged" VerticalAlignment="Center" Text="12.345" />
+                    <Label Grid.Row="1" Grid.Column="7" Content="mM" />
+
+                    <Button x:Name="AddIonButtn" Grid.Row="0" Grid.Column="8" Grid.RowSpan="2" Content="Add Ion to Set" Padding="5, 3, 5, 3" Margin="15, 0, 0, 0" Click="AddIon" VerticalAlignment="Center"/>
+
+                </Grid>
+            </GroupBox>
+
+            <GroupBox Header="Ion Set" Grid.Row="1" Margin="5, 0, 5, 0">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -75,20 +100,21 @@
                 </Grid>
             </GroupBox>
 
-            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0, 10, 0, 0">
+            <GroupBox Header="Calculation" Grid.Row="2" Margin="5, 0, 5, 0" >
+                <DockPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0, 10, 0, 0" DockPanel.Dock="Top" >
+                        <ComboBox Margin="0, 0, 5, 0">
+                            <ComboBoxItem Content="Nernst–Planck" IsSelected="True" />
+                            <ComboBoxItem Content="Henderson" IsEnabled="False" />
+                        </ComboBox>
+                        <Button Content="Calculate" Padding="5, 3, 5, 3" Margin="5, 0, 5, 0"/>
+                        <Label Content="calculating..." Foreground="Gray" />
+                    </StackPanel>
 
-                <ComboBox Margin="0, 0, 5, 0">
-                    <ComboBoxItem Content="Nernst–Planck" IsSelected="True" />
-                    <ComboBoxItem Content="Henderson" IsEnabled="False" />
-                </ComboBox>
-                <Button Content="Calculate" Padding="5, 3, 5, 3" Margin="5, 0, 5, 0"/>
-                <Label Content="calculating..." Foreground="Gray" />
-            </StackPanel>
-
-            <DockPanel Grid.Row="2" Margin="0, 5, 0, 5">
-                <TextBox Background="Transparent" BorderThickness="0" Text="LJP = 123.45 mV" DockPanel.Dock="Top" FontSize="24"/>
-                <TextBox Background="Transparent" BorderThickness="0" Text="details..." Foreground="Gray"/>
-            </DockPanel>
+                    <TextBox Background="Transparent" BorderThickness="0" Text="LJP = 123.45 mV" DockPanel.Dock="Top" FontSize="24"/>
+                    <TextBox Background="Transparent" BorderThickness="0" Text="details..." Foreground="Gray"/>
+                </DockPanel>
+            </GroupBox>
 
             <DockPanel LastChildFill="False" Grid.Row="3" Margin="0, 5, 0, 0">
                 <Button Content="About" DockPanel.Dock="Right" Padding="5, 3, 5, 3" Margin="5, 0, 0, 0" />
