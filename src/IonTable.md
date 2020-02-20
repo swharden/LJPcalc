@@ -6,7 +6,7 @@
 * Conductivities normalized to K (73.5) are suffixed with "*K".
 * Ions higher in the list are used by LJPcalc when duplicates are present.
 * Uncharged molecules (like glucose) don't conduct electricity in solution and therefore do not influence LJP
-* Large charged molecules (like EGTA, glucose, and phosphocreatine) have low mobilities so their influence on LJP is negligible when solutions contain appreciable concentrations of small ions. Therefore, large molecules can be omitted from LJP calculations for most biological applications.
+* Large charged molecules (like EGTA and phosphocreatine) have low mobilities so their influence on LJP is negligible when solutions contain appreciable concentrations of small ions. Therefore, large molecules can be omitted from LJP calculations for most biological applications.
 
 ### **Langes Handbook of Chemistry**
 Fifteenth Edition, Table 8.32, page 997\
