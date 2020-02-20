@@ -31,7 +31,7 @@ A cross-platform console version of LJPcalc is available which supports Windows,
 
 LJPcalc calculates the liquid junction potential according to the stationary Nernst-Planck equation which is typically regarded as superior to the simpler Henderson equation used by most commercial LJP calculators. Both equations produce nearly identical LJPs, but the Henderson equation becomes inaccurate as ion concentrations increase, and also when calculating LJP for solutions containing polyvalent ions.
 
-**Ion Charge and Conductivity Library:** Ion charge and conductivities are stored in [IonTable.md](/src/ionTable.md) which is easy to view and modify as needed.
+**Ion Charge and Conductivity Library:** Ion charge and conductivities are stored in [IonTable.md](/src/IonTable.md) which is easy to view and modify as needed.
 
 **Note regarding ion sequence:** When calculating LJP for a set of ions it is important to note the following facts. Additional information can be found in [Marino et al., 2014](https://arxiv.org/abs/1403.3640) which describes the exact computational methods employed by LJPcalc.
 
