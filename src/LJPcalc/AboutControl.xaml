@@ -5,31 +5,27 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LJPcalc"
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="400">
+             d:DesignHeight="650" d:DesignWidth="950">
 
-    <DockPanel MouseUp="DockPanel_MouseUp">
-        <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <StackPanel Orientation="Horizontal">
-                <Label Content="LJPcalc" FontSize="32" Padding="2, 0, 0, 0"/>
-                <Label Name="versionLabel" Content="1.2.3.4" FontSize="12" Foreground="Gray" VerticalAlignment="Bottom" />
+    <Grid Background="White">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        
+        <StackPanel Grid.Row="0" VerticalAlignment="Center">
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Label Content="LJPcalc" FontSize="48"/>
+                <Label Name="versionLabel" Content="1.2.3.4" FontSize="14" VerticalAlignment="Bottom" Margin="-8, 0, 0, 8"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="3, 10, 3, 10">
-                <Label Content="by" Foreground="Gray" Padding="0"/>
-                <Label Name="urlScott" Content=" Scott Harden " Foreground="Gray" Padding="0"
-                       MouseUp="urlScott_MouseUp" MouseEnter="urlScott_MouseEnter" MouseLeave="urlScott_MouseLeave"
-                       />
-                <Label Content="and" Foreground="Gray"  Padding="0"/>
-                <Label Name="urlDoriano" Content=" Doriano Brogioli " Foreground="Gray" Padding="0"
-                       MouseUp="urlDoriano_MouseUp" MouseEnter="urlDoriano_MouseEnter" MouseLeave="urlDoriano_MouseLeave"
-                       />
-            </StackPanel>
-            <Label Name="urlLabel"  Padding="3" Foreground="Gray" 
-                   Content="https://www.GitHub.com/swharden/LJPcalc" 
-                   MouseUp="Link_MouseUp" MouseEnter="Label_MouseEnter" MouseLeave="Label_MouseLeave"/>
-            <!--
-            <Button Content="JLJP on GitHub" FontSize="12" Margin="6, 30, 6, 30" Padding="6, 2, 6, 2" HorizontalAlignment="Left"/>
-            -->
+
+            <Label Foreground="Gray" HorizontalAlignment="Center" FontSize="14" Content="by Scott Harden, DMD, PhD"/>
+            <Label Foreground="Gray" HorizontalAlignment="Center" FontSize="14" Content="and Doriano Brogioli, PhD"/>
+            
         </StackPanel>
-    </DockPanel>
+        
+    </Grid>
 
 </UserControl>

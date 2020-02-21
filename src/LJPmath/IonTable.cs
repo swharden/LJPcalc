@@ -60,7 +60,7 @@ namespace LJPmath
         {
             foreach (Ion tableIon in ions)
                 if (string.Compare(ion.name, tableIon.name, StringComparison.OrdinalIgnoreCase) == 0)
-                    return new Ion(tableIon.name, tableIon.charge, tableIon.conductance, ion.c0, ion.cL);
+                    return new Ion(tableIon.name, tableIon.charge, tableIon.conductivity, ion.c0, ion.cL);
 
             return new Ion(ion);
         }
@@ -68,8 +68,12 @@ namespace LJPmath
         public Ion Lookup(string name)
         {
             foreach (Ion tableIon in ions)
+            {
                 if (string.Compare(name, tableIon.name, StringComparison.OrdinalIgnoreCase) == 0)
                     return tableIon;
+                else if (string.Compare(name, tableIon.nameWithCharge, StringComparison.OrdinalIgnoreCase) == 0)
+                    return tableIon;
+            }
 
             return new Ion(name, 0, 0, 0, 0);
         }

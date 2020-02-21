@@ -8,7 +8,7 @@ namespace LJPmath
     {
         public string name { get; private set; } = "?";
         public int charge { get; private set; } = 0;
-        public double conductance { get; private set; } = 0;
+        public double conductivity { get; private set; } = 0;
         public double mu { get; private set; } = 0;
         public double cdadc { get; } = 1.0;
 
@@ -18,6 +18,7 @@ namespace LJPmath
 
         public string chargeWithSign { get { return (charge > 0) ? "+" + charge.ToString() : charge.ToString(); } }
         public string nameWithCharge { get { return $"{name} ({chargeWithSign})"; } }
+        public bool isValid { get { return (charge != 0 && mu >= 0 && conductivity > 0 && name != null && name != ""); } }
 
         public Ion()
         {
@@ -28,7 +29,7 @@ namespace LJPmath
         {
             this.name = ion.name;
             this.charge = ion.charge;
-            this.conductance = ion.conductance;
+            this.conductivity = ion.conductivity;
             this.mu = ion.mu;
             this.c0 = ion.c0;
             this.cL = ion.cL;
@@ -51,7 +52,7 @@ namespace LJPmath
         {
             name = ion.name;
             charge = ion.charge;
-            conductance = ion.conductance;
+            conductivity = ion.conductivity;
             mu = ion.mu;
             this.c0 = c0;
             this.cL = cL;
@@ -61,7 +62,7 @@ namespace LJPmath
         {
             this.name = name;
             this.charge = charge;
-            this.conductance = conductance;
+            this.conductivity = conductance;
             mu = conductance / (Constants.Nav * Math.Pow(Constants.e, 2) * Math.Abs(charge));
             this.c0 = c0;
             this.cL = cL;

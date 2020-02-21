@@ -6,15 +6,16 @@
         xmlns:local="clr-namespace:LJPcalc"
         mc:Ignorable="d"
         Title="LJPcalc" 
-        Height="500" 
-        MinHeight="500"
+        WindowStartupLocation="CenterScreen"
+        Height="650" 
+        MinHeight="650"
         Width="950"
         MinWidth="950"
         >
 
     <Grid>
         <local:AboutControl Grid.Row="1" x:Name="aboutControl1" Visibility="Collapsed" MouseUp="AboutHide" Background="White"/>
-        <local:MainControl Grid.Row="1" x:Name="ljpControl1" Visibility="Visible" Padding="6" />
+        <local:LjpCalcControl Grid.Row="1" x:Name="ljpControl1" Visibility="Visible" />
     </Grid>
 
 </Window>

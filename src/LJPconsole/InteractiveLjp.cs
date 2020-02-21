@@ -236,7 +236,7 @@ namespace LJPconsole
             {
                 Console.Write(ion.name.PadRight(10));
                 Console.Write(ion.charge.ToString().PadRight(7));
-                Console.Write((ion.conductance * 1e4).ToString().PadRight(columnWidth));
+                Console.Write((ion.conductivity * 1e4).ToString().PadRight(columnWidth));
                 Console.Write(Math.Round(ion.mu / 1E11, 5).ToString().PadRight(columnWidth));
                 Console.Write(Math.Round(ion.phi, 5).ToString().PadRight(columnWidth));
                 Console.Write(Math.Round(ion.cL, 5).ToString().PadRight(columnWidth));

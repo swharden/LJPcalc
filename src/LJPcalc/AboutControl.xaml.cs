@@ -57,44 +57,14 @@ namespace LJPcalc
             UrlLaunch("https://github.com/swharden/LJPcalc");
         }
 
-        private void Label_MouseEnter(object sender, MouseEventArgs e)
-        {
-            urlLabel.Foreground = Brushes.Blue;
-        }
-
-        private void Label_MouseLeave(object sender, MouseEventArgs e)
-        {
-            urlLabel.Foreground = Brushes.Gray;
-        }
-
         private void urlScott_MouseUp(object sender, MouseButtonEventArgs e)
         {
             UrlLaunch("https://www.swharden.com/wp/about-scott/");
         }
 
-        private void urlScott_MouseEnter(object sender, MouseEventArgs e)
-        {
-            urlScott.Foreground = Brushes.Blue;
-        }
-
-        private void urlScott_MouseLeave(object sender, MouseEventArgs e)
-        {
-            urlScott.Foreground = Brushes.Gray;
-        }
-
         private void urlDoriano_MouseUp(object sender, MouseButtonEventArgs e)
         {
             UrlLaunch("https://sites.google.com/site/dbrogioli/");
-        }
-
-        private void urlDoriano_MouseEnter(object sender, MouseEventArgs e)
-        {
-            urlDoriano.Foreground = Brushes.Blue;
-        }
-
-        private void urlDoriano_MouseLeave(object sender, MouseEventArgs e)
-        {
-            urlDoriano.Foreground = Brushes.Gray;
         }
     }
 }

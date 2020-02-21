@@ -27,7 +27,7 @@ namespace LJPcalc
             Version version = typeof(AboutControl).Assembly.GetName().Version;
             Title = $"LJPcalc {version.Major}.{version.Minor}";
 
-            ljpControl1.ionSetControl1.AboutButtonClicked += AboutShow;
+            ljpControl1.AboutButtonClicked += AboutShow;
         }
 
         private void AboutShow(object sender, EventArgs e)
