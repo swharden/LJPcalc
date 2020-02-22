@@ -38,8 +38,10 @@
             </DockPanel>
 
             <Border Grid.Row="1" Margin="0, 10, 0, 0" Background="WhiteSmoke" CornerRadius="5" BorderThickness="1" BorderBrush="LightGray" Padding="5">
-                <TextBox x:Name="LjpDetails" FontFamily="Consolas" Text="message" IsReadOnly="True" 
-                         Background="Transparent" Foreground="Black" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Auto" Padding="0, 5, 5, 5"/>
+                <TextBox x:Name="LjpDetails" FontFamily="Consolas" FontSize="11" IsReadOnly="True" 
+                         Background="Transparent" Foreground="Black" BorderThickness="0" 
+                         ScrollViewer.VerticalScrollBarVisibility="Auto" Padding="0, 5, 5, 5"
+                         Text="11111111112222222222333333333344444444445555555555666666666677777777778888888888"/>
             </Border>
 
             <Border Grid.Row="2" Margin="0, 10, 0, 0" Background="WhiteSmoke" CornerRadius="5" BorderThickness="1" BorderBrush="LightGray" Padding="5">

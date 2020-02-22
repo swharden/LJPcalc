@@ -441,14 +441,7 @@ namespace LJPcalc
                 ionSetCopy.Add(new Ion(ion));
 
             var ljp = Calculate.Ljp(ionSetCopy, tempC);
-
-            StringBuilder msg = new StringBuilder();
-            msg.AppendLine($"Equations were solved in {ljp.benchmark}");
-            foreach (Ion ion in ionSetCopy)
-                msg.AppendLine(ion.ToString());
-            msg.AppendLine($"LJP = {ljp.mV} mV");
-
-            Message($"LJP = {ljp.mV:0.000} mV", msg.ToString());
+            Message($"LJP = {ljp.mV:0.000} mV", ljp.report);
 
             CalculateButton.IsEnabled = true;
         }

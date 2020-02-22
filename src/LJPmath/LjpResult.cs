@@ -24,6 +24,7 @@ namespace LJPmath
                     return true;
             }
         }
+        public string report = "report not generated";
 
         public readonly List<Ion> ionListOriginal = new List<Ion>();
         public readonly List<Ion> ionListSolved = new List<Ion>();
@@ -49,6 +50,18 @@ namespace LJPmath
             ionListSolved.Clear();
             foreach (Ion ion in ionList)
                 ionListSolved.Add(new Ion(ion));
+
+            var solvedIonSet = new IonSet(ionListSolved);
+
+            StringBuilder txt = new StringBuilder();
+            txt.AppendLine("Values for cL were adjusted to achieve electro-neutrality:");
+            txt.AppendLine();
+            txt.AppendLine(solvedIonSet.GetTableString());
+            txt.AppendLine();
+            txt.AppendLine($"Equations were solved in {benchmark}");
+            txt.AppendLine($"LJP = {mV} mV");
+
+            report = txt.ToString().TrimEnd();
         }
     }
 }

@@ -47,7 +47,7 @@ namespace LJPmath
             return false;
         }
 
-        public string GetTableString(bool prefix = true)
+        public string GetTableString(bool prefix = false)
         {
             var txt = new StringBuilder();
 
@@ -63,22 +63,24 @@ namespace LJPmath
             txt.AppendLine(" Name               | Charge | Conductivity (E-4) | C0 (mM)      | CL (mM)      ");
             txt.AppendLine("--------------------|--------|--------------------|--------------|--------------");
 
+            int precision = 7;
+
             foreach (Ion ion in ions)
             {
                 string name = ion.name.PadRight(18);
                 string charge = (ion.charge > 0) ? ("+" + ion.charge.ToString()).PadRight(6) : ion.charge.ToString().PadRight(6);
-                string conductivity = (ion.conductivity * 1E4).ToString().PadRight(18);
-                string c0 = ion.c0.ToString().PadRight(12);
-                string cL = ion.cL.ToString().PadRight(12);
+                string conductivity = Math.Round((ion.conductivity * 1E4), precision).ToString().PadRight(18);
+                string c0 = Math.Round(ion.c0, precision).ToString().PadRight(12);
+                string cL = Math.Round(ion.cL, precision).ToString().PadRight(12);
                 txt.AppendLine($" {name} | {charge} | {conductivity} | {c0} | {cL}");
             }
 
-            return txt.ToString();
+            return txt.ToString().TrimEnd();
         }
 
         public void Save(string filePath)
         {
-            System.IO.File.WriteAllText(filePath, GetTableString());
+            System.IO.File.WriteAllText(filePath, GetTableString(prefix: true));
         }
 
         public void Load(string filePath, bool sort = false)
