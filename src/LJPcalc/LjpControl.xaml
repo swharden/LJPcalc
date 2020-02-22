@@ -119,15 +119,14 @@
 
                 <DockPanel Grid.Column="0" Grid.Row="1" LastChildFill="False">
 
-                    <Button Name="MoveUpButton" Click="IonSetMoveUpButton_Click" Content="🡡" Width="25" Margin="0, 0, 5, 0" Padding="5, 3, 5, 3" ToolTip="move selected ion upward"/>
-                    <Button Name="MoveDownButton" Click="IonSetMoveDownButton_Click" Content="🡣" Width="25" Margin="0, 0, 5, 0" Padding="5, 3, 5, 3" ToolTip="move selected ion downward"/>
-                    <Button Name="RemoveButton" Click="IonSetRemoveButton_Click" Content="✕" Width="25" Margin="0, 0, 5, 0" Padding="5, 3, 5, 3" ToolTip="delete selected ion"/>
-                    <Button Click="IonSetLoadButton_Click" Content="📁" Width="25" Margin="15, 0, 5, 0" Padding="5, 3, 5, 3" ToolTip="load ion set"/>
-                    <Button Name="SaveButton" Click="IonSetSaveButton_Click" Content="💾" Width="25" Margin="0, 0, 5, 0" Padding="5, 3, 5, 3" ToolTip="save ion set"/>
+                    <Button Name="MoveUpButton" Click="IonSetMoveUpButton_Click" Content="🡡" Width="30" Margin="0, 0, 5, 0" Padding="5, 3, 5, 3" ToolTip="move selected ion upward"/>
+                    <Button Name="MoveDownButton" Click="IonSetMoveDownButton_Click" Content="🡣" Width="30" Margin="0, 0, 5, 0" Padding="5, 3, 5, 3" ToolTip="move selected ion downward"/>
+                    <Button Name="RemoveButton" Click="IonSetRemoveButton_Click" Content="✕" Width="30" Margin="0, 0, 5, 0" Padding="5, 3, 5, 3" ToolTip="delete selected ion"/>
+                    <Button Click="IonSetLoadButton_Click" Content="📁" Width="30" Margin="15, 0, 5, 0" Padding="5, 3, 5, 3" ToolTip="load ion set"/>
+                    <Button Name="SaveButton" Click="IonSetSaveButton_Click" Content="💾" Width="30" Margin="0, 0, 5, 0" Padding="5, 3, 5, 3" ToolTip="save ion set"/>
 
                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" >
-                        <Label Content="Equation:" Margin="15, 0, 0, 0"/>
-                        <ComboBox>
+                        <ComboBox ToolTip="LJP Calculation Equation">
                             <ComboBoxItem Content="Nernst–Planck" IsSelected="True" />
                             <ComboBoxItem Content="Henderson" IsEnabled="False" />
                         </ComboBox>

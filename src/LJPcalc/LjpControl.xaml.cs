@@ -59,7 +59,7 @@ namespace LJPcalc
                 {
                     ionSet.AddRange(knownSet.ions);
                     ValidateIonSet();
-                    CalculateLjp(null, null);
+                    //CalculateLjp(null, null);
                 }
             }
             dataGrid1.Items.Refresh();
@@ -72,6 +72,7 @@ namespace LJPcalc
             IonC0Textbox.Text = "";
             IonCLTextbox.Text = "";
             IonConductivityTextbox.Text = "";
+            IonMobilityTextbox.Text = "";
             ValidateIonSet();
         }
 
@@ -370,12 +371,46 @@ namespace LJPcalc
 
         private void IonSetSaveButton_Click(object sender, RoutedEventArgs e)
         {
-            Message("ERROR", "ion set save not yet implimented");
+            var dlg = new Microsoft.Win32.SaveFileDialog
+            {
+                Title = "Save Ion Set",
+                FileName = "myIonSet",
+                DefaultExt = ".md",
+                Filter = "Markdown Files (.md)|*.md"
+            };
+
+            var result = dlg.ShowDialog();
+
+            if (result == true)
+            {
+                string filePath = System.IO.Path.GetFullPath(dlg.FileName);
+                var thisSet = new IonSet(ionSet);
+                thisSet.Save(filePath);
+                Message("Saved Ion Set", $"Custom ion set containing {thisSet.ions.Count} ions saved in:\n{filePath}");
+            }
         }
 
         private void IonSetLoadButton_Click(object sender, RoutedEventArgs e)
         {
-            Message("ERROR", "ion set load not yet implimented");
+            var dlg = new Microsoft.Win32.OpenFileDialog
+            {
+                Title = "Load Ion Set",
+                FileName = "myIonSet",
+                DefaultExt = ".md",
+                Filter = "Markdown Files (.md)|*.md"
+            };
+
+            var result = dlg.ShowDialog();
+            if (result == true)
+            {
+                string filePath = System.IO.Path.GetFullPath(dlg.FileName);
+                var loadedIonSet = new IonSet(filePath);
+                ionSet.Clear();
+                ionSet.AddRange(loadedIonSet.ions);
+                Message("Loaded Ion Set", $"Loaded {ionSet.Count} ions from file:\n{filePath}");
+                dataGrid1.Items.Refresh();
+                ValidateIonSet();
+            }
         }
 
         #endregion
