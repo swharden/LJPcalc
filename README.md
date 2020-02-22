@@ -2,32 +2,23 @@
 
 [![Build Status](https://dev.azure.com/swharden/swharden/_apis/build/status/swharden.LJPcalc?branchName=master)](https://dev.azure.com/swharden/swharden/_build/latest?definitionId=7&branchName=master)
 
-LJPcalc is a free and open source liquid junction potential (LJP) calculator. LJPcalc is available as a click-to-run EXE for Windows and a console application for Linux and MacOS.
-
-> ⚠️ **This project is still early in development.** A download link for Windows will be added when development completes in March, 2020.
-
-### LJPcalc 1.0.0
+LJPcalc is a free and open source liquid junction potential (LJP) calculator. LJPcalc is available as a simple click-to-run EXE for Windows and a console application for Linux and MacOS.
 
 ![](src/LJPcalc/screenshot.jpg)
 
-### LJPcalc 1.0.1
+### Download for Windows (64-bit): ~~[LJPcalc.zip]()~~
 
-![](src/LJPcalc/screenshot2.jpg)
+> ⚠️ **This project is still early in development.** A download link for Windows will be added when development completes in March, 2020.
 
-## LJPcalc Console Application
+### Download for Linux and MacOS: [LJPconsole](src/LJPconsole)
 
-A cross-platform console version of LJPcalc is available which supports Windows, Linux, and MacOS.
+A cross-platform console version of LJPcalc is available which supports Windows, Linux, and MacOS. See the [LJPconsole page](src/LJPconsole) for installation instructions.
 
-* [building from source](src/LJPconsole#build-and-run)
-* [LJP console quickstart guide](src/LJPconsole#quickstart)
-
-![](src/LJPconsole/screenshot.jpg)
-
-## LJPcalc Mobile
+### LJPcalc Mobile
 
 > ⚠️ The LJPcalc mobile app is still under development.
 
-[**NernstApp**](https://github.com/swharden/NernstApp) is a Nernst potential calculator for Android
+_[NernstApp](https://github.com/swharden/NernstApp) is a Nernst potential calculator for Android_
 
 ## Theory
 
