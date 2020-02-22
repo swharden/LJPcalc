@@ -32,6 +32,37 @@ namespace LJPcalc
             dataGrid1.ItemsSource = ionSet;
             ResetGui();
             //LoadExample_JLJP(null, null);
+
+            if (ionTable != null)
+            {
+                var knownSets = new KnownIonSets(ionTable);
+                foreach (var knownSet in knownSets.ionSets)
+                {
+                    MenuItem item = new MenuItem();
+                    item.Click += ExampleIonSetClicked;
+                    item.Header = knownSet.name;
+                    item.ToolTip = knownSet.details;
+                    KnownSetsContextMenu.Items.Add(item);
+                }
+            }
+        }
+
+        private void ExampleIonSetClicked(object sender, RoutedEventArgs e)
+        {
+            string clickedItemName = (((MenuItem)sender).Header).ToString();
+            var knownSets = new KnownIonSets(ionTable);
+
+            ionSet.Clear();
+            foreach (var knownSet in knownSets.ionSets)
+            {
+                if (knownSet.name == clickedItemName)
+                {
+                    ionSet.AddRange(knownSet.ions);
+                    ValidateIonSet();
+                    CalculateLjp(null, null);
+                }
+            }
+            dataGrid1.Items.Refresh();
         }
 
         private void ResetGui()
@@ -61,15 +92,16 @@ namespace LJPcalc
                 ionTable = new IonTable();
                 foreach (var ion in ionTable.ions)
                     IonTableListbox.Items.Add(ion.nameWithCharge);
-
-                // pre-select an item
-                //IonTableListbox.SelectedItem = IonTableListbox.Items[0];
-                //IonTableListbox.ScrollIntoView(IonTableListbox.SelectedItem);
             }
             catch
             {
                 IonTableListbox.Items.Add("ERROR");
                 IonTableListbox.IsEnabled = false;
+                MessageBox.Show(
+                    "The ion table failed to load. Calculations will work, but ion values cannot be looked up and example ion sets will not be available.",
+                    "Ion Table Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
             }
         }
 
@@ -355,68 +387,6 @@ namespace LJPcalc
             ExampleButton.ContextMenu.IsOpen = true;
         }
 
-
-        private void LoadExample_JLJP(object sender, RoutedEventArgs e)
-        {
-            // values from JLJP screenshot: https://a.fsdn.com/con/app/proj/jljp/screenshots/GUI.png/max/max/1.jpg
-            var ionTable = new IonTable();
-            ionSet.Clear();
-            ionSet.Add(ionTable.Lookup(new Ion("Zn", 9, 2.84E-2)));
-            ionSet.Add(ionTable.Lookup(new Ion("K", 0, 3)));
-            ionSet.Add(ionTable.Lookup(new Ion("Cl", 18, 3.062)));
-            dataGrid1.Items.Refresh();
-            ValidateIonSet();
-            CalculateLjp(null, null);
-        }
-
-        private void LoadExample_NgAndBarry(object sender, RoutedEventArgs e)
-        {
-            // values from Ng and Barry (1994) Table 2: https://doi.org/10.1016/0165-0270(94)00087-W
-            var ionTable = new IonTable();
-            ionSet.Clear();
-            ionSet.Add(ionTable.Lookup(new Ion("Ca", 50, 0)));
-            ionSet.Add(ionTable.Lookup(new Ion("Cl", 200, 100)));
-            ionSet.Add(ionTable.Lookup(new Ion("Mg", 50, 0)));
-            ionSet.Add(ionTable.Lookup(new Ion("Li", 0, 100)));
-            dataGrid1.Items.Refresh();
-            ValidateIonSet();
-            CalculateLjp(null, null);
-        }
-
-        private void LoadExample_JPWin(object sender, RoutedEventArgs e)
-        {
-            // ion set shown in JPCalcWin manual (page 7): https://tinyurl.com/wk7otn7
-            var ionTable = new IonTable();
-            ionSet.Clear();
-            ionSet.Add(ionTable.Lookup(new Ion("Na", 10, 145)));
-            ionSet.Add(ionTable.Lookup(new Ion("Cl", 10, 145)));
-            ionSet.Add(ionTable.Lookup(new Ion("Cs", 135, 0)));
-            ionSet.Add(ionTable.Lookup(new Ion("F", 135, 0)));
-            dataGrid1.Items.Refresh();
-            ValidateIonSet();
-            CalculateLjp(null, null);
-        }
-
-        private void LoadExample_Patch(object sender, RoutedEventArgs e)
-        {
-            // ion set shown in JPCalcWin manual (page 7): https://tinyurl.com/wk7otn7
-            var ionTable = new IonTable();
-            ionSet.Clear();
-            ionSet.Add(ionTable.Lookup(new Ion("Ca", 0, 2.4)));
-            ionSet.Add(ionTable.Lookup(new Ion("Cl", 2, 133.8)));
-            ionSet.Add(ionTable.Lookup(new Ion("Gluconate", 125, 0)));
-            ionSet.Add(ionTable.Lookup(new Ion("H2PO4", 0, 1.2)));
-            ionSet.Add(ionTable.Lookup(new Ion("HCO3", 0, 25)));
-            ionSet.Add(ionTable.Lookup(new Ion("HEPES", 10, 0)));
-            ionSet.Add(ionTable.Lookup(new Ion("K", 125, 3)));
-            ionSet.Add(ionTable.Lookup(new Ion("Mg", 1, 1.5)));
-            ionSet.Add(ionTable.Lookup(new Ion("SO4", 0, 1.5)));
-            ionSet.Add(ionTable.Lookup(new Ion("Na", 4.25, 152.2)));
-            dataGrid1.Items.Refresh();
-            ValidateIonSet();
-            CalculateLjp(null, null);
-        }
-
         #endregion
 
         public event EventHandler AboutButtonClicked = delegate { };
@@ -456,7 +426,7 @@ namespace LJPcalc
             CalculateButton.IsEnabled = false;
 
             DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(.5);
+            timer.Interval = TimeSpan.FromSeconds(.1);
             timer.Tick += CalculateLjpThread;
             timer.Start();
         }
