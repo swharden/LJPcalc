@@ -16,7 +16,7 @@ A cross-platform console version of LJPcalc is available which supports Windows,
 
 ### LJPcalc Mobile
 
-> ⚠️ The LJPcalc mobile app is still under development.
+> ⚠️ The LJPcalc mobile app is still in development.
 
 _[NernstApp](https://github.com/swharden/NernstApp) is a Nernst potential calculator for Android_
 
