@@ -59,12 +59,12 @@ namespace LJPmath
             this.cL = cL;
         }
 
-        public Ion(String name, int charge, double conductance, double c0, double cL)
+        public Ion(String name, int charge, double conductivity, double c0, double cL)
         {
             this.name = name;
             this.charge = charge;
-            this.conductivity = conductance;
-            mu = conductance / (Constants.Nav * Math.Pow(Constants.e, 2) * Math.Abs(charge));
+            this.conductivity = conductivity;
+            mu = conductivity / (Constants.Nav * Math.Pow(Constants.e, 2) * Math.Abs(charge));
             this.c0 = c0;
             this.cL = cL;
         }
