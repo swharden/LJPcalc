@@ -115,49 +115,6 @@ namespace LJPmath
             return duplicateIons;
         }
 
-        [Obsolete]
-        private Ion IonFromCsvLine(String line)
-        {
-            line = line.Replace("\t", "");
-            line = line.Trim();
-            if (line.StartsWith("#"))
-                return null;
-            if (line.Length < 5)
-                return null;
-
-            Regex CSVParser = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
-            String[] parts = CSVParser.Split(line);
-
-            if (parts.Length != 3)
-                Console.WriteLine($"WARNING improperly formatted ion table line:\n{line}");
-
-            if (parts[1] == "" || parts[2] == "")
-                return null;
-
-            const double K_CONDUCTANCE = 73.5;
-
-            try
-            {
-                string name = parts[0].Trim().Trim('"');
-                int charge = int.Parse(parts[1]);
-
-                string conductanceString = parts[2].Replace(" ", "");
-                bool isNormalizedToK = (conductanceString.EndsWith("*K", StringComparison.OrdinalIgnoreCase));
-                conductanceString = conductanceString.Replace("*K", "");
-                double conductance = double.Parse(conductanceString) * 1E-4;
-                if (isNormalizedToK)
-                    conductance *= K_CONDUCTANCE;
-
-                Ion ion = new Ion(name, charge, conductance, cL: 0, c0: 0);
-                return ion;
-            }
-            catch
-            {
-                Debug.WriteLine($"Could not parse line: {line}");
-                return null;
-            }
-        }
-
         private Ion IonFromMarkdownLine(String line)
         {
             const double K_CONDUCTANCE = 73.5;
