@@ -22,7 +22,7 @@ namespace LJPresearch
             {
                 Console.WriteLine($"Calculating for {temps[i]}C...");
                 var ionSet = new List<Ion> { new Ion("Zn", 9, 0.0284), new Ion("K", 0, 3), new Ion("Cl", 18, 3.0568) };
-                ljps[i] = Calculate.Ljp(ionTable.Lookup(ionSet), temps[i]) * 1000;
+                ljps[i] = Calculate.Ljp(ionTable.Lookup(ionSet), temps[i]).mV;
             }
 
             var plt = new ScottPlot.Plot(800, 600);
@@ -52,21 +52,21 @@ namespace LJPresearch
                     new Ion("K", 1, 40.3, 0, 3),
                     new Ion("Cl", -1, 41.4, 18, 3.0568)
                 };
-                ljps0C[i] = Calculate.Ljp(ionSet0C, temps[i]) * 1000;
+                ljps0C[i] = Calculate.Ljp(ionSet0C, temps[i]).mV;
 
                 var ionSet18C = new List<Ion> {
                     new Ion("Zn", 2, 45.0, 9, 0.0284),
                     new Ion("K", 1, 64.6, 0, 3),
                     new Ion("Cl", -1, 65.5, 18, 3.0568)
                 };
-                ljps18C[i] = Calculate.Ljp(ionSet18C, temps[i]) * 1000;
+                ljps18C[i] = Calculate.Ljp(ionSet18C, temps[i]).mV;
 
                 var ionSet25C = new List<Ion> {
                     new Ion("Zn", 2, 52.8, 9, 0.0284),
                     new Ion("K", 1, 73.5, 0, 3),
                     new Ion("Cl", -1, 76.31, 18, 3.0568)
                 };
-                ljps25C[i] = Calculate.Ljp(ionSet25C, temps[i]) * 1000;
+                ljps25C[i] = Calculate.Ljp(ionSet25C, temps[i]).mV;
 
             }
 
@@ -106,16 +106,16 @@ namespace LJPresearch
                 // create a new ion set for each iteration to prevent modifications due to solving from carrying to the next solve
 
                 ionSet = new List<Ion> { new Ion("Zn", 9, 0.0284), new Ion("K", 0, 3), new Ion("Cl", 18, 3.0568) };
-                jljpResults[i] = Calculate.Ljp(ionTable.Lookup(ionSet), temps[i]) * 1000;
+                jljpResults[i] = Calculate.Ljp(ionTable.Lookup(ionSet), temps[i]).mV;
 
                 ionSet = new List<Ion> { new Ion("Ca", 2, 2), new Ion("K", 100, 0), new Ion("Li", 0, 100), new Ion("Cl", 104, 104) };
-                ngAndBarryResults[i] = Calculate.Ljp(ionTable.Lookup(ionSet), temps[i]) * 1000;
+                ngAndBarryResults[i] = Calculate.Ljp(ionTable.Lookup(ionSet), temps[i]).mV;
 
                 ionSet = new List<Ion> { new Ion("Ca", .29, .00545), new Ion("Cl", .29 * 2, .00545 * 2) };
-                HarperResults[i] = Calculate.Ljp(ionTable.Lookup(ionSet), temps[i]) * 1000;
+                HarperResults[i] = Calculate.Ljp(ionTable.Lookup(ionSet), temps[i]).mV;
 
                 ionSet = new List<Ion> { new Ion("Na", 10, 145), new Ion("Cl", 10, 145), new Ion("Cs", 135, 0), new Ion("F", 135, 0) };
-                jpWinResults[i] = Calculate.Ljp(ionTable.Lookup(ionSet), temps[i]) * 1000;
+                jpWinResults[i] = Calculate.Ljp(ionTable.Lookup(ionSet), temps[i]).mV;
             }
 
             var mplt = new ScottPlot.MultiPlot(800, 600, 2, 2);

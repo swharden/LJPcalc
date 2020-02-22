@@ -180,7 +180,7 @@ namespace LJPconsole
             Console.WriteLine("calculating...");
             try
             {
-                double ljp_V = LJPmath.Calculate.Ljp(ionSet);
+                double ljp_V = Calculate.Ljp(ionSet).mV;
                 DisplayIonSet();
                 Console.WriteLine($"LJP = {ljp_V * 1000} mV");
             }
