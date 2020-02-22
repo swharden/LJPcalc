@@ -9,7 +9,7 @@ namespace LJPtest
     public class IonSetTest
     {
         [Test]
-        public void Test_IonSet_Save()
+        public void Test_SaveAndLoad_ValuesAreIdentical()
         {
             // create an ion set
             var ions = new List<Ion>
