@@ -23,8 +23,8 @@ namespace LJPcalc
         {
             InitializeComponent();
 
-            Version version = typeof(AboutControl).Assembly.GetName().Version;
-            versionLabel.Content = $"{version.Major}.{version.Minor}.{version.Revision}";
+            Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            versionLabel.Content = $"{version.Major}.{version.Minor}.{version.Build}";
         }
 
         public event EventHandler HideAboutScreen = delegate { };

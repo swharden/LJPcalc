@@ -13,13 +13,13 @@ for path in csprojPaths:
     if not os.path.exists(path):
         raise Exception("csproj file not found: " + path)
 
-def setVersion(filePath, newVersion):
+def setVersion(filePath, newVersion, tag):
 
     with open(filePath) as f:
         lines = f.read().split("\n")
 
     for i, line in enumerate(lines):
-        if "<AssemblyVersion>" in line:
+        if tag in line:
             linePre = line.split(">")[0] + ">"
             linePost = "<" + line.split("<")[2]
             lineNew = linePre + newVersion + linePost
@@ -29,12 +29,15 @@ def setVersion(filePath, newVersion):
         f.write("\n".join(lines))
 
     basename = os.path.basename(filePath)
-    print(f"set version of {basename} to {newVersion}")
+    print(f"set {basename} {tag} to {newVersion}")
 
 if __name__=="__main__":
     if len(sys.argv) == 2:
         newVersion = sys.argv[1].strip()
         for filePath in csprojPaths:
-            setVersion(filePath, newVersion)
+            setVersion(filePath, newVersion, "<Version>")
+            setVersion(filePath, newVersion, "<AssemblyVersion>")
+            setVersion(filePath, newVersion, "<FileVersion>")
+            print()
     else:
         print("ERROR: version argument required")
