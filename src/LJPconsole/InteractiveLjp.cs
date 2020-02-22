@@ -72,6 +72,8 @@ namespace LJPconsole
                     DisplayIonSet();
                 else if (command.Equals("ionset", StringComparison.OrdinalIgnoreCase))
                     DisplayIonSet();
+                else if (command.Equals("list", StringComparison.OrdinalIgnoreCase))
+                    DisplayIonSet();
                 else if (command.Equals("site", StringComparison.OrdinalIgnoreCase))
                     LaunchSite();
                 else if (command.Equals("www", StringComparison.OrdinalIgnoreCase))
