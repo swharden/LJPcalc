@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace LJPcalc
 {
@@ -28,8 +30,18 @@ namespace LJPcalc
             InitializeComponent();
             LoadIonTable();
             dataGrid1.ItemsSource = ionSet;
+            ResetGui();
+            //LoadExample_JLJP(null, null);
+        }
+
+        private void ResetGui()
+        {
+            IonNameTextbox.Text = "";
+            IonChargeTextbox.Text = "";
+            IonC0Textbox.Text = "";
+            IonCLTextbox.Text = "";
+            IonConductivityTextbox.Text = "";
             ValidateIonSet();
-            LoadExample_JLJP(null, null);
         }
 
         public void Message(string title, string details)
@@ -51,8 +63,8 @@ namespace LJPcalc
                     IonTableListbox.Items.Add(ion.nameWithCharge);
 
                 // pre-select an item
-                IonTableListbox.SelectedItem = IonTableListbox.Items[0];
-                IonTableListbox.ScrollIntoView(IonTableListbox.SelectedItem);
+                //IonTableListbox.SelectedItem = IonTableListbox.Items[0];
+                //IonTableListbox.ScrollIntoView(IonTableListbox.SelectedItem);
             }
             catch
             {
@@ -69,7 +81,7 @@ namespace LJPcalc
             string selectedIonName = IonTableListbox.SelectedItem.ToString();
             Ion ion = ionTable.Lookup(selectedIonName);
 
-            if (ion != null)
+            if (ion.isValid)
             {
                 IonNameTextbox.Text = ion.name;
                 IonChargeTextbox.Text = ion.charge.ToString();
@@ -93,6 +105,20 @@ namespace LJPcalc
         {
             if (IonAddButton.IsEnabled)
                 AddIon(null, null);
+        }
+
+        private void IonNameKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                Ion ion = ionTable.Lookup(IonNameTextbox.Text);
+                if (ion.isValid)
+                {
+                    IonNameTextbox.Text = ion.name;
+                    AddIon(null, null);
+                    IonNameTextbox.Text = "";
+                }
+            }
         }
 
         #endregion
@@ -217,7 +243,7 @@ namespace LJPcalc
 
             if (ionSet.Count < 2)
             {
-                Message("Invalid Ion Set", "LJP calculation requires at least 2 ions");
+                Message("Add more ions...", "LJP calculation requires at least 2 ions");
                 return;
             }
 
@@ -399,8 +425,10 @@ namespace LJPcalc
             AboutButtonClicked(null, EventArgs.Empty);
         }
 
-        private void CalculateLjp(object sender, RoutedEventArgs e)
+        public void CalculateLjpThread(object sender, EventArgs e)
         {
+            (sender as DispatcherTimer).Stop();
+
             double tempC = double.Parse(CalculationTemperatureC.Text);
 
             List<Ion> ionSetCopy = new List<Ion>();
@@ -408,7 +436,6 @@ namespace LJPcalc
                 ionSetCopy.Add(new Ion(ion));
 
             Stopwatch stopwatch = Stopwatch.StartNew();
-            Message($"Calculating...", "");
             double ljp_V = Calculate.Ljp(ionSetCopy, tempC);
             double elapsedSec = (double)stopwatch.ElapsedTicks / Stopwatch.Frequency;
 
@@ -420,6 +447,18 @@ namespace LJPcalc
 
             Message($"LJP = {ljp_V * 1000:0.000} mV", msg.ToString());
 
+            CalculateButton.IsEnabled = true;
+        }
+
+        private void CalculateLjp(object sender, RoutedEventArgs e)
+        {
+            Message($"Calculating...", "");
+            CalculateButton.IsEnabled = false;
+
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(.5);
+            timer.Tick += CalculateLjpThread;
+            timer.Start();
         }
     }
 }
