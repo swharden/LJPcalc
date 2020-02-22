@@ -15,5 +15,11 @@ namespace LJPmath
 
 		// Avogadro constant = 6.02214076e23 (no units)
 		public const double Nav = 6.02214076e23;
+
+		// Gas Constant
+		public const double R = Nav * boltzmann;
+
+		// Faraday constant (C / mol)
+		public const double F = e * Nav;
 	}
 }
