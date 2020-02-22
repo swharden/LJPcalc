@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 
 namespace LJPmath
 {
-    /* IonSet should almost never be used. 
-     * Most math is done on List<Ion> objects. 
-     * 
-     * ... or come back later and recfactor to only use IonSet
-     */
+    /// <summary>
+    /// An IonSet contains a List of ions and functions to load/save/search/sort them
+    /// </summary>
     public class IonSet
     {
         public readonly List<Ion> ions = new List<Ion>();
+
+        public IonSet()
+        {
+
+        }
 
         public IonSet(List<Ion> ions)
         {
@@ -28,6 +32,19 @@ namespace LJPmath
             if (!System.IO.File.Exists(loadFromThisFilePath))
                 throw new ArgumentException("ion set file does not exist");
             Load(loadFromThisFilePath);
+        }
+
+        public override string ToString()
+        {
+            return $"Ion set containing {ions.Count} ions";
+        }
+
+        public bool Contains(string name)
+        {
+            foreach (Ion tableIon in ions)
+                if (string.Compare(name, tableIon.name, StringComparison.OrdinalIgnoreCase) == 0)
+                    return true;
+            return false;
         }
 
         public string GetTableString(bool prefix = true)
@@ -64,7 +81,7 @@ namespace LJPmath
             System.IO.File.WriteAllText(filePath, GetTableString());
         }
 
-        public void Load(string filePath)
+        public void Load(string filePath, bool sort = false)
         {
             ions.Clear();
             foreach (string line in System.IO.File.ReadAllLines(filePath))
@@ -72,6 +89,13 @@ namespace LJPmath
                 Ion ion = IonFromMarkdownLine(line);
                 if (ion != null)
                     ions.Add(ion);
+            }
+
+            if (sort)
+            {
+                var sortedIons = ions.OrderBy(ion => ion.name).ToList();
+                ions.Clear();
+                ions.AddRange(sortedIons);
             }
         }
 

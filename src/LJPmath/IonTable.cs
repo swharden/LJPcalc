@@ -7,11 +7,12 @@ using System.Text.RegularExpressions;
 
 namespace LJPmath
 {
-    public class IonTable
+    /// <summary>
+    /// The IonTable is an IonSet with ion names, charges, and mobilities pre-loaded from a reference file.
+    /// </summary>
+    public class IonTable : IonSet
     {
-        public readonly List<Ion> ions = new List<Ion>();
-
-        public IonTable(String filePath = "IonTable.md", bool sortAlphabetically = true)
+        public IonTable(String filePath = "IonTable.md")
         {
             if (!System.IO.File.Exists(filePath))
             {
@@ -23,30 +24,13 @@ namespace LJPmath
                     throw new ArgumentException("ion table file does not exist");
             }
 
-            ions = ReadIonsFromFile(filePath);
-            if (sortAlphabetically)
-                Sort();
+            Load(filePath, sort: true);
             Debug.WriteLine($"Loaded {ions.Count} ions from {filePath}");
-        }
-
-        private void Sort()
-        {
-            var sortedIons = ions.OrderBy(ion => ion.name).ToList();
-            ions.Clear();
-            ions.AddRange(sortedIons);
         }
 
         public override string ToString()
         {
             return $"Ion table containing {ions.Count} ions";
-        }
-
-        public bool Contains(string name)
-        {
-            foreach (Ion tableIon in ions)
-                if (string.Compare(name, tableIon.name, StringComparison.OrdinalIgnoreCase) == 0)
-                    return true;
-            return false;
         }
 
         public List<Ion> Lookup(List<Ion> ionList)
@@ -76,80 +60,6 @@ namespace LJPmath
             }
 
             return new Ion(name, 0, 0, 0, 0);
-        }
-
-        private List<Ion> ReadIonsFromFile(String ionFilePath)
-        {
-            List<Ion> unsortedIons = new List<Ion>();
-            String rawText = System.IO.File.ReadAllText(ionFilePath);
-            String[] lines = rawText.Split('\n');
-            List<string> ionsSeen = new List<string>();
-            for (int i = 1; i < lines.Length; i++)
-            {
-                Ion ion = IonFromMarkdownLine(lines[i]);
-                if (ion != null && !ionsSeen.Contains(ion.name))
-                {
-                    ionsSeen.Add(ion.name);
-                    unsortedIons.Add(ion);
-                }
-            }
-            return unsortedIons;
-        }
-
-        public List<Ion> GetDuplicates()
-        {
-            var duplicateNames = new List<string>();
-
-            var seenNames = new List<string>();
-            foreach (Ion ion in ions)
-                if (seenNames.Contains(ion.name))
-                    duplicateNames.Add(ion.name);
-                else
-                    seenNames.Add(ion.name);
-
-            var duplicateIons = new List<Ion>();
-            foreach (Ion ion in ions)
-                if (duplicateNames.Contains(ion.name))
-                    duplicateIons.Add(ion);
-
-            return duplicateIons;
-        }
-
-        private Ion IonFromMarkdownLine(String line)
-        {
-            const double K_CONDUCTANCE = 73.5;
-
-            var parts = line.Split('|');
-            if (parts.Length != 3)
-                return null;
-
-            if (parts[1] == "---" || parts[1] == "Charge")
-                return null;
-
-            string strCond = parts[2];
-            strCond = strCond.Replace(" ", "").ToUpper();
-            bool isNormalizedToK = false;
-            if (strCond.Contains("*K"))
-            {
-                strCond = strCond.Replace("*K", "");
-                isNormalizedToK = true;
-            }
-
-            try
-            {
-                string name = parts[0].Trim();
-                int charge = int.Parse(parts[1]);
-                double conductance = double.Parse(strCond) * 1E-4;
-                if (isNormalizedToK)
-                    conductance *= K_CONDUCTANCE;
-                Ion ion = new Ion(name, charge, conductance, cL: 0, c0: 0);
-                return ion;
-            }
-            catch
-            {
-                Debug.WriteLine($"Could not parse line: {line}");
-                return null;
-            }
         }
     }
 }
