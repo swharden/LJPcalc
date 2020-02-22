@@ -28,7 +28,8 @@ namespace LJPmath
 
         public readonly List<Ion> ionListOriginal = new List<Ion>();
         public readonly List<Ion> ionListSolved = new List<Ion>();
-        public readonly double temperatureK;
+        public readonly double temperatureC;
+        public double temperatureK { get { return temperatureC + Constants.zeroCinK; } }
 
         readonly Stopwatch stopwatch = new Stopwatch();
 
@@ -38,7 +39,7 @@ namespace LJPmath
             foreach (Ion ion in ionList)
                 ionListOriginal.Add(new Ion(ion));
 
-            this.temperatureK = temperatureC + Constants.zeroCinK;
+            this.temperatureC = temperatureC;
 
             stopwatch.Restart();
         }
@@ -55,10 +56,8 @@ namespace LJPmath
                 ionListSolved.Add(new Ion(ion));
             var solvedIonSet = new IonSet(ionListSolved);
 
-            // figure out LJP due to Cl (useful for Ag/AgCl electrodes)
             double chlorideConcC0 = 0;
             double chlorideConcCL = 0;
-
             foreach (Ion ion in solvedIonSet.ions)
             {
                 if (ion.name == "Cl")
@@ -76,7 +75,7 @@ namespace LJPmath
             txt.AppendLine(solvedIonSet.GetTableString());
             txt.AppendLine();
             txt.AppendLine($"Equations were solved in {benchmark}");
-            txt.AppendLine($"LJP = {mV} mV");
+            txt.AppendLine($"LJP at {temperatureC} C ({temperatureK} K) = {mV} mV");
 
             if (isChlorideOnBothSides)
             {
