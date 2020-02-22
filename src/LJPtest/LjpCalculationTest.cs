@@ -24,7 +24,6 @@ namespace LJPtest
             ionSet = ionTable.Lookup(ionSet);
 
             var ljp = Calculate.Ljp(ionSet);
-            //Assert.AreEqual(-20.82388089, ljp.mV, 1e-6); // JLJP result (using inaccurate Nav)
             Assert.AreEqual(-20.79558643, ljp.mV, 1e-6);
         }
 
@@ -54,7 +53,6 @@ namespace LJPtest
             };
 
             var ljp = Calculate.Ljp(ionSet);
-            //Assert.AreEqual(-20.82388089, ljp.mV, 1e-6); // JLJP result (using inaccurate Nav)
             Assert.AreEqual(-20.79558643, ljp.mV, 1e-6);
         }
 
@@ -72,17 +70,11 @@ namespace LJPtest
             Ion K = new Ion("K", MolsPerCubicMeter(0), MolsPerCubicMeter(3));
             Ion Cl = new Ion("Cl", MolsPerCubicMeter(18), MolsPerCubicMeter(3.0568));
 
-            //Zn.setCdadc("-1.0+2.0/3.0*(atan((Zn-5.45776)*0.408978)*2.35004+3.0-atan(-5.45776*0.408978)*2.35004)");
-            //K.setCdadc("1.0");
-            //Cl.setCdadc("1.0/2.0+1.0/6.0*(atan((Zn-5.45776)*0.408978)*2.35004+3.0-atan(-5.45776*0.408978)*2.35004)");
-            // if custom cdadcs are used the LJP will be -16.65
-
             var ionSet = new List<Ion> { Zn, K, Cl };
             var ionTable = new IonTable();
             ionSet = ionTable.Lookup(ionSet);
             var ljp = Calculate.Ljp(ionSet);
 
-            //Assert.AreEqual(-20.82388089, ljp.mV, 1e-6); // JLJP result (using inaccurate Nav)
             Assert.AreEqual(-20.79558643, ljp.mV, 1e-6);
         }
 
