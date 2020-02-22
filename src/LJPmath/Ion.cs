@@ -71,7 +71,7 @@ namespace LJPmath
 
         public override string ToString()
         {
-            return $"Ion {nameWithCharge}: mu={mu:0.000E+0}, phi={phi:0.000}, c0={c0:0.000}, cL={cL:0.000}";
+            return $"Ion {nameWithCharge}: mu={mu:0.000E+0}, c0={c0:0.000}, cL={cL:0.000}";
         }
     }
 }
