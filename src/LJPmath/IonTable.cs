@@ -24,7 +24,7 @@ namespace LJPmath
                     throw new ArgumentException("ion table file does not exist");
             }
 
-            Load(filePath, sort: true);
+            Load(filePath, ignoreDuplicates: true, sort: true);
             Debug.WriteLine($"Loaded {ions.Count} ions from {filePath}");
         }
 
