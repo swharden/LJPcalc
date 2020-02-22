@@ -371,6 +371,26 @@ namespace LJPcalc
             CalculateLjp(null, null);
         }
 
+        private void LoadExample_Patch(object sender, RoutedEventArgs e)
+        {
+            // ion set shown in JPCalcWin manual (page 7): https://tinyurl.com/wk7otn7
+            var ionTable = new IonTable();
+            ionSet.Clear();
+            ionSet.Add(ionTable.Lookup(new Ion("Ca", 0, 2.4)));
+            ionSet.Add(ionTable.Lookup(new Ion("Cl", 2, 133.8)));
+            ionSet.Add(ionTable.Lookup(new Ion("Gluconate", 125, 0)));
+            ionSet.Add(ionTable.Lookup(new Ion("H2PO4", 0, 1.2)));
+            ionSet.Add(ionTable.Lookup(new Ion("HCO3", 0, 25)));
+            ionSet.Add(ionTable.Lookup(new Ion("HEPES", 10, 0)));
+            ionSet.Add(ionTable.Lookup(new Ion("K", 125, 3)));
+            ionSet.Add(ionTable.Lookup(new Ion("Mg", 1, 1.5)));
+            ionSet.Add(ionTable.Lookup(new Ion("SO4", 0, 1.5)));
+            ionSet.Add(ionTable.Lookup(new Ion("Na", 4.25, 152.2)));
+            dataGrid1.Items.Refresh();
+            ValidateIonSet();
+            CalculateLjp(null, null);
+        }
+
         #endregion
 
         public event EventHandler AboutButtonClicked = delegate { };
@@ -396,6 +416,8 @@ namespace LJPcalc
             msg.AppendLine(string.Format("Equations were solved in {0:0.00} ms", elapsedSec * 1000.0));
             foreach (Ion ion in ionSetCopy)
                 msg.AppendLine(ion.ToString());
+            msg.AppendLine($"LJP = {ljp_V * 1000} mV");
+
             Message($"LJP = {ljp_V * 1000:0.000} mV", msg.ToString());
 
         }
