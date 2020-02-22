@@ -4,7 +4,7 @@
 
 LJPcalc is a free and open source liquid junction potential (LJP) calculator. LJPcalc is available as a simple click-to-run EXE for Windows and a console application for Linux and MacOS.
 
-![](src/LJPcalc/screenshot.jpg)
+![](src/LJPcalc/screenshot.png)
 
 ### Download for Windows (64-bit): ~~[LJPcalc.zip]()~~
 
