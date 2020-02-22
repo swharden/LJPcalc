@@ -7,10 +7,10 @@
         mc:Ignorable="d"
         Title="LJPcalc" 
         WindowStartupLocation="CenterScreen"
-        Height="650" 
-        MinHeight="650"
-        Width="950"
-        MinWidth="950"
+        Height="600" 
+        MinHeight="600"
+        Width="800"
+        MinWidth="800"
         >
 
     <Grid>

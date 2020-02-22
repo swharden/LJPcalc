@@ -63,7 +63,7 @@ namespace LJPcalc
 
         private void IonTableListboxSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (IonTableListbox is null || IonTableListbox.SelectedIndex < 0)
+            if (IonTableListbox is null || ionTable is null || IonTableListbox.SelectedIndex < 0)
                 return;
 
             string selectedIonName = IonTableListbox.SelectedItem.ToString();
@@ -101,6 +101,9 @@ namespace LJPcalc
 
         private void IonLoadByUserEnteredName(object sender, RoutedEventArgs e)
         {
+            if (ionTable is null)
+                return;
+
             Ion ion = ionTable.Lookup(IonNameTextbox.Text);
             for (int i = 0; i < IonTableListbox.Items.Count; i++)
             {
@@ -143,7 +146,7 @@ namespace LJPcalc
 
         private void ValidateIon()
         {
-            if (IonAddButton is null)
+            if (IonAddButton is null || ionTable is null)
                 return;
 
             if (IonNameTextbox.Text == "") { Message("Invalid Ion", "Ion name cannot be blank"); return; }

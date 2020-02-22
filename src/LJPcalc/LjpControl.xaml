@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:LJPcalc"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="900">
+             d:DesignHeight="600" d:DesignWidth="750">
 
     <Grid Background="White">
 
@@ -53,68 +53,61 @@
                     />
             </DockPanel>
 
-            <GroupBox Header="" Margin="5, 0, 5, 0" Grid.Row="1" BorderThickness="0">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
-                        <!-- lbl -->
-                        <ColumnDefinition Width="auto"/>
-                        <!-- edt -->
-                        <ColumnDefinition Width="auto"/>
-                        <!-- lbl -->
-                        <ColumnDefinition Width="auto"/>
-                        <!-- edt -->
-                        <ColumnDefinition Width="auto"/>
-                        <!-- lbl -->
-                        <ColumnDefinition Width="auto"/>
-                        <!-- lbl -->
-                        <ColumnDefinition Width="auto"/>
-                        <!-- edt -->
-                        <ColumnDefinition Width="auto"/>
-                        <!-- lbl -->
-                        <ColumnDefinition Width="auto"/>
-                        <!-- btn -->
-                    </Grid.ColumnDefinitions>
+            <GroupBox Header="" Margin="5, 0, 5, 0" Grid.Row="1" BorderThickness="0" Background="WhiteSmoke">
+                <StackPanel>
 
-                    <Label Grid.Row="0" Grid.Column="0" Content="Name:" HorizontalAlignment="Right" />
-                    <TextBox Grid.Row="0" Grid.Column="1" x:Name="IonNameTextbox" TextChanged="IonNameTextboxTextChanged" Text="NaH2PO4" VerticalAlignment="Center" Width="120"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
-                    <Label Grid.Row="1" Grid.Column="0" Content="Charge:" HorizontalAlignment="Right" />
-                    <TextBox Grid.Row="1" Grid.Column="1" x:Name="IonChargeTextbox" TextChanged="ValidateIon" Text="-2" VerticalAlignment="Center"/>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
 
-                    <Label Grid.Row="0" Grid.Column="2" Content="Conductivity:" HorizontalAlignment="Right"  Margin="15, 0, 0, 0" />
-                    <TextBox Grid.Row="0" Grid.Column="3" x:Name="IonConductivityTextbox" TextChanged="ValidateIon" VerticalAlignment="Center" Text="12.345" MinWidth="60" />
-                    <Label Grid.Row="0" Grid.Column="4" Content="10⁻⁴·m²·S/mol" />
+                        <Label Content="Name:" Grid.Row="0" Grid.Column="0" />
+                        <TextBox Text="NaH2PO4" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Margin="0, 0, 5, 0"
+                                 VerticalAlignment="Center" Name="IonNameTextbox" TextChanged="IonNameTextboxTextChanged" />
 
-                    <Label Grid.Row="1" Grid.Column="2" Content="Mobility:" HorizontalAlignment="Right" />
-                    <TextBox Grid.Row="1" Grid.Column="3" x:Name="IonMobilityTextbox" IsReadOnly="True" VerticalAlignment="Center" Text="12.345" />
-                    <Label Grid.Row="1" Grid.Column="4" Content="10¹¹·m²/V/s" />
+                        <Button Content="Lookup 🔎" ToolTip="Load values for the user-entered ion name" 
+                                 Grid.Row="0" Grid.Column="4"
+                                 Padding="5, 2, 5, 2" VerticalAlignment="Center"
+                                 Click="IonLoadByUserEnteredName" Name="IonLoadButton" />
 
-                    <Label Grid.Row="0" Grid.Column="5" Content="c0:" HorizontalAlignment="Right" Margin="15, 0, 0, 0" />
-                    <TextBox Grid.Row="0" Grid.Column="6" x:Name="IonC0Textbox" TextChanged="ValidateIon" VerticalAlignment="Center" Text="12.345" MinWidth="60" />
-                    <Label Grid.Row="0" Grid.Column="7" Content="mM" />
+                        <Button Content="Add Ion 🡣" ToolTip="Add this ion to the ion set" Grid.Row="3" Grid.Column="4" 
+                                Name="IonAddButton" Click="AddIon" Padding="5, 2, 5, 2" VerticalAlignment="Center" />
 
-                    <Label Grid.Row="1" Grid.Column="5" Content="cL:" HorizontalAlignment="Right" />
-                    <TextBox Grid.Row="1" Grid.Column="6" x:Name="IonCLTextbox" TextChanged="ValidateIon" VerticalAlignment="Center" Text="12.345" />
-                    <Label Grid.Row="1" Grid.Column="7" Content="mM" />
+                        <Label Content="Charge:" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right"/>
+                        <TextBox Name="IonChargeTextbox" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" TextChanged="ValidateIon" Text="-2" />
+                        <Label Content="valence" Grid.Row="1" Grid.Column="2" />
 
-                    <Button Name="IonLoadButton" Click="IonLoadByUserEnteredName"
-                            Grid.Row="0" Grid.Column="8" Width="80" VerticalAlignment="Center" 
-                            Padding="5, 3, 5, 3" Margin="25, 0, 0, 0" 
-                            Content="Look Up 🔎" 
-                            ToolTip="Load values for the user-entered ion name" />
+                        <Label Content="Conductivity:" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Right"/>
+                        <TextBox Name="IonConductivityTextbox" Grid.Row="1" Grid.Column="4" TextChanged="ValidateIon" VerticalAlignment="Center" Text="12.345"/>
+                        <Label Content="10⁻⁴·m²·S/mol" Grid.Row="1" Grid.Column="5" />
 
-                    <Button Name="IonAddButton" Click="AddIon"
-                            Grid.Row="1" Grid.Column="8" Width="80" VerticalAlignment="Center" 
-                            Padding="5, 3, 5, 3" Margin="25, 0, 0, 0"
-                            Content="Add Ion 🡣" 
-                            ToolTip="Add this ion to the ion set"/>
+                        <Label Content="Mobility:" Grid.Row="2" Grid.Column="3" HorizontalContentAlignment="Right" />
+                        <TextBox Name="IonMobilityTextbox" Grid.Row="2" Grid.Column="4" IsReadOnly="True" VerticalAlignment="Center" Text="12.345" />
+                        <Label Content="10¹¹·m²/V/s" Grid.Row="2" Grid.Column="5" />
 
-                </Grid>
+                        <Label Content="C0:" Grid.Row="2" Grid.Column="0" HorizontalContentAlignment="Right" />
+                        <TextBox Name="IonC0Textbox" Grid.Row="2" Grid.Column="1" TextChanged="ValidateIon" VerticalAlignment="Center" Text="12.345" />
+                        <Label Content="mM" Grid.Row="2" Grid.Column="2" />
+
+                        <Label Content="CL:" Grid.Row="3" Grid.Column="0" HorizontalContentAlignment="Right"  />
+                        <TextBox Name="IonCLTextbox" Grid.Row="3" Grid.Column="1" TextChanged="ValidateIon" VerticalAlignment="Center" Text="12.345" MinWidth="60"/>
+                        <Label Content="mM" Grid.Row="3" Grid.Column="2" />
+
+                    </Grid>
+
+                </StackPanel>
             </GroupBox>
 
             <GroupBox Grid.Row="2" Margin="5, 5, 5, 5" BorderThickness="0">
