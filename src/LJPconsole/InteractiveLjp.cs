@@ -9,6 +9,7 @@ namespace LJPconsole
 {
     public class InteractiveLjp
     {
+        IonTable ionTable = new IonTable();
         readonly List<Ion> ionSet = new List<Ion>();
 
         public InteractiveLjp()
@@ -113,7 +114,6 @@ namespace LJPconsole
                 if (parts.Length == 3)
                 {
                     ion = new Ion(parts[0], double.Parse(parts[1]), double.Parse(parts[2]));
-                    IonTable ionTable = new IonTable();
                     ion = ionTable.Lookup(ion);
                 }
                 else if (parts.Length == 4)
@@ -180,9 +180,9 @@ namespace LJPconsole
             Console.WriteLine("calculating...");
             try
             {
-                double ljp_V = Calculate.Ljp(ionSet).mV;
-                DisplayIonSet();
-                Console.WriteLine($"LJP = {ljp_V * 1000} mV");
+                IonSet copySet = new IonSet(ionSet);
+                var ljp = Calculate.Ljp(copySet.ions);
+                Console.WriteLine(ljp.report);
             }
             catch (Exception ex)
             {
@@ -221,59 +221,7 @@ namespace LJPconsole
 
         private void DisplayIonSet()
         {
-            Console.WriteLine();
-            Console.WriteLine();
-            //Console.WriteLine("".PadLeft(80, '#'));
-
-            int columnWidth = 15;
-            string leftPad = "  ";
-
-            // column headers
-            Console.Write(leftPad);
-            Console.Write("Ion".PadRight(10));
-            Console.Write("Charge".PadRight(7));
-            Console.Write("Cond (E4)".PadRight(columnWidth));
-            Console.Write("Mu (E11)".PadRight(columnWidth));
-            Console.Write("c0 (mM)".PadRight(columnWidth));
-            Console.Write("cL (mM)".PadRight(columnWidth));
-            Console.WriteLine();
-
-            // line between title and table
-            Console.Write(leftPad);
-            Console.Write("".PadLeft(10 - 1, '-') + " ");
-            Console.Write("".PadLeft(7 - 1, '-') + " ");
-            Console.Write("".PadLeft(columnWidth - 1, '-') + " ");
-            Console.Write("".PadLeft(columnWidth - 1, '-') + " ");
-            Console.Write("".PadLeft(columnWidth - 1, '-') + " ");
-            Console.Write("".PadLeft(columnWidth - 1, '-') + " ");
-            Console.WriteLine();
-
-            foreach (Ion ion in ionSet)
-            {
-                string charge = (ion.charge > 0) ? $"+{ion.charge}" : ion.charge.ToString();
-                string conductivity = (ion.conductivity * 1e4).ToString();
-
-                Console.Write(leftPad);
-                Console.Write(ion.name.PadRight(10));
-                Console.Write(charge.PadRight(7));
-                Console.Write(conductivity.PadRight(columnWidth));
-                Console.Write(Math.Round(ion.mu / 1E11, 7).ToString().PadRight(columnWidth));
-                Console.Write(Math.Round(ion.cL, 7).ToString().PadRight(columnWidth));
-                Console.Write(Math.Round(ion.c0, 7).ToString().PadRight(columnWidth));
-                Console.WriteLine("");
-            }
-
-            // line under table
-            Console.Write(leftPad);
-            Console.Write("".PadLeft(10 - 1, '-') + " ");
-            Console.Write("".PadLeft(7 - 1, '-') + " ");
-            Console.Write("".PadLeft(columnWidth - 1, '-') + " ");
-            Console.Write("".PadLeft(columnWidth - 1, '-') + " ");
-            Console.Write("".PadLeft(columnWidth - 1, '-') + " ");
-            Console.Write("".PadLeft(columnWidth - 1, '-') + " ");
-            Console.WriteLine();
-
-            Console.WriteLine("");
+            Console.WriteLine(new IonSet(ionSet).GetTableString());
         }
 
         #endregion
