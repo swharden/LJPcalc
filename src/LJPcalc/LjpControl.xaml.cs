@@ -440,17 +440,15 @@ namespace LJPcalc
             foreach (Ion ion in ionSet)
                 ionSetCopy.Add(new Ion(ion));
 
-            Stopwatch stopwatch = Stopwatch.StartNew();
-            double ljp_V = Calculate.Ljp(ionSetCopy, tempC);
-            double elapsedSec = (double)stopwatch.ElapsedTicks / Stopwatch.Frequency;
+            var ljp = Calculate.Ljp(ionSetCopy, tempC);
 
             StringBuilder msg = new StringBuilder();
-            msg.AppendLine(string.Format("Equations were solved in {0:0.00} ms", elapsedSec * 1000.0));
+            msg.AppendLine($"Equations were solved in {ljp.benchmark}");
             foreach (Ion ion in ionSetCopy)
                 msg.AppendLine(ion.ToString());
-            msg.AppendLine($"LJP = {ljp_V * 1000} mV");
+            msg.AppendLine($"LJP = {ljp.mV} mV");
 
-            Message($"LJP = {ljp_V * 1000:0.000} mV", msg.ToString());
+            Message($"LJP = {ljp.mV:0.000} mV", msg.ToString());
 
             CalculateButton.IsEnabled = true;
         }

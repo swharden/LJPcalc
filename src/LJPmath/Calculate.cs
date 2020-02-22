@@ -6,9 +6,9 @@ namespace LJPmath
 {
     public class Calculate
     {
-        public static double Ljp(List<Ion> ionSet, double temperatureC = 25)
+        public static LjpResult Ljp(List<Ion> ionList, double temperatureC = 25)
         {
-            foreach (Ion ion in ionSet)
+            foreach (Ion ion in ionList)
             {
                 if (ion.charge == 0)
                     throw new ArgumentException("ion charge cannot be zero");
@@ -16,12 +16,14 @@ namespace LJPmath
                     throw new ArgumentException("ion mu cannot be zero");
             }
 
-            int ionCount = ionSet.Count;
+            LjpResult result = new LjpResult(ionList);
+
+            int ionCount = ionList.Count;
             int ionCountMinusOne = ionCount - 1;
             int ionCountMinusTwo = ionCount - 2;
 
-            Ion secondFromLastIon = ionSet[ionSet.Count - 2];
-            Ion LastIon = ionSet[ionSet.Count - 1];
+            Ion secondFromLastIon = ionList[ionCount - 2];
+            Ion LastIon = ionList[ionCount - 1];
 
             if (secondFromLastIon.c0 == secondFromLastIon.cL)
                 throw new InvalidOperationException("second from last ion concentrations cannot be equal");
@@ -32,28 +34,28 @@ namespace LJPmath
             // phis to solve are initialized to the concentration difference
             for (int j = 0; j < phis.Length; j++)
             {
-                Ion ion = ionSet[j];
+                Ion ion = ionList[j];
                 phis[j] = ion.cL - ion.c0;
             }
 
             // all phis except the last two get solved
             if (ionCount > 2)
             {
-                var phiEquations = new PhiEquations(ionSet, temperatureC) as IEquationSystem;
+                var phiEquations = new PhiEquations(ionList, temperatureC) as IEquationSystem;
                 Solver s = new Solver(phiEquations);
                 s.solve(phis);
             }
 
             // calculate LJP
             double[] cLs = new double[phis.Length];
-            double ljp_V = Ljp(ionSet, phis, cLs, temperatureC);
+            double ljp_V = Ljp(ionList, phis, cLs, temperatureC);
             if (ljp_V == Double.NaN)
                 throw new Exception("ERROR: Singularity (calculation aborted)");
 
             // update ions based on what was just calculated
             for (int j = 0; j < phis.Length; j++)
             {
-                Ion ion = ionSet[j];
+                Ion ion = ionList[j];
                 ion.phi = phis[j];
                 ion.cL = cLs[j];
             }
@@ -65,7 +67,7 @@ namespace LJPmath
             double totalChargeWeightedPhi = 0.0;
             for (int j = 0; j < ionCountMinusOne; j++)
             {
-                Ion ion = ionSet[j];
+                Ion ion = ionList[j];
                 totalChargeWeightedPhi += ion.phi * ion.charge;
             }
             LastIon.phi = -totalChargeWeightedPhi / LastIon.charge;
@@ -74,28 +76,29 @@ namespace LJPmath
             double totalChargeWeightedCL = 0.0;
             for (int j = 0; j < ionCountMinusOne; j++)
             {
-                Ion ion = ionSet[j];
+                Ion ion = ionList[j];
                 totalChargeWeightedCL += ion.cL * ion.charge;
             }
             LastIon.cL = -totalChargeWeightedCL / LastIon.charge;
 
-            return ljp_V;
+            result.Finished(ionList, ljp_V);
+            return result;
         }
 
-        public static double Ljp(List<Ion> list, double[] startingPhis, double[] startingCLs, double temperatureC)
+        public static double Ljp(List<Ion> ionList, double[] startingPhis, double[] startingCLs, double temperatureC)
         {
             double KT = Constants.boltzmann * (temperatureC + Constants.zeroCinK);
 
             double cdadc = 1.0; // fine for low concentrations
 
-            int ionCount = list.Count;
+            int ionCount = ionList.Count;
             int ionCountMinusOne = ionCount - 1;
             int ionCountMinusTwo = ionCount - 2;
             int indexLastIon = ionCount - 1;
             int indexSecondFromLastIon = ionCount - 2;
 
-            Ion lastIon = list[indexLastIon];
-            Ion secondFromLastIon = list[indexSecondFromLastIon];
+            Ion lastIon = ionList[indexLastIon];
+            Ion secondFromLastIon = ionList[indexSecondFromLastIon];
 
             if (startingPhis.Length != ionCount - 2)
                 throw new ArgumentException();
@@ -109,7 +112,7 @@ namespace LJPmath
             double[] rhos = new double[ionCountMinusOne];
             for (int j = 0; j < ionCountMinusOne; j++)
             {
-                Ion ion = list[j];
+                Ion ion = ionList[j];
                 charges[j] = ion.charge;
                 mus[j] = ion.mu;
                 rhos[j] = ion.c0;
@@ -132,7 +135,7 @@ namespace LJPmath
             double dK = (KCL - KC0) / 1000.0;
 
             // set last ion C0 based on charges, rhos, and linear algebra
-            double zCl = list[indexLastIon].charge;
+            double zCl = ionList[indexLastIon].charge;
             double rhoCl = -Linalg.ScalarProduct(charges, rhos) / zCl;
             lastIon.c0 = rhoCl;
 
