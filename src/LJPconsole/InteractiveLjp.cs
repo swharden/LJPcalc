@@ -198,7 +198,7 @@ namespace LJPconsole
             Version ver = typeof(Program).Assembly.GetName().Version;
 
             Console.WriteLine();
-            Console.WriteLine($"  LJPcalc console (version {ver.Major}.{ver.Minor}) by Scott Harden");
+            Console.WriteLine($"  LJPcalc console (version {ver.Major}.{ver.Minor}) by Scott Harden and Doriano Brogioli");
             Console.WriteLine();
             Console.WriteLine("  General commands:");
             Console.WriteLine("    exit, quit - exit the program");
