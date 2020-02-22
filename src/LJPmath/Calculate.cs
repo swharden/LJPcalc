@@ -16,7 +16,7 @@ namespace LJPmath
                     throw new ArgumentException("ion mu cannot be zero");
             }
 
-            LjpResult result = new LjpResult(ionList);
+            LjpResult result = new LjpResult(ionList, temperatureC);
 
             int ionCount = ionList.Count;
             int ionCountMinusOne = ionCount - 1;
@@ -85,6 +85,7 @@ namespace LJPmath
             return result;
         }
 
+        // This function is balanced by the equation solver, not called directly by the user.
         public static double Ljp(List<Ion> ionList, double[] startingPhis, double[] startingCLs, double temperatureC)
         {
             double KT = Constants.boltzmann * (temperatureC + Constants.zeroCinK);

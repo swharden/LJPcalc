@@ -28,31 +28,48 @@ namespace LJPmath
 
         public readonly List<Ion> ionListOriginal = new List<Ion>();
         public readonly List<Ion> ionListSolved = new List<Ion>();
+        public readonly double temperatureK;
 
         readonly Stopwatch stopwatch = new Stopwatch();
 
-        public LjpResult(List<Ion> ionList)
+        public LjpResult(List<Ion> ionList, double temperatureC)
         {
             ionListOriginal.Clear();
             foreach (Ion ion in ionList)
                 ionListOriginal.Add(new Ion(ion));
 
+            this.temperatureK = temperatureC + Constants.zeroCinK;
+
             stopwatch.Restart();
         }
 
-        public void Finished(List<Ion> ionList, double ljp_V)
+        public void Finished(List<Ion> ionList, double ljpVolts)
         {
             stopwatch.Stop();
             benchmark_s = (double)stopwatch.ElapsedTicks / Stopwatch.Frequency;
 
-            this.V = ljp_V;
+            V = ljpVolts;
 
             ionListSolved.Clear();
             foreach (Ion ion in ionList)
                 ionListSolved.Add(new Ion(ion));
-
             var solvedIonSet = new IonSet(ionListSolved);
 
+            // figure out LJP due to Cl (useful for Ag/AgCl electrodes)
+            double chlorideConcC0 = 0;
+            double chlorideConcCL = 0;
+
+            foreach (Ion ion in solvedIonSet.ions)
+            {
+                if (ion.name == "Cl")
+                {
+                    chlorideConcC0 += ion.c0;
+                    chlorideConcCL += ion.cL;
+                }
+            }
+            bool isChlorideOnBothSides = (chlorideConcC0 > 0 && chlorideConcCL > 0);
+
+            // build report
             StringBuilder txt = new StringBuilder();
             txt.AppendLine("Values for cL were adjusted to achieve electro-neutrality:");
             txt.AppendLine();
@@ -60,6 +77,18 @@ namespace LJPmath
             txt.AppendLine();
             txt.AppendLine($"Equations were solved in {benchmark}");
             txt.AppendLine($"LJP = {mV} mV");
+
+            if (isChlorideOnBothSides)
+            {
+
+                double chlorideLjp_C0_Mv = -1000 * (Constants.R * temperatureK / Constants.F) * Math.Log(chlorideConcC0);
+                double chlorideLjp_CL_Mv = -1000 * (Constants.R * temperatureK / Constants.F) * Math.Log(chlorideConcCL);
+                txt.AppendLine();
+                txt.AppendLine($"Chloride LJPs may be useful if using Ag/AgCl electrodes:");
+                txt.AppendLine($"LJP[Cl] c0 = {chlorideLjp_C0_Mv} mV");
+                txt.AppendLine($"LJP[Cl] cL = {chlorideLjp_CL_Mv} mV");
+                txt.AppendLine($"difference = {chlorideLjp_CL_Mv - chlorideLjp_C0_Mv} mV");
+            }
 
             report = txt.ToString().TrimEnd();
         }
