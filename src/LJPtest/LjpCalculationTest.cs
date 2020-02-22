@@ -358,5 +358,18 @@ namespace LJPtest
             double ljp_mV = Calculate.Ljp(ionSet) * 1000;
             Assert.AreEqual(-8.1, ljp_mV, 0.5);
         }
+
+        [Test]
+        public void Test_KnownIonSets_LjpWithinExpectedRange()
+        {
+            var ionTable = new IonTable();
+            var knownSets = new KnownIonSets(ionTable);
+            foreach (var ionSet in knownSets.ionSets)
+            {
+                Console.WriteLine($"Testing known ion set: {ionSet.name}");
+                double ljp_mV = Calculate.Ljp(ionSet.ions) * 1000;
+                Assert.AreEqual(ionSet.expectedLjp_mV, ljp_mV, ionSet.expectedAccuracy_mV);
+            }
+        }
     }
 }

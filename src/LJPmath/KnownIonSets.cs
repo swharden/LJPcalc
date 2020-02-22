@@ -18,8 +18,8 @@ namespace LJPmath
             ionSets.Add(new KnownIonSet(
                 name: "JLJP screenshot",
                 details: "Results frrom screenshot on SourceForge: https://a.fsdn.com/con/app/proj/jljp/screenshots/GUI.png/max/max/1.jpg",
-                expectedLjp_mV: -21,
-                expectedAccuracy_mV: 1,
+                expectedLjp_mV: -20.79558643,
+                expectedAccuracy_mV: .5,
                 ions: new List<Ion>(){
                         new Ion("Zn", 9, 2.84E-2),
                         new Ion("K", 0, 3),
@@ -30,8 +30,8 @@ namespace LJPmath
             ionSets.Add(new KnownIonSet(
                 name: "Ng and Barry (1994)",
                 details: "Table 2 of: https://doi.org/10.1016/0165-0270(94)00087-W",
-                expectedLjp_mV: -21,
-                expectedAccuracy_mV: 1,
+                expectedLjp_mV: -8.2,
+                expectedAccuracy_mV: .5,
                 ions: new List<Ion>(){
                         new Ion("Ca", 50, 0),
                         new Ion("Cl", 200, 100),
@@ -43,8 +43,8 @@ namespace LJPmath
             ionSets.Add(new KnownIonSet(
                 name: "JPCalcWin manual page 7",
                 details: "JPCalcWin manual (page 7): https://medicalsciences.med.unsw.edu.au/sites/default/files/soms/page/ElectroPhysSW/JPCalcWin-Demo%20Manual.pdf",
-                expectedLjp_mV: -21,
-                expectedAccuracy_mV: 1,
+                expectedLjp_mV: +8.74,
+                expectedAccuracy_mV: 0.5,
                 ions: new List<Ion>(){
                         new Ion("Na", 10, 145),
                         new Ion("Cl", 10, 145),
@@ -67,8 +67,8 @@ namespace LJPmath
             ionSets.Add(new KnownIonSet(
                 name: "Patch Clamp Solutions (K-glu)",
                 details: "Patch-Clamp Analysis (Watz and Wolfgang, 2007) Second Edition page 191: http://springer.com/gp/book/9781588297051",
-                expectedLjp_mV: -21,
-                expectedAccuracy_mV: 1,
+                expectedLjp_mV: +15.729,
+                expectedAccuracy_mV: .5,
                 ions: new List<Ion>(){
                         new Ion("Ca", 0, 2.4),
                         new Ion("Cl", 2, 133.8),
@@ -88,8 +88,8 @@ namespace LJPmath
             ionSets.Add(new KnownIonSet(
                 name: "Patch Clamp Solutions (K-glu, high [Cl])",
                 details: "Modified from Watz and Wolfgang (2007) page 191: http://springer.com/gp/book/9781588297051",
-                expectedLjp_mV: -21,
-                expectedAccuracy_mV: 1,
+                expectedLjp_mV: +12.441,
+                expectedAccuracy_mV: .5,
                 ions: new List<Ion>(){
                         new Ion("Ca", 0, 2.4),
                         new Ion("Cl", 2 + 30, 133.8),
