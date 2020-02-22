@@ -58,8 +58,8 @@ namespace LJPcalc
                 if (knownSet.name == clickedItemName)
                 {
                     ionSet.AddRange(knownSet.ions);
+                    CalculationTemperatureC.Text = knownSet.temperatureC.ToString();
                     ValidateIonSet();
-                    //CalculateLjp(null, null);
                 }
             }
             dataGrid1.Items.Refresh();

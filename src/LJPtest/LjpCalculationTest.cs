@@ -359,7 +359,7 @@ namespace LJPtest
             foreach (var ionSet in knownSets.ionSets)
             {
                 Console.WriteLine($"Testing known ion set: {ionSet.name}");
-                var ljp = Calculate.Ljp(ionSet.ions);
+                var ljp = Calculate.Ljp(ionSet.ions, ionSet.temperatureC);
                 Assert.AreEqual(ionSet.expectedLjp_mV, ljp.mV, ionSet.expectedAccuracy_mV);
             }
         }
