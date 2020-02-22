@@ -7,6 +7,7 @@
 ## Build and Run
 _These instructions work identically on Windows, Linux, and MacOS_
 * Install [.NET Core SDK](https://dotnet.microsoft.com/download)
+* Download and unzip this project's source code
 * `cd src/LJPconsole`
 * `dotnet run`
 
