@@ -32,9 +32,9 @@ LJPcalc calculates the liquid junction potential according to the stationary Ner
 
 **Note regarding ion sequence:** When calculating LJP for a set of ions it is important to consider the sequence in which they are listed. Additional information can be found in [Marino et al., 2014](https://arxiv.org/abs/1403.3640) which describes the exact computational methods employed by LJPcalc.
 
-* **The last ion's c0 may be overridden** to achieve electro-neutrality on the c0 side. This will not occur if the sum of charge on the c0 side is zero.
+* **The last ion's c0 may be overridden** to achieve electroneutrality on the c0 side. This will not occur if the sum of charge on the c0 side is zero.
 
-* **cL for most ions will be slightly adjusted** to achieve electro-neutrality on the cL side. The second-to-last ion's cL (which cannot equal c0) will remain fixed, while the last cL will be adjusted to achieve electro-neutrality. During the solving process all cL values (but the second-from-last) will be slightly adjusted. The adjustments are likely negligable experimentally, but this is why cL values in the output table slightly differer from those given for inputs.
+* **cL for most ions will be slightly adjusted** to achieve electroneutrality on the cL side. The second-to-last ion's cL (which cannot equal c0) will remain fixed, while the last cL will be adjusted to achieve electroneutrality. During the solving process all cL values (but the second-from-last) will be slightly adjusted. The adjustments are likely negligable experimentally, but this is why cL values in the output table slightly differer from those given for inputs.
 
 ### Effect of Temperature on LJP
 
