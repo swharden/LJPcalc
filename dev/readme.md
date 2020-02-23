@@ -20,3 +20,9 @@ LJPcalc | [.NET Core](https://en.wikipedia.org/wiki/.NET_Core) | Graphical LJP c
 LJPapp | [Xamarin.Forms](https://dotnet.microsoft.com/apps/xamarin/xamarin-forms) | Mobile app for iPhone and Android
 LJPresearch | [.NET Core](https://en.wikipedia.org/wiki/.NET_Core) | Tool for writing experimental LJP calculations
 LJPtest | [.NET Core](https://en.wikipedia.org/wiki/.NET_Core) | Tests for the LJPmath module
+
+### Questions
+* what if we auto-sort the list before every solve? 
+  * the ion with the largest difference between C0 and CL becomes second-to-last
+  * the ion with the largest cL becomes last
+* is the citation OK?
