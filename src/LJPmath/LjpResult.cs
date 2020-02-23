@@ -70,7 +70,7 @@ namespace LJPmath
 
             // build report
             StringBuilder txt = new StringBuilder();
-            txt.AppendLine("Values for cL were adjusted to achieve electro-neutrality:");
+            txt.AppendLine("Concentrations were slightly adjusted to achieve electroneutrality:");
             txt.AppendLine();
             txt.AppendLine(solvedIonSet.GetTableString());
             txt.AppendLine();
