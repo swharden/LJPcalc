@@ -34,7 +34,96 @@ LJPcalc calculates the liquid junction potential according to the stationary Ner
 
 * **The last ion's c0 may be overridden** to achieve electroneutrality on the c0 side. This will not occur if the sum of charge on the c0 side is zero.
 
-* **cL for most ions will be slightly adjusted** to achieve electroneutrality on the cL side. The second-to-last ion's cL (which cannot equal its c0) will remain fixed, while the last cL will be adjusted to achieve electroneutrality. During the solving process all cL values (but the second-from-last) will be slightly adjusted. The adjustments are likely negligable experimentally, but this is why cL values in the output table slightly differer from those given for inputs.
+* **cL for most ions will be slightly adjusted** to achieve electroneutrality on the cL side. The second-to-last ion's cL (which cannot equal its c0) will remain fixed, while the last cL will be adjusted to achieve electroneutrality. During the solving process all cL values (but the second-from-last) will be slightly adjusted. The adjustments are likely negligible experimentally, but this is why cL values in the output table slightly differ from those given for inputs.
+
+### How to Correct for LJP in Electrophysiology Experiments
+
+Electrophysiologists often measure (or clamp) the voltage of cells impaled with glass microelectrodes, but the difference in ionic composition between the intracellular (pipette) and extracellular (bath) solutions produces a LJP which is added to the measurements:
+
+<p align="center">V<sub>measured</sub> = V<sub>cell</sub> + LJP</p>
+
+**To compensate for LJP,** the electrophysiologist must calculate LJP mathematically (using software like LJPcalc) or estimate it experimentally (see below). Once the LJP is known, recorded data can be adjusted to accurately report cell voltage:
+
+<p align="center">V<sub>cell</sub> = V<sub>measured</sub> - LJP</p>
+
+> ⚠️ This method assumes that (1) the amplifier voltage was zeroed at the start of the experiment when the pipette was in open-tip configuration with the bath, and (2) the concentration of chloride (if using Ag/AgCl electrodes) in the internal and bath solutions are stable throughout the experiment.
+
+#### Example LJP Calculation & Correction
+
+This ion set came from in [Figl et al., 2003](https://medicalsciences.med.unsw.edu.au/sites/default/files/soms/page/ElectroPhysSW/AxoBits39New.pdf) Page 8. They have been loaded into LJPcalc such that the pipette solution is c0 and the bath solution is cL. Note that the order of ions has been adjusted to place the most abundant two ions at the bottom. This is ideal for LJPcalc's analytical method.
+
+ Name       | Charge | pipette (mM) | bath (mM)      
+------------|--------|--------------|---------
+ K          | +1     | 145          | 2.8
+ Na         | +1     | 13           | 145
+ Mg         | +2     | 1            | 2
+ Ca         | +2     | 0            | 1
+ HEPES      | -1     | 5            | 5
+ Gluconate  | -1     | 145          | 0           
+ Cl         | -1     | 10           | 148.8
+
+Loading this table into LJPcalc produces the following output:
+
+```
+Values for cL were adjusted to achieve electro-neutrality:
+
+ Name               | Charge | Conductivity (E-4) | C0 (mM)      | CL (mM)      
+--------------------|--------|--------------------|--------------|--------------
+ K                  | +1     | 73.5               | 145          | 2.8098265   
+ Na                 | +1     | 50.11              | 13           | 144.9794365 
+ Mg                 | +2     | 53.06              | 1            | 1.9998212   
+ Ca                 | +2     | 59.5               | 0            | 0.9999109   
+ HEPES              | -1     | 22.05              | 5            | 4.9990023   
+ Gluconate          | -1     | 24.255             | 145          | 0           
+ Cl                 | -1     | 76.31              | 10           | 148.789725
+
+Equations were solved in 88.91 ms
+LJP at 20 C (293.15 K) = 16.052319631180264 mV
+```
+
+> _[Figl et al., 2003](https://medicalsciences.med.unsw.edu.au/sites/default/files/soms/page/ElectroPhysSW/AxoBits39New.pdf) Page 8 calculated a LJP of 15.6 mV for this ion set (720 µV lesser magnitude than our calcualted LJP). As discussed above, differences in ion mobility table values and use of the Nernst-Planck vs. Henderson equation can cause commercial software to report values slightly different than LJPcalc. Experimentally these small differences are negligable, but values produced by LJPcalc are assumed to be more accurate. See [Marino et al., 2014](https://arxiv.org/abs/1403.3640) for discussion._
+
+If we have patch-clamp data that indicates a neuron rests at -48.13 mV, what is its true resting potential? Now that we know the LJP, we can subtract it from our measurement:
+
+<p align="center">V<sub>cell</sub> = V<sub>measured</sub> - LJP</p>
+
+<p align="center">V<sub>cell</sub> = -48.13 - 16.05 mV</p>
+
+<p align="center">V<sub>cell</sub> = -64.18 mV</p>
+
+We now know our cell rests at -64.18 mV.
+
+#### Notes about offset voltage, Ag/AgCl pellets, and and half-cell potentials
+
+The patch-clamp amplifier is typically zeroed at the start of every experiment when the patch pipette is in open-tip configuration with the bath solution. An offset voltage (V<sub>offset</sub>) is applied such that the V<sub>measured</sub> is zero. This process nulls several potentials:
+
+* _liquid_ junction potential (caused by internal vs. bath solutions)
+* _half-cell_ potentials (caused by wire vs. internal and wire vs. bath)
+  * these potentials are large and variable when [Cl] is low on either side
+  * using an agar bridge helps keep this constant
+
+When the amplifier is nulled prior to experiments the half-cell potentials can typically be ignored. However, if the [Cl] of the internal or bath solutions change during the course of an experiment (most likely to occur when an Ag/AgCl pellet is immersed in a flowing bath solution), the half-cell potentials become significant and affect V<sub>measured</sub> as they change. See [Figl et al., 2003](https://medicalsciences.med.unsw.edu.au/sites/default/files/soms/page/ElectroPhysSW/AxoBits39New.pdf) for more information about LJPs as they relate to electrophysiological experiments.
+
+### Measuring LJP Experimentally
+
+It is possible to measure LJP experimentally. However, this technique is discouraged because issues with KCl reference electrodes make it difficult to accurately measure LJP ([Barry and Diamond, 1970](https://link.springer.com/article/10.1007/BF01868010)). However, this technique can be used in cases when ion mobilities are not known:
+
+To measure LJP of an intracellular vs. extracellular solution for whole-cell patch-clamp experiments:
+
+* Fill the recording pipette with intracellular solution
+* Fill the bath with the identical intracellular solution
+* Use a high-mobility bath reference electrode with 3M KCl
+  * you can use a pipette filled with 3M KCl 
+  * you can use freshly cut 3M agar bridge
+  * do not use an Ag/AgCl pellet (see note below)
+* In current-clamp (I=0) adjust V<sub>offset</sub> so V<sub>measured</sub> is 0 mV
+* Change the bath from pipette solution to extracellular solution
+* If using an agar bridge, replace it with a new one
+* Note  the measured voltage (it should be negative)
+  * The inverse of this is the LJP (it should be positive)
+  * Future recordings can be compensated: V<sub>cell</sub> = V<sub>measured</sub> - LJP
+
+> ⚠️ Use of an Ag/AgCl pellet will not produce accurate results. This is because intracellular solution typically has a low [Cl]. Using a KCl reference is ideal because intracellular solution has high [K] and extracellular solution has high [Cl] so there is excellent mobility in all cases.
 
 ### Effect of Temperature on LJP
 
