@@ -79,7 +79,7 @@ namespace LJPmath
 
             if (isChlorideOnBothSides)
             {
-
+                /*
                 double chlorideLjp_C0_Mv = -1000 * (Constants.R * temperatureK / Constants.F) * Math.Log(chlorideConcC0);
                 double chlorideLjp_CL_Mv = -1000 * (Constants.R * temperatureK / Constants.F) * Math.Log(chlorideConcCL);
                 txt.AppendLine();
@@ -87,6 +87,7 @@ namespace LJPmath
                 txt.AppendLine($"LJP[Cl] c0 = {chlorideLjp_C0_Mv} mV");
                 txt.AppendLine($"LJP[Cl] cL = {chlorideLjp_CL_Mv} mV");
                 txt.AppendLine($"difference = {chlorideLjp_CL_Mv - chlorideLjp_C0_Mv} mV");
+                */
             }
 
             report = txt.ToString().TrimEnd();
