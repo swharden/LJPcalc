@@ -42,7 +42,7 @@ Electrophysiologists often measure (or clamp) the voltage of cells impaled with 
 
 <p align="center">V<sub>measured</sub> = V<sub>cell</sub> + LJP</p>
 
-**To compensate for LJP,** the electrophysiologist must calculate LJP mathematically (using software like LJPcalc) or estimate it experimentally (see below). Once the LJP is known, recorded data can be adjusted to accurately report cell voltage:
+**To compensate for LJP,** the electrophysiologist must calculate LJP mathematically (using software like LJPcalc) or estimate it experimentally ([instructions below](#measuring-ljp-experimentally)). Once the LJP is known, recorded data can be adjusted to accurately report cell voltage:
 
 <p align="center">V<sub>cell</sub> = V<sub>measured</sub> - LJP</p>
 
