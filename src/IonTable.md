@@ -224,7 +224,7 @@ SCN (Thiocyanate)|-1|0.901*K
 Co|+2|0.367*K
 Mg|+2|0.361*K
 HPO4|-2|0.39*K
-SO4 (Sulphate)|-2|0.544*K
+SO4|-2|0.544*K
 
 Ion Table 2|Charge|Conductivity (E-4)
 ---|---|---
