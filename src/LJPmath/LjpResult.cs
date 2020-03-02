@@ -44,6 +44,11 @@ namespace LJPmath
             stopwatch.Restart();
         }
 
+        public override string ToString()
+        {
+            return $"LJP result: {mV} mV";
+        }
+
         public void Finished(List<Ion> ionList, double ljpVolts)
         {
             stopwatch.Stop();

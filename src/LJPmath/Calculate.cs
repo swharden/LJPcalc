@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace LJPmath
@@ -43,7 +44,9 @@ namespace LJPmath
             {
                 var phiEquations = new PhiEquations(ionList, temperatureC) as IEquationSystem;
                 Solver s = new Solver(phiEquations);
-                s.solve(phis);
+                Debug.WriteLine("solving phis...");
+                s.Solve(phis);
+                Debug.WriteLine("phis solved.");
             }
 
             // calculate LJP

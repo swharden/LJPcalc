@@ -8,7 +8,60 @@ namespace LJPresearch
     {
         static void Main(string[] args)
         {
-            Figure_EffectOfTemperature_DifferentMobilities();
+            //Figure_EffectOfTemperature_DifferentMobilities();
+            TestSlowCalculations();
+        }
+
+        static List<Ion> SortForSolver(List<Ion> ionList)
+        {
+            // largest cL should be last
+            int indexLargestCl = 0;
+            double largestCl = 0;
+            for(int i=0; i<ionList.Count; i++)
+            {
+                if (ionList[i].cL > largestCl)
+                {
+                    indexLargestCl = i;
+                    largestCl = ionList[i].cL;
+                }
+            }
+            Ion ionLargestCl = ionList[indexLargestCl];
+            ionList.RemoveAt(indexLargestCl);
+
+            // largest diff should be second from last
+            int indexLargestCdiff = 0;
+            double largestCdiff = 0;
+            for (int i = 0; i < ionList.Count; i++)
+            {
+                if (ionList[i].cDiff > largestCdiff)
+                {
+                    indexLargestCdiff = i;
+                    largestCdiff = ionList[i].cDiff;
+                }
+            }
+            Ion ionLargestCdiff = ionList[indexLargestCdiff];
+            ionList.RemoveAt(indexLargestCdiff);
+
+            ionList.Add(ionLargestCdiff);
+            ionList.Add(ionLargestCl);
+            return ionList;
+        }
+
+        public static void TestSlowCalculations()
+        {
+            var ionList = new List<Ion>(){
+                    new Ion("Zn", 9, .0284),
+                    new Ion("K", 0, 3),
+                    new Ion("Cl", 18, 3.062),
+                    new Ion("Mg", 5, 3),
+                    new Ion("Ag", 1, 1),
+                };
+
+            var ionTable = new IonTable();
+            ionList = ionTable.Lookup(ionList);
+            ionList = SortForSolver(ionList);
+            var result = Calculate.Ljp(ionList);
+            Console.WriteLine(result.report);
         }
 
         public static void Figure_EffectOfTemperature_Simple()

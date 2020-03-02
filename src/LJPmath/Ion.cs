@@ -15,6 +15,8 @@ namespace LJPmath
 
         public double c0 { get; set; } = 0;
         public double cL { get; set; } = 0;
+        public double cDiff { get { return Math.Abs(cL - c0); } }
+
         public double phi { get; set; } = 0;
 
         public string chargeWithSign { get { return (charge > 0) ? "+" + charge.ToString() : charge.ToString(); } }

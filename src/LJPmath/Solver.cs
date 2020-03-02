@@ -1,48 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace LJPmath
 {
     public class Solver
     {
-        private IEquationSystem es;
-        private bool running = true;
-        Random rand = new Random(0);
+        private readonly IEquationSystem es;
+        private readonly Random rand = new Random(0);
 
         public Solver(IEquationSystem es)
         {
             this.es = es;
         }
 
-        public void stop()
-        {
-            running = false;
-        }
-
-        private void goOn()
-        {
-            if (!running)
-            {
-                running = true;
-                throw new OperationCanceledException("Calculation aborted");
-            }
-        }
-
-        private List<Point> list = new List<Point>();
-        public void solve(double[] x)
+        private readonly List<Point> list = new List<Point>();
+        public void Solve(double[] x, double maxSeconds = 0)
         {
             if (es.number() == 0)
                 return;
 
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             list.Add(new Point(x, es));
             while (list[0].getM() > 1.0)
             {
-                goOn();
-                suggest();
+                Suggest();
                 list.Sort();
                 while (list.Count > es.number() * 4)
                     list.RemoveAt(list.Count - 1);
+                if ((maxSeconds > 0) && (stopwatch.ElapsedMilliseconds > (maxSeconds * 1000)))
+                {
+                    Debug.WriteLine($"Solver timed-out ({maxSeconds} sec)");
+                    break;
+                }
             }
 
             for (int j = 0; j < es.number(); j++)
@@ -50,7 +43,7 @@ namespace LJPmath
         }
 
         public int sn = 0; // TODO: make sn an enumeration
-        private void suggest()
+        private void Suggest()
         {
             double[] x = new double[es.number()];
             switch (sn)

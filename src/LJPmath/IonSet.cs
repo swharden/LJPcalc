@@ -143,7 +143,6 @@ namespace LJPmath
                 double cL = (parts.Length == 5) ? double.Parse(parts[4]) : 0;
 
                 Ion ion = new Ion(name, charge, conductance, c0, cL);
-                Debug.WriteLine($"Parsed ion: {ion}");
                 return ion;
             }
             catch
