@@ -124,13 +124,14 @@ namespace LJPmath
                         new Ion("Ag", 1, 1),
                 },
                 ionTable: ionTable));
+                */
 
             ionSets.Add(new KnownIonSet(
-                name: "CRASH #9B",
-                details: "Known to crash due to poor ion order https://github.com/swharden/LJPcalc/issues/9",
-                expectedLjp_mV: 0,
-                temperatureC: 25,
-                expectedAccuracy_mV: 9999,
+                name: "AxoBits Article (Issue 39, page 8)",
+                details: "Contains a JPcalcWin Screenshot: https://medicalsciences.med.unsw.edu.au/sites/default/files/soms/page/ElectroPhysSW/LJP_article_%20AxoBits%2039.pdf",
+                expectedLjp_mV: 15.6,
+                temperatureC: 20,
+                expectedAccuracy_mV: .5,
                 ions: new List<Ion>(){
                         new Ion("K", 145, 2.8),
                         new Ion("Na", 13, 145),
@@ -141,7 +142,6 @@ namespace LJPmath
                         new Ion("HEPES", 5, 5),
                 },
                 ionTable: ionTable));
-                */
         }
     }
 }

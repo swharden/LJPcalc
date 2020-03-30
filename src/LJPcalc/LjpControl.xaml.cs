@@ -440,8 +440,28 @@ namespace LJPcalc
             foreach (Ion ion in ionSet)
                 ionSetCopy.Add(new Ion(ion));
 
-            var ljp = Calculate.Ljp(ionSetCopy, tempC);
-            Message($"LJP = {ljp.mV:0.000} mV", ljp.report);
+            try
+            {
+                var ljp = Calculate.Ljp(ionSetCopy, tempC, AutoSortCheckbox.IsChecked.Value);
+                Message($"LJP = {ljp.mV:0.000} mV", ljp.report);
+            }
+            catch (OperationCanceledException)
+            {
+                if (AutoSortCheckbox.IsChecked.Value == true)
+                {
+                    Message($"Ion Set Error", "This ion set failed to calculate," + Environment.NewLine +
+                        "even though automatic ion set sorting was used." + Environment.NewLine +
+                        "Please help improve LJPcalc by submitting a bug report!" + Environment.NewLine +
+                        "Please include the full content of this message." + Environment.NewLine +
+                        new IonSet(ionSetCopy).GetTableString()
+                        );
+                }
+                else
+                {
+                    Message($"Ion Set Error", "This ion set failed to calculate." + Environment.NewLine +
+                        "Enable automatic ion set sorting and try again.");
+                }
+            }
 
             CalculateButton.IsEnabled = true;
         }
