@@ -7,7 +7,42 @@ namespace LJPmath
 {
     public class Calculate
     {
-        public static LjpResult Ljp(List<Ion> ionList, double temperatureC = 25)
+        private static List<Ion> AutoSort(List<Ion> ionList)
+        {
+            // largest cL should be last
+            int indexLargestCl = 0;
+            double largestCl = 0;
+            for (int i = 0; i < ionList.Count; i++)
+            {
+                if (ionList[i].cL > largestCl)
+                {
+                    indexLargestCl = i;
+                    largestCl = ionList[i].cL;
+                }
+            }
+            Ion ionLargestCl = ionList[indexLargestCl];
+            ionList.RemoveAt(indexLargestCl);
+
+            // largest diff should be second from last
+            int indexLargestCdiff = 0;
+            double largestCdiff = 0;
+            for (int i = 0; i < ionList.Count; i++)
+            {
+                if (ionList[i].cDiff > largestCdiff)
+                {
+                    indexLargestCdiff = i;
+                    largestCdiff = ionList[i].cDiff;
+                }
+            }
+            Ion ionLargestCdiff = ionList[indexLargestCdiff];
+            ionList.RemoveAt(indexLargestCdiff);
+
+            ionList.Add(ionLargestCdiff);
+            ionList.Add(ionLargestCl);
+            return ionList;
+        }
+
+        public static LjpResult Ljp(List<Ion> ionList, double temperatureC = 25, bool autoSort = true)
         {
             foreach (Ion ion in ionList)
             {
@@ -16,6 +51,9 @@ namespace LJPmath
                 if (ion.mu == 0)
                     throw new ArgumentException("ion mu cannot be zero");
             }
+
+            if (autoSort)
+                AutoSort(ionList);
 
             LjpResult result = new LjpResult(ionList, temperatureC);
 

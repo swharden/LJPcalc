@@ -127,6 +127,7 @@
                     <Button Name="SaveButton" Click="IonSetSaveButton_Click" Content="💾" Width="30" Margin="0, 0, 5, 0" Padding="5, 3, 5, 3" ToolTip="save ion set"/>
 
                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" >
+                        <CheckBox Content="sort" ToolTip="Automaticaly sort ion order" VerticalAlignment="Center" Margin="0 0 5 0" IsChecked="True"/>
                         <ComboBox ToolTip="LJP Calculation Equation">
                             <ComboBoxItem Content="Nernst–Planck" IsSelected="True" />
                             <ComboBoxItem Content="Henderson" IsEnabled="False" />

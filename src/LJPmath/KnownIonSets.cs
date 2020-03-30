@@ -108,6 +108,23 @@ namespace LJPmath
                         new Ion("Na", 4.25, 152.2)
                 },
                 ionTable: ionTable));
+
+            /*
+            ionSets.Add(new KnownIonSet(
+                name: "CRASH #9",
+                details: "Known to crash due to poor ion order https://github.com/swharden/LJPcalc/issues/9",
+                expectedLjp_mV: 0,
+                temperatureC: 25,
+                expectedAccuracy_mV: 9999,
+                ions: new List<Ion>(){
+                        new Ion("Zn", 9, .0284),
+                        new Ion("K", 0, 3),
+                        new Ion("Cl", 18, 3.062),
+                        new Ion("Mg", 5, 3),
+                        new Ion("Ag", 1, 1),
+                },
+                ionTable: ionTable));
+                */
         }
     }
 }

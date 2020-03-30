@@ -23,7 +23,7 @@ namespace LJPtest
             var ionTable = new IonTable();
             ionSet = ionTable.Lookup(ionSet);
 
-            var ljp = Calculate.Ljp(ionSet);
+            var ljp = Calculate.Ljp(ionSet, autoSort: false);
             Assert.AreEqual(-20.79558643, ljp.mV, 1e-6);
         }
 
@@ -52,7 +52,7 @@ namespace LJPtest
                 new Ion("Cl",-1, 76.31, 18, 3.0568)
             };
 
-            var ljp = Calculate.Ljp(ionSet);
+            var ljp = Calculate.Ljp(ionSet, autoSort: false);
             Assert.AreEqual(-20.79558643, ljp.mV, 1e-6);
         }
 
@@ -73,7 +73,7 @@ namespace LJPtest
             var ionSet = new List<Ion> { Zn, K, Cl };
             var ionTable = new IonTable();
             ionSet = ionTable.Lookup(ionSet);
-            var ljp = Calculate.Ljp(ionSet);
+            var ljp = Calculate.Ljp(ionSet, autoSort: false);
 
             Assert.AreEqual(-20.79558643, ljp.mV, 1e-6);
         }
