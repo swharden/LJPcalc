@@ -42,7 +42,7 @@ namespace LJPmath
             return ionList;
         }
 
-        public static LjpResult Ljp(List<Ion> ionList, double temperatureC = 25, bool autoSort = true)
+        public static LjpResult Ljp(List<Ion> ionList, double temperatureC = 25, bool autoSort = true, double timeoutMilliseconds = 5000)
         {
             foreach (Ion ion in ionList)
             {
@@ -83,7 +83,7 @@ namespace LJPmath
                 var phiEquations = new PhiEquations(ionList, temperatureC) as IEquationSystem;
                 Solver s = new Solver(phiEquations);
                 Debug.WriteLine("solving phis...");
-                s.Solve(phis);
+                s.Solve(phis, timeoutMilliseconds);
                 Debug.WriteLine("phis solved.");
             }
 

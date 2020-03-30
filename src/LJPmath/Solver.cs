@@ -16,7 +16,7 @@ namespace LJPmath
         }
 
         private readonly List<Point> list = new List<Point>();
-        public void Solve(double[] x, double maxSeconds = 0)
+        public void Solve(double[] x, double timeoutMilliseconds = 0)
         {
             if (es.number() == 0)
                 return;
@@ -31,11 +31,8 @@ namespace LJPmath
                 list.Sort();
                 while (list.Count > es.number() * 4)
                     list.RemoveAt(list.Count - 1);
-                if ((maxSeconds > 0) && (stopwatch.ElapsedMilliseconds > (maxSeconds * 1000)))
-                {
-                    Debug.WriteLine($"Solver timed-out ({maxSeconds} sec)");
-                    break;
-                }
+                if ((timeoutMilliseconds > 0) && (stopwatch.ElapsedMilliseconds > timeoutMilliseconds))
+                    throw new OperationCanceledException($"Solver timed out while calculating Phis ({timeoutMilliseconds} ms)");
             }
 
             for (int j = 0; j < es.number(); j++)
