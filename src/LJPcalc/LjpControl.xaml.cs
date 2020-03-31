@@ -476,5 +476,18 @@ namespace LJPcalc
             timer.Tick += CalculateLjpThread;
             timer.Start();
         }
+
+        private void OnEditTableClicked(object sender, RoutedEventArgs e)
+        {
+            var res = MessageBox.Show($"LJPcalc loads ion valence and mobility from IonTable.md" +
+                "\n\nDo you want to open this file now?", "Edit LJPcalc Ion Table", 
+                MessageBoxButton.YesNoCancel, MessageBoxImage.Information);
+
+            if (res == MessageBoxResult.Yes)
+                System.Diagnostics.Process.Start("explorer.exe", ionTable.filePath);
+
+            MessageBox.Show("IonTable.md will be reloaded the next time LJPcalc starts.", 
+                "Restart Required", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
     }
 }

@@ -28,12 +28,13 @@
             <DockPanel Grid.Row="0" LastChildFill="False">
                 <TextBox x:Name="LjpTitle" Background="Transparent" BorderThickness="0" Text="LJP value" FontSize="32"/>
                 <Button Content="About" VerticalAlignment="Top" DockPanel.Dock="Right" Padding="5, 3, 5, 3" Margin="10, 0, 0, 0" Click="OnAboutButtonClicked" />
-                <Button Content="Ion Sets" VerticalAlignment="Top" Name="ExampleButton" Click="LoadExampleClick" DockPanel.Dock="Right" Padding="5, 3, 5, 3" Margin="5, 0, 0, 0">
+                <Button Content="Ion Sets" VerticalAlignment="Top" Name="ExampleButton" Click="LoadExampleClick" DockPanel.Dock="Right" Padding="5, 3, 5, 3" Margin="10, 0, 0, 0">
                     <Button.ContextMenu>
                         <ContextMenu Name="KnownSetsContextMenu">
                         </ContextMenu>
                     </Button.ContextMenu>
                 </Button>
+                <Button Content="Edit Table" VerticalAlignment="Top" DockPanel.Dock="Right" Padding="5, 3, 5, 3" Margin="10, 0, 0, 0" Click="OnEditTableClicked" />
             </DockPanel>
 
             <Border Grid.Row="1" Margin="0, 10, 0, 0" Background="WhiteSmoke" CornerRadius="5" BorderThickness="1" BorderBrush="LightGray" Padding="5">

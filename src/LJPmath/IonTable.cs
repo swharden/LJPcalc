@@ -12,12 +12,16 @@ namespace LJPmath
     /// </summary>
     public class IonTable : IonSet
     {
+        public string filePath { get; private set; }
+
         public IonTable(string filePath = "IonTable.md")
         {
             filePath = FindFile(filePath);
 
             if (filePath is null)
                 throw new ArgumentException("ion table file could not be found");
+            else
+                this.filePath = filePath;
 
             Load(filePath, ignoreDuplicates: true, sort: true);
             Debug.WriteLine($"Loaded {ions.Count} ions from {filePath}");
