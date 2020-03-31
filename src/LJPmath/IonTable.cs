@@ -12,20 +12,46 @@ namespace LJPmath
     /// </summary>
     public class IonTable : IonSet
     {
-        public IonTable(String filePath = "IonTable.md")
+        public IonTable(string filePath = "IonTable.md")
         {
-            if (!System.IO.File.Exists(filePath))
-            {
-                string baseName = System.IO.Path.GetFileName(filePath);
-                string pathFourFoldersUp = "../../../../" + baseName;
-                if (System.IO.File.Exists(pathFourFoldersUp))
-                    filePath = pathFourFoldersUp;
-                else
-                    throw new ArgumentException("ion table file does not exist");
-            }
+            filePath = FindFile(filePath);
+
+            if (filePath is null)
+                throw new ArgumentException("ion table file could not be found");
 
             Load(filePath, ignoreDuplicates: true, sort: true);
             Debug.WriteLine($"Loaded {ions.Count} ions from {filePath}");
+        }
+
+        private string FindFile(string filePath)
+        {
+            filePath = System.IO.Path.GetFullPath(filePath);
+            string fileName = System.IO.Path.GetFileName(filePath);
+
+            // look at the full given path
+            if (System.IO.File.Exists(filePath))
+                return filePath;
+            else
+                Debug.WriteLine($"Ion table not found in: {filePath}");
+
+            // look in the same folder as this EXE
+            string exeFolder = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            string pathInExeFolder = System.IO.Path.Combine(exeFolder, fileName);
+            pathInExeFolder = System.IO.Path.GetFullPath(pathInExeFolder);
+            if (System.IO.File.Exists(pathInExeFolder))
+                return pathInExeFolder;
+            else
+                Debug.WriteLine($"Ion table not found in: {pathInExeFolder}");
+
+            // look 4 folders up (developers)
+            string pathDev = System.IO.Path.Combine(exeFolder + "/../../../../", fileName);
+            pathDev = System.IO.Path.GetFullPath(pathDev);
+            if (System.IO.File.Exists(pathDev))
+                return pathDev;
+            else
+                Debug.WriteLine($"Ion table not found in: {pathDev}");
+
+            return null;
         }
 
         public override string ToString()
