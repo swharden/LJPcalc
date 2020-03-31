@@ -304,3 +304,19 @@ Ion Table 5|Charge|Conductivity (E-4)
 2-AP (2-aminopyridine)|+1|0.45*K
 3-AP (3-aminopyridine)|+1|0.46*K
 4-AP (4-aminopyridine)|+2|0.29*K
+
+### **Ions likely irrelevant to LJP calculations**
+These ions are very unlikely to affect the calculated LJP
+due to exceptionally low mobility, no charge, or common
+use at extremely low concentrations (see the theory page
+for details).
+
+By listing such molecules here we confirm we know they exist,
+and remind users they are probably not important for caculating LJP.
+
+Irrelevant Ion|Charge|Conductivity (E-4)
+---|---|---
+GTP|+1|0
+Glucose|0|0
+Sucrose|0|0
+Dextrose|0|0

@@ -66,7 +66,7 @@ namespace LJPmath
             this.name = name;
             this.charge = charge;
             this.conductivity = conductivity;
-            mu = conductivity / (Constants.Nav * Math.Pow(Constants.e, 2) * Math.Abs(charge));
+            mu = (charge == 0) ? 0 : conductivity / (Constants.Nav * Math.Pow(Constants.e, 2) * Math.Abs(charge));
             this.c0 = c0;
             this.cL = cL;
         }

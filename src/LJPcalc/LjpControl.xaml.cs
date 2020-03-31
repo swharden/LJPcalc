@@ -114,15 +114,12 @@ namespace LJPcalc
             string selectedIonName = IonTableListbox.SelectedItem.ToString();
             Ion ion = ionTable.Lookup(selectedIonName);
 
-            if (ion.isValid)
-            {
-                IonNameTextbox.Text = ion.name;
-                IonChargeTextbox.Text = ion.charge.ToString();
-                IonConductivityTextbox.Text = (ion.conductivity * 1e4).ToString("0.000");
-                IonC0Textbox.Text = "0";
-                IonCLTextbox.Text = "0";
-                Message($"Loaded Ion: {ion.nameWithCharge}", ion.ToString());
-            }
+            IonNameTextbox.Text = ion.name;
+            IonChargeTextbox.Text = ion.charge.ToString();
+            IonConductivityTextbox.Text = (ion.conductivity * 1e4).ToString("0.000");
+            IonC0Textbox.Text = "0";
+            IonCLTextbox.Text = "0";
+            Message($"Loaded Ion: {ion.nameWithCharge}", ion.ToString());
 
             ValidateIon();
         }
@@ -180,10 +177,24 @@ namespace LJPcalc
             try
             {
                 int charge = int.Parse(IonChargeTextbox.Text);
-                if (charge == 0) { Message("Invalid Ion", "Ion charge cannot be zero"); return null; }
+                if (charge == 0)
+                {
+                    Message("No Charge", $"This molecule has no charge, so it does not influence LJP." +
+                        Environment.NewLine + Environment.NewLine +
+                        "Molecules without charge do not need to be added to the ion table."
+                     );
+                    return null;
+                }
 
                 double conductivity = double.Parse(IonConductivityTextbox.Text) * 1e-4;
-                if (conductivity <= 0) { Message("Invalid Ion", "Conductivity must be greater than zero"); return null; }
+                if (conductivity <= 0)
+                {
+                    Message("Low Conductivity", "This ion has low conductivity so its effect on LJP is negligible." +
+                        Environment.NewLine + Environment.NewLine +
+                        "Ions with low conductivity do not need to be added to the ion table."
+                        );
+                    return null;
+                }
 
                 double c0 = double.Parse(IonC0Textbox.Text);
                 if (c0 < 0) { Message("Invalid Ion", "Concentrations must be greater than zero"); return null; }
@@ -480,13 +491,13 @@ namespace LJPcalc
         private void OnEditTableClicked(object sender, RoutedEventArgs e)
         {
             var res = MessageBox.Show($"LJPcalc loads ion valence and mobility from IonTable.md" +
-                "\n\nDo you want to open this file now?", "Edit LJPcalc Ion Table", 
+                "\n\nDo you want to open this file now?", "Edit LJPcalc Ion Table",
                 MessageBoxButton.YesNoCancel, MessageBoxImage.Information);
 
             if (res == MessageBoxResult.Yes)
                 System.Diagnostics.Process.Start("explorer.exe", ionTable.filePath);
 
-            MessageBox.Show("IonTable.md will be reloaded the next time LJPcalc starts.", 
+            MessageBox.Show("IonTable.md will be reloaded the next time LJPcalc starts.",
                 "Restart Required", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
