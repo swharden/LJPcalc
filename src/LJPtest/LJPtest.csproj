@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="cp $(SolutionDir)IonTable.md $(OutDir)IonTable.md" />
+    <Exec Command="cp $(ProjectDir)../IonTable.md $(OutDir)" />
   </Target>
 
 </Project>
