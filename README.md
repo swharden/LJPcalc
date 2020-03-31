@@ -6,19 +6,10 @@ LJPcalc is a free and open source liquid junction potential (LJP) calculator. LJ
 
 ![](src/LJPcalc/screenshot.png)
 
-### Download for Windows (64-bit): [LJPcalc 1.1.zip](https://github.com/swharden/LJPcalc/releases/download/1.1/LJPcalc-1.1.zip)
+### Download 
 
-### Download for Linux and MacOS: [LJPconsole](src/LJPconsole)
-
-A cross-platform console version of LJPcalc is available which supports Windows, Linux, and MacOS. See the [LJPconsole page](src/LJPconsole) for installation instructions.
-
-![](src/LJPconsole/screenshot.png)
-
-### LJPcalc Mobile
-
-> ⚠️ The LJPcalc mobile app is still in development.
-
-_[NernstApp](https://github.com/swharden/NernstApp) is a Nernst potential calculator for Android_
+  * Windows (64-bit): [LJPcalc 1.1.zip](https://github.com/swharden/LJPcalc/releases/download/1.1/LJPcalc-1.1.zip)
+  * Linux and MacOS: [LJPconsole](src/LJPconsole)
 
 ## Theory
 
