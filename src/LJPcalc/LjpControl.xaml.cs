@@ -441,6 +441,24 @@ namespace LJPcalc
             AboutButtonClicked(null, EventArgs.Empty);
         }
 
+        private void ShowCalculationError(List<Ion> ionSetCopy)
+        {
+            if (AutoSortCheckbox.IsChecked.Value == true)
+            {
+                Message($"Ion Set Error", "This ion set failed to calculate," + Environment.NewLine +
+                    "even though automatic ion set sorting was used." + Environment.NewLine +
+                    "Please help improve LJPcalc by submitting a bug report!" + Environment.NewLine +
+                    "Please include the full content of this message." + Environment.NewLine +
+                    new IonSet(ionSetCopy).GetTableString()
+                    );
+            }
+            else
+            {
+                Message($"Calculation Failed", "This ion set failed to calculate." + Environment.NewLine +
+                    Environment.NewLine + "Enable automatic ion set sorting and try again.");
+            }
+        }
+
         public void CalculateLjpThread(object sender, EventArgs e)
         {
             (sender as DispatcherTimer).Stop();
@@ -454,24 +472,14 @@ namespace LJPcalc
             try
             {
                 var ljp = Calculate.Ljp(ionSetCopy, tempC, AutoSortCheckbox.IsChecked.Value);
-                Message($"LJP = {ljp.mV:0.000} mV", ljp.report);
+                if (ljp.isValid)
+                    Message($"LJP = {ljp.mV:0.000} mV", ljp.report);
+                else
+                    ShowCalculationError(ionSetCopy);
             }
             catch (OperationCanceledException)
             {
-                if (AutoSortCheckbox.IsChecked.Value == true)
-                {
-                    Message($"Ion Set Error", "This ion set failed to calculate," + Environment.NewLine +
-                        "even though automatic ion set sorting was used." + Environment.NewLine +
-                        "Please help improve LJPcalc by submitting a bug report!" + Environment.NewLine +
-                        "Please include the full content of this message." + Environment.NewLine +
-                        new IonSet(ionSetCopy).GetTableString()
-                        );
-                }
-                else
-                {
-                    Message($"Ion Set Error", "This ion set failed to calculate." + Environment.NewLine +
-                        "Enable automatic ion set sorting and try again.");
-                }
+                ShowCalculationError(ionSetCopy);
             }
 
             CalculateButton.IsEnabled = true;
