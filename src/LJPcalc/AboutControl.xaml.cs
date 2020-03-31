@@ -23,8 +23,9 @@ namespace LJPcalc
         {
             InitializeComponent();
 
-            Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-            versionLabel.Content = $"{version.Major}.{version.Minor}.{version.Build}";
+            // brand with the version of LJPmath (not LJPcalc)
+            Version version = typeof(LJPmath.Calculate).Assembly.GetName().Version;
+            versionLabel.Content = $"{version.Major}.{version.Minor}";
         }
 
         public event EventHandler HideAboutScreen = delegate { };

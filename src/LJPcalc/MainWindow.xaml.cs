@@ -24,7 +24,8 @@ namespace LJPcalc
         {
             InitializeComponent();
 
-            Version version = typeof(AboutControl).Assembly.GetName().Version;
+            // brand with the version of LJPmath (not LJPcalc)
+            Version version = typeof(LJPmath.Calculate).Assembly.GetName().Version;
             Title = $"LJPcalc {version.Major}.{version.Minor}";
 
             ljpControl1.AboutButtonClicked += AboutShow;
