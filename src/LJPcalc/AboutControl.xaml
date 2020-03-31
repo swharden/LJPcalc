@@ -21,8 +21,9 @@
                 <Label Name="versionLabel" Content="1.2.3.4" FontSize="14" VerticalAlignment="Bottom" Margin="-8, 0, 0, 8"/>
             </StackPanel>
 
-            <Label Foreground="Gray" HorizontalAlignment="Center" FontSize="14" Content="by Scott Harden, DMD, PhD"/>
-            <Label Foreground="Gray" HorizontalAlignment="Center" FontSize="14" Content="and Doriano Brogioli, PhD"/>
+            <Label Foreground="Gray" HorizontalAlignment="Center" FontSize="14" Content="by Scott Harden, DMD, PhD" MouseUp="urlScott_MouseUp" Cursor="Hand"/>
+            <Label Foreground="Gray" HorizontalAlignment="Center" FontSize="14" Content="and Doriano Brogioli, PhD" MouseUp="urlDoriano_MouseUp" Cursor="Hand"/>
+            <Label Foreground="Gray" HorizontalAlignment="Center" FontSize="14" Content="GitHub.com/swharden/LJPcalc" MouseUp="Link_MouseUp" Cursor="Hand"/>
             
         </StackPanel>
         
