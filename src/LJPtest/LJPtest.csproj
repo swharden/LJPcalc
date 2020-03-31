@@ -15,4 +15,8 @@
     <ProjectReference Include="..\LJPmath\LJPmath.csproj" />
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="cp $(SolutionDir)IonTable.md $(OutDir)IonTable.md" />
+  </Target>
+
 </Project>
