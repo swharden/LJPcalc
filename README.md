@@ -1,6 +1,7 @@
 # LJPcalc
 
 [![Build Status](https://dev.azure.com/swharden/swharden/_apis/build/status/swharden.LJPcalc?branchName=master)](https://dev.azure.com/swharden/swharden/_build/latest?definitionId=7&branchName=master)
+[![Tests](https://img.shields.io/azure-devops/tests/swharden/swharden/7?label=Tests&logo=azure%20pipelines)](https://dev.azure.com/swharden/swharden/_build/latest?definitionId=7&branchName=master)
 
 LJPcalc is a free and open source liquid junction potential (LJP) calculator. LJPcalc is available as a simple click-to-run EXE for Windows and a console application for Linux and MacOS.
 
