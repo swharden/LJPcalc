@@ -20,7 +20,6 @@ echo ### COPYING FILES ###
 copy Download* ..\..\src\LJPcalc\bin\Release
 copy LJPcalc* ..\..\src\LJPcalc\bin\Release
 copy ..\..\src\IonTable.md ..\..\src\LJPcalc\bin\Release\net472
-copy ..\..\src\LJPconsole\LJPconsole.bat ..\..\src\LJPcalc\bin\Release\net472
 copy ..\..\src\LJPconsole\bin\Release\net472\LJPconsole* ..\..\src\LJPcalc\bin\Release\net472
 
 rename ..\..\src\LJPcalc\bin\Release\net472 LJPcalc
