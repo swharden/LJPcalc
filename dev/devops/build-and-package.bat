@@ -17,13 +17,15 @@ dotnet build ..\..\src\LJP.sln --verbosity quiet --configuration Release
 
 echo.
 echo ### COPYING FILES ###
-copy download* ..\..\src\LJPcalc\bin\Release
+copy Download* ..\..\src\LJPcalc\bin\Release
 copy LJPcalc* ..\..\src\LJPcalc\bin\Release
-copy ..\..\src\IonTable.md ..\..\src\LJPcalc\bin\Release\netcoreapp3.0
-copy ..\..\src\LJPconsole\LJPconsole.bat ..\..\src\LJPcalc\bin\Release\netcoreapp3.0
-copy ..\..\src\LJPconsole\bin\Release\netcoreapp2.0\LJPconsole* ..\..\src\LJPcalc\bin\Release\netcoreapp3.0
+copy ..\..\src\IonTable.md ..\..\src\LJPcalc\bin\Release\net472
+copy ..\..\src\LJPconsole\LJPconsole.bat ..\..\src\LJPcalc\bin\Release\net472
+copy ..\..\src\LJPconsole\bin\Release\net472\LJPconsole* ..\..\src\LJPcalc\bin\Release\net472
 
-rename ..\..\src\LJPcalc\bin\Release\netcoreapp3.0 LJPcalc
+rename ..\..\src\LJPcalc\bin\Release\net472 LJPcalc
+del ..\..\src\LJPcalc\bin\Release\LJPcalc\*.pdb
+del ..\..\src\LJPcalc\bin\Release\LJPcalc\*.config
 
 echo.
 echo ### LAUNCHING OUTPUT FOLDER ###
