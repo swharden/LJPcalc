@@ -39,7 +39,9 @@ namespace LJPmath
                 Debug.WriteLine($"Ion table not found in: {filePath}");
 
             // look in the same folder as this EXE
-            string exeFolder = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            var assembly = typeof(LJPmath.Calculate).Assembly;
+            var assemblyPath = assembly.Location;
+            string exeFolder = System.IO.Path.GetDirectoryName(assemblyPath);
             string pathInExeFolder = System.IO.Path.Combine(exeFolder, fileName);
             pathInExeFolder = System.IO.Path.GetFullPath(pathInExeFolder);
             if (System.IO.File.Exists(pathInExeFolder))
