@@ -20,7 +20,7 @@ namespace LJPtest
             };
 
             // save the ion set to a file
-            string filePath = System.IO.Path.GetFullPath("testIonSet.md");
+            string filePath = System.IO.Path.GetFullPath(System.IO.Path.GetTempFileName() + "_testIonSet.md");
             IonSet ionSet1 = new IonSet(ions);
             ionSet1.Save(filePath);
             Console.WriteLine($"saved: {filePath}");
