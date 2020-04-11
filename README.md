@@ -6,7 +6,7 @@
 LJPcalc is a free and open source liquid junction potential (LJP) calculator.
 
 <div align="center">
-<img src='src/LJPcalc/screenshot.png' width='75%'>
+  <a href='https://swharden.com/LJPcalc/'><img src='src/LJPcalc/screenshot.png' width='75%'></a>
 </div>
 
 ## LJPcalc Website
