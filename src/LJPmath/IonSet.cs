@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -134,13 +135,13 @@ namespace LJPmath
             try
             {
                 string name = parts[0].Trim();
-                int charge = int.Parse(parts[1]);
-                double conductance = double.Parse(strCond) * 1E-4;
+                int charge = int.Parse(parts[1], CultureInfo.InvariantCulture);
+                double conductance = double.Parse(strCond, CultureInfo.InvariantCulture) * 1E-4;
                 if (isNormalizedToK)
                     conductance *= K_CONDUCTANCE;
 
-                double c0 = (parts.Length == 5) ? double.Parse(parts[3]) : 0;
-                double cL = (parts.Length == 5) ? double.Parse(parts[4]) : 0;
+                double c0 = (parts.Length == 5) ? double.Parse(parts[3], CultureInfo.InvariantCulture) : 0;
+                double cL = (parts.Length == 5) ? double.Parse(parts[4], CultureInfo.InvariantCulture) : 0;
 
                 Ion ion = new Ion(name, charge, conductance, c0, cL);
                 return ion;
