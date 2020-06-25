@@ -8,6 +8,8 @@ namespace LJPmath
     {
         public string name { get; private set; } = "?";
         public int charge { get; private set; } = 0;
+        public bool isAnion { get { return charge < 0; } }
+        public bool isCation { get { return charge > 0; } }
         public double conductivity { get; private set; } = 0;
         public double mu { get; private set; } = 0;
         public double muE11 { get { return mu / 1e11; } }
@@ -16,6 +18,7 @@ namespace LJPmath
         public double c0 { get; set; } = 0;
         public double cL { get; set; } = 0;
         public double cDiff { get { return Math.Abs(cL - c0); } }
+        public double cTotal { get { return cL + c0; } }
 
         public double phi { get; set; } = 0;
 
