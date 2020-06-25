@@ -202,6 +202,8 @@ namespace LJPcalc
                 double cL = double.Parse(IonCLTextbox.Text);
                 if (cL < 0) { Message("Invalid Ion", "Concentrations must be greater than zero"); return null; }
 
+                if (cL == 0 && c0 == 0) { Message("Invalid Ion", "CL and C0 cannot both be zero"); return null; }
+
                 Ion ion = new Ion(IonNameTextbox.Text, charge, conductivity, c0, cL);
                 return ion;
             }
