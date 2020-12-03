@@ -17,15 +17,7 @@ LJPcalc is a free and open source liquid junction potential (LJP) calculator.
 
 ## Developer Notes 
 
-### Building in Windows
-* Install [Visual Studio Community](https://visualstudio.microsoft.com/vs/community/) (free)
-* Open [/src/LJP.sln](/src/LJP.sln) in Visual Studio
-* Right-click the LJPcalc project and select "Set as StartUp Project"
-* Press F5 to build and run
-
-### Source Code Project Structure
-
-The primary LJP math is entirely handled in the LJPmath module which targets [.NET Standard 2.0](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) so it works on modern systems like .NET Core, .NET Framework, and Xamarin. LJPcalc and LJPconsole now dual-target .NET Core and .NET Framework.
+LJP calculations are entirely handled by the LJPmath module which targets [.NET Standard 2.0](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) so it works on modern systems like .NET Core, .NET Framework, and Xamarin. LJPcalc and LJPconsole dual-target .NET Core and .NET Framework and can be used on Windows, MacOS, and Linux.
 
 Project | Platform | Purpose
 ---|---|---
