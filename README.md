@@ -11,9 +11,9 @@ LJPcalc is a free and open source liquid junction potential (LJP) calculator.
 
 ## LJPcalc Website
 
-* Home Page: https://swharden.com/LJPcalc
-* Theory: https://swharden.com/LJPcalc/theory.md.html
-* Download: https://swharden.com/LJPcalc/download.md.html
+* Home Page: https://swharden.com/software/LJPcalc
+* Theory: https://swharden.com/software/LJPcalc/theory.md.html
+* Download: https://swharden.com/software/LJPcalc/download.md.html
 
 ## Developer Notes 
 
