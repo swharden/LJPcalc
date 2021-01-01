@@ -1,15 +1,16 @@
 ﻿@inherits LayoutComponentBase
+@inject Services.LjpService LjpService
 
-    <div class="container border bg-light p-4 shadow">
-        <header>
-            <h1 class="display-4">LJPcalc</h1>
-            <h4 class="lead">Liquid Junction Potential Calculator</h4>
-        </header>
+<div class="container border bg-light p-4 shadow">
+    <header>
+        <h1 class="display-4">LJPcalc</h1>
+        <h4 class="lead">Liquid Junction Potential Calculator</h4>
+    </header>
 
-        @Body
+    @Body
 
-        <footer class="text-muted">
-            <a href='https://swharden.com/software/LJPcalc'>LJPcalc 1.2.3</a>
-            by Scott Harden and Doriano Brogioli
-        </footer>
-    </div>
+    <footer class="text-muted">
+        <a href='https://swharden.com/software/LJPcalc'>LJPcalc @LjpService.Version</a>
+        by Scott Harden and Doriano Brogioli
+    </footer>
+</div>
