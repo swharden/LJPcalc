@@ -1,0 +1,431 @@
+<html>
+
+<head>
+    <link href="bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+        crossorigin="anonymous"></script>
+</head>
+
+<body style="background-color: #1f3d4b;">
+    <div class="container border bg-light p-4">
+        <header>
+            <div class="display-2"><strong>LJPcalc</strong></div>
+            <div class="h3"><em>Liquid Junction Potential Calculator</em></div>
+        </header>
+
+        <section class="mt-5">
+            <table class="table table-borderless table-hover">
+                <thead>
+                    <tr>
+                        <td>
+                            <strong>Ion</strong>
+                        </td>
+                        <td>
+                            <strong>Charge</strong>
+                        </td>
+                        <td>
+                            <strong>Mobility</strong>
+                            <span class="small text-muted">10<sup>11</sup>&times;m<sup>2</sup>/V/s</span>
+                        </td>
+                        <td>
+                            <strong>Pipette</strong>
+                            <span class="small text-muted">mM</span>
+                        </td>
+                        <td>
+                            <strong>Bath</strong>
+                            <span class="small text-muted">mM</span>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input class="form-control" value="K" /></td>
+                        <td><input class="form-control" value="+1" readonly /></td>
+                        <td><input class="form-control" value="73.5" readonly /></td>
+                        <td><input class="form-control" value="145" /></td>
+                        <td><input class="form-control" value="2.8" /></td>
+                        <td><button class="btn">❌</button></td>
+                    </tr>
+                    <tr>
+                        <td><input class="form-control" value="Na" /></td>
+                        <td><input class="form-control" value="+1" readonly /></td>
+                        <td><input class="form-control" value="50.11" readonly /></td>
+                        <td><input class="form-control" value="13" /></td>
+                        <td><input class="form-control" value="145" /></td>
+                        <td><button class="btn">❌</button></td>
+                    </tr>
+                    <tr>
+                        <td><input class="form-control" value="Mg" /></td>
+                        <td><input class="form-control" value="+2" readonly /></td>
+                        <td><input class="form-control" value="53.06" readonly /></td>
+                        <td><input class="form-control" value="1" /></td>
+                        <td><input class="form-control" value="2" /></td>
+                        <td><button class="btn">❌</button></td>
+                    </tr>
+                    <tr>
+                        <td><input class="form-control" value="Ca" /></td>
+                        <td><input class="form-control" value="+2" readonly /></td>
+                        <td><input class="form-control" value="59.5" readonly /></td>
+                        <td><input class="form-control" value="0" /></td>
+                        <td><input class="form-control" value="1" /></td>
+                        <td><button class="btn">❌</button></td>
+                    </tr>
+                    <tr>
+                        <td><input class="form-control" value="HEPES" /></td>
+                        <td><input class="form-control" value="-1" readonly /></td>
+                        <td><input class="form-control" value="22.05" readonly /></td>
+                        <td><input class="form-control" value="5" /></td>
+                        <td><input class="form-control" value="5" /></td>
+                        <td><button class="btn">❌</button></td>
+                    </tr>
+                    <tr>
+                        <td><input class="form-control" value="Gluconate" /></td>
+                        <td><input class="form-control" value="-1" readonly /></td>
+                        <td><input class="form-control" value="24.255" readonly /></td>
+                        <td><input class="form-control" value="145" /></td>
+                        <td><input class="form-control" value="145" /></td>
+                        <td><button class="btn">❌</button></td>
+                    </tr>
+                    <tr>
+                        <td><input class="form-control" value="Cl" /></td>
+                        <td><input class="form-control" value="-1" readonly /></td>
+                        <td><input class="form-control" value="76.31" readonly /></td>
+                        <td><input class="form-control" value="10" /></td>
+                        <td><input class="form-control" value="150" /></td>
+                        <td><button class="btn">❌</button></td>
+                    </tr>
+                    <tr class="highlight">
+                        <td>
+                            <select class="form-select">
+                                <option value="" selected disabled hidden>Select Ion</option>
+                                <option value='Ag'>Ag</option>
+                                <option value='Al'>Al</option>
+                                <option value='Ba'>Ba</option>
+                                <option value='Be'>Be</option>
+                                <option value='Ca'>Ca</option>
+                                <option value='Cd'>Cd</option>
+                                <option value='Ce'>Ce</option>
+                                <option value='Co'>Co</option>
+                                <option value='Co(NH3)6'>Co(NH3)6</option>
+                                <option value='Co(ethylenediamine)3'>Co(ethylenediamine)3</option>
+                                <option value='Cr'>Cr</option>
+                                <option value='Cs'>Cs</option>
+                                <option value='Cu'>Cu</option>
+                                <option value='D'>D</option>
+                                <option value='Dy'>Dy</option>
+                                <option value='Er'>Er</option>
+                                <option value='Eu'>Eu</option>
+                                <option value='FeII'>FeII</option>
+                                <option value='FeIII'>FeIII</option>
+                                <option value='Gd'>Gd</option>
+                                <option value='H'>H</option>
+                                <option value='Hg2'>Hg2</option>
+                                <option value='Hg'>Hg</option>
+                                <option value='Ho'>Ho</option>
+                                <option value='K'>K</option>
+                                <option value='La'>La</option>
+                                <option value='Li'>Li</option>
+                                <option value='Mg'>Mg</option>
+                                <option value='Mn'>Mn</option>
+                                <option value='NH'>NH</option>
+                                <option value='N2H5'>N2H5</option>
+                                <option value='Na'>Na</option>
+                                <option value='Nd'>Nd</option>
+                                <option value='Ni'>Ni</option>
+                                <option value='Pb'>Pb</option>
+                                <option value='Pr'>Pr</option>
+                                <option value='Ra'>Ra</option>
+                                <option value='Rb'>Rb</option>
+                                <option value='Sc'>Sc</option>
+                                <option value='Sm'>Sm</option>
+                                <option value='Sr'>Sr</option>
+                                <option value='Tl'>Tl</option>
+                                <option value='Tm'>Tm</option>
+                                <option value='UO2'>UO2</option>
+                                <option value='Y'>Y</option>
+                                <option value='Yb'>Yb</option>
+                                <option value='Zn'>Zn</option>
+                                <option value='Au(CN)2'>Au(CN)2</option>
+                                <option value='Au(CN)4'>Au(CN)4</option>
+                                <option value='B(C6H5)4'>B(C6H5)4</option>
+                                <option value='Br'>Br</option>
+                                <option value='Br3'>Br3</option>
+                                <option value='BrO3'>BrO3</option>
+                                <option value='Cl'>Cl</option>
+                                <option value='ClO2'>ClO2</option>
+                                <option value='ClO3'>ClO3</option>
+                                <option value='ClO4'>ClO4</option>
+                                <option value='CN'>CN</option>
+                                <option value='CO3'>CO3</option>
+                                <option value='Co(CN)6'>Co(CN)6</option>
+                                <option value='CrO4'>CrO4</option>
+                                <option value='F'>F</option>
+                                <option value='Fe(CN)6 IIII'>Fe(CN)6 IIII</option>
+                                <option value='Fe(CN)6 III'>Fe(CN)6 III</option>
+                                <option value='H2AsO4'>H2AsO4</option>
+                                <option value='HCO3'>HCO3</option>
+                                <option value='HF2'>HF2</option>
+                                <option value='HPO4'>HPO4</option>
+                                <option value='H2PO4'>H2PO4</option>
+                                <option value='HS'>HS</option>
+                                <option value='HSO3'>HSO3</option>
+                                <option value='HSO4'>HSO4</option>
+                                <option value='H2SbO4'>H2SbO4</option>
+                                <option value='I'>I</option>
+                                <option value='IO3'>IO3</option>
+                                <option value='IO4'>IO4</option>
+                                <option value='MnO4'>MnO4</option>
+                                <option value='MoO4'>MoO4</option>
+                                <option value='N3'>N3</option>
+                                <option value='N(CN)2'>N(CN)2</option>
+                                <option value='NO2'>NO2</option>
+                                <option value='NO3'>NO3</option>
+                                <option value='NH2SO3 (sulfamate)'>NH2SO3 (sulfamate)</option>
+                                <option value='OCN (cyanate)'>OCN (cyanate)</option>
+                                <option value='OH'>OH</option>
+                                <option value='PF6'>PF6</option>
+                                <option value='PO3F'>PO3F</option>
+                                <option value='PO4'>PO4</option>
+                                <option value='P2O7'>P2O7</option>
+                                <option value='P3O9'>P3O9</option>
+                                <option value='P3O10'>P3O10</option>
+                                <option value='ReO4'>ReO4</option>
+                                <option value='SCN (thiocyanate)'>SCN (thiocyanate)</option>
+                                <option value='SeCN'>SeCN</option>
+                                <option value='SeO4'>SeO4</option>
+                                <option value='SO3'>SO3</option>
+                                <option value='SO4'>SO4</option>
+                                <option value='S2O3'>S2O3</option>
+                                <option value='S2O4'>S2O4</option>
+                                <option value='S2O6'>S2O6</option>
+                                <option value='S2O8'>S2O8</option>
+                                <option value='WO4'>WO4</option>
+                                <option value='Decylpyridinium'>Decylpyridinium</option>
+                                <option value='Diethylammonium'>Diethylammonium</option>
+                                <option value='Dimethylammonium'>Dimethylammonium</option>
+                                <option value='Dipropylammonium'>Dipropylammonium</option>
+                                <option value='Dodecylammonium'>Dodecylammonium</option>
+                                <option value='Ethylammonium'>Ethylammonium</option>
+                                <option value='Ethyltrimethylammonium'>Ethyltrimethylammonium</option>
+                                <option value='Isobutylammonium'>Isobutylammonium</option>
+                                <option value='Methylammonium'>Methylammonium</option>
+                                <option value='Piperidinium'>Piperidinium</option>
+                                <option value='Propylammonium'>Propylammonium</option>
+                                <option value='Tetrabutylammonium'>Tetrabutylammonium</option>
+                                <option value='Tetraethylammonium'>Tetraethylammonium</option>
+                                <option value='Tetramethylammonium'>Tetramethylammonium</option>
+                                <option value='Tetrapropylammonium'>Tetrapropylammonium</option>
+                                <option value='Triethylsulfonium'>Triethylsulfonium</option>
+                                <option value='Trimethylammonium'>Trimethylammonium</option>
+                                <option value='Trimethylsulfonium'>Trimethylsulfonium</option>
+                                <option value='Tripropylammonium'>Tripropylammonium</option>
+                                <option value='Acetate'>Acetate</option>
+                                <option value='Benzoate'>Benzoate</option>
+                                <option value='Bromoacetate'>Bromoacetate</option>
+                                <option value='Bromobenzoate'>Bromobenzoate</option>
+                                <option value='Butanoate'>Butanoate</option>
+                                <option value='Chloroacetate'>Chloroacetate</option>
+                                <option value='m-Chlorobenzoate'>m-Chlorobenzoate</option>
+                                <option value='o-Chlorobenzoate'>o-Chlorobenzoate</option>
+                                <option value='Citrate'>Citrate</option>
+                                <option value='Crotonate'>Crotonate</option>
+                                <option value='Cyanoacetate'>Cyanoacetate</option>
+                                <option value='Cyclohexanecarboxylate'>Cyclohexanecarboxylate</option>
+                                <option value='Cyclopropane-1,3-dicarboxylate2'>Cyclopropane-1,3-dicarboxylate2</option>
+                                <option value='Decylsulfonate'>Decylsulfonate</option>
+                                <option value='Dichloroacetate'>Dichloroacetate</option>
+                                <option value='Diethylbarbiturate'>Diethylbarbiturate</option>
+                                <option value='Dihydrogencitrate'>Dihydrogencitrate</option>
+                                <option value='Dimethylmalonate'>Dimethylmalonate</option>
+                                <option value='3, 5-Dinitrobenzoate'>3, 5-Dinitrobenzoate</option>
+                                <option value='Dodecylsulfonate'>Dodecylsulfonate</option>
+                                <option value='Ethylmalonate'>Ethylmalonate</option>
+                                <option value='Ethylsulfonate'>Ethylsulfonate</option>
+                                <option value='Fluoroacetate'>Fluoroacetate</option>
+                                <option value='Fluorobenzoate'>Fluorobenzoate</option>
+                                <option value='Formate'>Formate</option>
+                                <option value='Fumarate'>Fumarate</option>
+                                <option value='Glutarate'>Glutarate</option>
+                                <option value='Hydrogenoxalate'>Hydrogenoxalate</option>
+                                <option value='Iodoacetate'>Iodoacetate</option>
+                                <option value='Lactate'>Lactate</option>
+                                <option value='Malate'>Malate</option>
+                                <option value='Malonate'>Malonate</option>
+                                <option value='3-Methylbutanoate'>3-Methylbutanoate</option>
+                                <option value='Methylsulfonate'>Methylsulfonate</option>
+                                <option value='Naphthylacetate'>Naphthylacetate</option>
+                                <option value='1, 8-Octanedioate'>1, 8-Octanedioate</option>
+                                <option value='Octylsulfonate'>Octylsulfonate</option>
+                                <option value='Oxalate'>Oxalate</option>
+                                <option value='Phenylacetate'>Phenylacetate</option>
+                                <option value='m-Phthalate'>m-Phthalate</option>
+                                <option value='o-Phthalate'>o-Phthalate</option>
+                                <option value='Picrate'>Picrate</option>
+                                <option value='Propanoate'>Propanoate</option>
+                                <option value='Propylsulfonate'>Propylsulfonate</option>
+                                <option value='Salicylate'>Salicylate</option>
+                                <option value='Succinate'>Succinate</option>
+                                <option value='Tartrate'>Tartrate</option>
+                                <option value='Trichloroacetate'>Trichloroacetate</option>
+                                <option value='Trimethylacetate'>Trimethylacetate</option>
+                                <option value='Choline'>Choline</option>
+                                <option value='Cs'>Cs</option>
+                                <option value='K'>K</option>
+                                <option value='Li'>Li</option>
+                                <option value='NH4 (Ammonium)'>NH4 (Ammonium)</option>
+                                <option value='Na'>Na</option>
+                                <option value='Rb'>Rb</option>
+                                <option value='TEA (TetraethylAmmonium)'>TEA (TetraethylAmmonium)</option>
+                                <option value='TMA (TetramethylAmmonium)'>TMA (TetramethylAmmonium)</option>
+                                <option value='Acetate'>Acetate</option>
+                                <option value='Benzoate'>Benzoate</option>
+                                <option value='Br'>Br</option>
+                                <option value='Cl'>Cl</option>
+                                <option value='ClO4 (Perchlorate)'>ClO4 (Perchlorate)</option>
+                                <option value='F'>F</option>
+                                <option value='H2PO'>H2PO</option>
+                                <option value='HCO3'>HCO3</option>
+                                <option value='I'>I</option>
+                                <option value='NO3 (Nitrate)'>NO3 (Nitrate)</option>
+                                <option value='Picrate'>Picrate</option>
+                                <option value='Propionate'>Propionate</option>
+                                <option value='SCN (Thiocyanate)'>SCN (Thiocyanate)</option>
+                                <option value='Co'>Co</option>
+                                <option value='Mg'>Mg</option>
+                                <option value='HPO4'>HPO4</option>
+                                <option value='SO4'>SO4</option>
+                                <option value='NMDG'>NMDG</option>
+                                <option value='Tris'>Tris</option>
+                                <option value='Aspartate'>Aspartate</option>
+                                <option value='Gluconate'>Gluconate</option>
+                                <option value='Glutamate'>Glutamate</option>
+                                <option value='HEPES'>HEPES</option>
+                                <option value='Isethionate'>Isethionate</option>
+                                <option value='MES'>MES</option>
+                                <option value='MOPS'>MOPS</option>
+                                <option value='EGTA(2-)'>EGTA(2-)</option>
+                                <option value='EGTA(3-)'>EGTA(3-)</option>
+                                <option value='Thallium'>Thallium</option>
+                                <option value='Butyrate'>Butyrate</option>
+                                <option value='Citrate'>Citrate</option>
+                                <option value='2-(Methyl-Amino) Ethanol'>2-(Methyl-Amino) Ethanol</option>
+                                <option value='N-Methylethanolamine'>N-Methylethanolamine</option>
+                                <option value='Ag'>Ag</option>
+                                <option value='Diethylammonium'>Diethylammonium</option>
+                                <option value='Dimethylammonium'>Dimethylammonium</option>
+                                <option value='Ethyltrimethylammonium'>Ethyltrimethylammonium</option>
+                                <option value='H'>H</option>
+                                <option value='Piperidinium'>Piperidinium</option>
+                                <option value='Tetrabutylammonium'>Tetrabutylammonium</option>
+                                <option value='Tetrapropylammonium'>Tetrapropylammonium</option>
+                                <option value='Triethylammonium'>Triethylammonium</option>
+                                <option value='Trimethylammonium'>Trimethylammonium</option>
+                                <option value='Bromoacetate'>Bromoacetate</option>
+                                <option value='Bromobenzoate'>Bromobenzoate</option>
+                                <option value='Chloroacetate'>Chloroacetate</option>
+                                <option value='CNO (Cyanate)'>CNO (Cyanate)</option>
+                                <option value='Cyanoacetate'>Cyanoacetate</option>
+                                <option value='Dichloroacetate'>Dichloroacetate</option>
+                                <option value='Ethylsulfate'>Ethylsulfate</option>
+                                <option value='Ethylsulfonate'>Ethylsulfonate</option>
+                                <option value='Fluoroacetate'>Fluoroacetate</option>
+                                <option value='Fluorobenzoate'>Fluorobenzoate</option>
+                                <option value='Formate'>Formate</option>
+                                <option value='Iodoacetate'>Iodoacetate</option>
+                                <option value='Lactate'>Lactate</option>
+                                <option value='Methylsulfate'>Methylsulfate</option>
+                                <option value='methanesulfonate'>methanesulfonate</option>
+                                <option value='Methylsulfonate'>Methylsulfonate</option>
+                                <option value='OH (hydroxide)'>OH (hydroxide)</option>
+                                <option value='ReO4 (Rhenate)'>ReO4 (Rhenate)</option>
+                                <option value='Salicylate'>Salicylate</option>
+                                <option value='Trichloroacetate'>Trichloroacetate</option>
+                                <option value='Cd'>Cd</option>
+                                <option value='Cu'>Cu</option>
+                                <option value='Fe'>Fe</option>
+                                <option value='Hg'>Hg</option>
+                                <option value='Mn'>Mn</option>
+                                <option value='Ni'>Ni</option>
+                                <option value='Pb'>Pb</option>
+                                <option value='Malate'>Malate</option>
+                                <option value='Maleate'>Maleate</option>
+                                <option value='Oxalate'>Oxalate</option>
+                                <option value='Succinate'>Succinate</option>
+                                <option value='Gd'>Gd</option>
+                                <option value='Fe'>Fe</option>
+                                <option value='La'>La</option>
+                                <option value='Citrate'>Citrate</option>
+                                <option value='ATP (Adenosine 5' -Triphosphate)'>ATP (Adenosine 5'-Triphosphate)
+                                </option>
+                                <option value='ATP (Adenosine 5' -Triphosphate)'>ATP (Adenosine 5'-Triphosphate)
+                                </option>
+                                <option value='ATP (Adenosine 5' -Triphosphate)'>ATP (Adenosine 5'-Triphosphate)
+                                </option>
+                                <option value='2-AP (2-aminopyridine)'>2-AP (2-aminopyridine)</option>
+                                <option value='3-AP (3-aminopyridine)'>3-AP (3-aminopyridine)</option>
+                                <option value='4-AP (4-aminopyridine)'>4-AP (4-aminopyridine)</option>
+                                <option value='GTP'>GTP</option>
+                                <option value='Glucose'>Glucose</option>
+                                <option value='Sucrose'>Sucrose</option>
+                                <option value='Dextrose'>Dextrose</option>
+                            </select>
+                        </td>
+                        <td><input class="form-control" value="+2" /></td>
+                        <td><input class="form-control" value="123.45" /></td>
+                        <td><button class="col btn btn-primary">Add Ion</button></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </section>
+
+        <section class="mt-5">
+            <div class="container">
+                <div class="row align-items-end justify-content-md-center">
+
+                    <div class="col-2">
+                        <label><strong>Temperature (C)</strong></label>
+                        <input class="form-control" value="25" />
+                    </div>
+
+                    <div class="col-2">
+                        <label><strong>Solution Labels</strong></label>
+                        <select class="form-select">
+                            <option value="patch">patch-clamp</option>
+                            <option value="patch">generic</option>
+                        </select>
+                    </div>
+
+                    <div class="col-2 text-center">
+                        <button class="col btn btn-primary">Calculate LJP</button>
+                    </div>
+                </div>
+
+                <div class="row align-items-end justify-content-md-center">
+                    <div class="display-2 text-center mt-4">LJP = 14.345 mV</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="m-2 mt-5">
+            <pre class="d-inline-block text-muted mt-5">
+Analysis details:
+
+Name               | Charge | Conductivity (E-4) | C0 (mM)      | CL (mM)      
+-------------------|--------|--------------------|--------------|--------------
+K                  | +1     | 73.5               | 145          | 2.8098265   
+Na                 | +1     | 50.11              | 13           | 144.9794365 
+Mg                 | +2     | 53.06              | 1            | 1.9998212   
+Ca                 | +2     | 59.5               | 0            | 0.9999109   
+HEPES              | -1     | 22.05              | 5            | 4.9990023   
+Gluconate          | -1     | 24.255             | 145          | 0           
+Cl                 | -1     | 76.31              | 10           | 148.789725                
+                </pre>
+        </section>
+
+    </div>
+</body>
+
+</html>
