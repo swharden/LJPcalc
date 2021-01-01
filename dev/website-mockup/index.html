@@ -10,9 +10,10 @@
 
 <body style="background-color: #1f3d4b;">
     <div class="container border bg-light p-4">
+
         <header>
-            <div class="display-2"><strong>LJPcalc</strong></div>
-            <div class="h3"><em>Liquid Junction Potential Calculator</em></div>
+            <h1 class="display-4">LJPcalc</h1>
+            <h4 class="lead">Liquid Junction Potential Calculator</h4>
         </header>
 
         <section class="mt-5">
@@ -374,56 +375,70 @@
                         </td>
                         <td><input class="form-control" value="+2" /></td>
                         <td><input class="form-control" value="123.45" /></td>
-                        <td><button class="col btn btn-primary">Add Ion</button></td>
+                        <td><button class="col btn btn-primary">Add</button></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                 </tbody>
             </table>
 
         </section>
 
-        <section class="mt-5">
-            <div class="container">
-                <div class="row align-items-end justify-content-md-center">
+        <section class="mt-3 mb-3">
 
-                    <div class="col-2">
-                        <label><strong>Temperature (C)</strong></label>
-                        <input class="form-control" value="25" />
-                    </div>
+            <div class="d-inline-block m-2">
+                <label><strong>Solution Labels</strong></label>
+                <select class="form-select">
+                    <option value="patch">pipette</option>
+                    <option value="patch">generic</option>
+                </select>
+            </div>
 
-                    <div class="col-2">
-                        <label><strong>Solution Labels</strong></label>
-                        <select class="form-select">
-                            <option value="patch">patch-clamp</option>
-                            <option value="patch">generic</option>
-                        </select>
-                    </div>
+            <div class="d-inline-block m-2">
+                <label><strong>Temperature (C)</strong></label>
+                <input class="form-control" value="25" size="10" />
+            </div>
+        </section>
 
-                    <div class="col-2 text-center">
-                        <button class="col btn btn-primary">Calculate LJP</button>
-                    </div>
+        <section class="text-center">
+            <div class="d-inline-block">
+
+                <div class="alert alert-danger" role="alert">
+                    Ion table must contain at least one cation and one anion
                 </div>
 
-                <div class="row align-items-end justify-content-md-center">
-                    <div class="display-2 text-center mt-4">LJP = 14.345 mV</div>
+                <div class="text-center">
+                    <button class="col btn btn-primary" disabled>Calculate LJP</button>
+                </div>
+
+                <div class="display-2">
+                    LJP = 14.345 mV
                 </div>
             </div>
         </section>
 
-        <section class="m-2 mt-5">
+        <section class="m-2 mt-5 text-center">
             <pre class="d-inline-block text-muted mt-5">
 Analysis details:
 
 Name               | Charge | Conductivity (E-4) | C0 (mM)      | CL (mM)      
 -------------------|--------|--------------------|--------------|--------------
-K                  | +1     | 73.5               | 145          | 2.8098265   
-Na                 | +1     | 50.11              | 13           | 144.9794365 
-Mg                 | +2     | 53.06              | 1            | 1.9998212   
-Ca                 | +2     | 59.5               | 0            | 0.9999109   
-HEPES              | -1     | 22.05              | 5            | 4.9990023   
-Gluconate          | -1     | 24.255             | 145          | 0           
-Cl                 | -1     | 76.31              | 10           | 148.789725                
+K                  | +1     | 73.5               | 145          | 2.8098265    
+Na                 | +1     | 50.11              | 13           | 144.9794365  
+Mg                 | +2     | 53.06              | 1            | 1.9998212    
+Ca                 | +2     | 59.5               | 0            | 0.9999109    
+HEPES              | -1     | 22.05              | 5            | 4.9990023    
+Gluconate          | -1     | 24.255             | 145          | 0            
+Cl                 | -1     | 76.31              | 10           | 148.789725   
                 </pre>
         </section>
+
+        <hr class="m-5 invisible">
+
+        <footer class="text-muted">
+            <a href='https://swharden.com/software/LJPcalc'>LJPcalc 1.2.3</a>
+            by Scott Harden and Doriano Brogioli
+        </footer>
 
     </div>
 </body>
