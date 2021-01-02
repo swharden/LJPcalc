@@ -19,11 +19,11 @@
 
     public string Text
     {
-        get => HasError ? ActualInput : LjpService.AddIonMobility.ToString();
+        get => HasError ? ActualInput : (LjpService.AddIonMobility / 1e11).ToString("#.#####");
         set
         {
             ActualInput = value;
-            bool canParse = double.TryParse(ActualInput, out LjpService.AddIonMobility);
+            bool canParse = double.TryParse(ActualInput, out double mobility);
 
             if (!canParse)
             {

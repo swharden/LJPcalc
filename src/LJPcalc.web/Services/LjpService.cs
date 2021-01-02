@@ -11,11 +11,18 @@ namespace LJPcalc.web.Services
     {
         public Action OnSolutionLabelChange;
         public Action OnSelectedIonChange;
+        public Action OnIonTableChange;
 
         public readonly List<Ion> IonList;
         public string AddIonName;
         public int AddIonCharge;
-        public double AddIonMobility;
+        public double AddIonMobility
+        {
+            get => Ion.Mobility(AddIonConductivity, AddIonCharge);
+            set { AddIonConductivity = Ion.Conductivity(value, AddIonCharge); }
+        }
+        public double AddIonConductivity;
+        public void AddIon() => IonList.Add(new Ion(AddIonName, AddIonCharge, AddIonConductivity, 0, 0));
 
         public string ErrorMessage;
         public bool HasError => !string.IsNullOrWhiteSpace(ErrorMessage);

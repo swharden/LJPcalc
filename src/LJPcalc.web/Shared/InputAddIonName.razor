@@ -18,7 +18,7 @@
             _selectedIonName = value;
             var ion = Services.IonTable.GetIon(value);
             LjpService.AddIonCharge = ion.charge;
-            LjpService.AddIonMobility = ion.muE11;
+            LjpService.AddIonConductivity = ion.conductivity;
             LjpService.AddIonName = ion.name;
             LjpService.OnSelectedIonChange.Invoke();
         }

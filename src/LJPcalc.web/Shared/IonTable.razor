@@ -33,14 +33,14 @@
                     <td><input class="form-control" value=@ion.mu readonly /></td>
                     <td><input class="form-control" value=@ion.c0 /></td>
                     <td><input class="form-control" value=@ion.cL /></td>
-                    <td><button class="btn">❌</button></td>
+                    <td><button class="btn" @onclick="@(e => Remove(ion))">❌</button></td>
                 </tr>
             }
             <tr class="highlight">
                 <td><InputAddIonName /></td>
                 <td><InputAddCharge /></td>
                 <td><InputAddMobility /></td>
-                <td><button class="col btn btn-primary">Add</button></td>
+                <td><InputAddButton /></td>
                 <td></td>
                 <td></td>
             </tr>
@@ -50,5 +50,15 @@
 
 @code {
 
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        LjpService.OnIonTableChange += StateHasChanged;
+    }
 
+    private void Remove(LJPmath.Ion ion)
+    {
+        LjpService.IonList.Remove(ion);
+        LjpService.OnIonTableChange.Invoke();
+    }
 }

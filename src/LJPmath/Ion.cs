@@ -69,7 +69,7 @@ namespace LJPmath
             this.name = name;
             this.charge = charge;
             this.conductivity = conductivity;
-            mu = (charge == 0) ? 0 : conductivity / (Constants.Nav * Math.Pow(Constants.e, 2) * Math.Abs(charge));
+            mu = Mobility(conductivity, charge);
             this.c0 = c0;
             this.cL = cL;
         }
@@ -77,6 +77,22 @@ namespace LJPmath
         public override string ToString()
         {
             return $"Ion {nameWithCharge}: mu={mu:0.000E+0}, c0={c0:0.000}, cL={cL:0.000}";
+        }
+
+        public static double Conductivity(double mobility, int charge)
+        {
+            if (charge == 0)
+                return 0;
+            double bigNumber = Constants.Nav * Math.Pow(Constants.e, 2) * Math.Abs(charge);
+            return bigNumber / mobility;
+        }
+
+        public static double Mobility(double conductivity, int charge)
+        {
+            if (charge == 0)
+                return 0;
+            double bigNumber = Constants.Nav * Math.Pow(Constants.e, 2) * Math.Abs(charge);
+            return conductivity / bigNumber;
         }
     }
 }

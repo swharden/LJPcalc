@@ -1,0 +1,12 @@
+﻿@inject Services.LjpService LjpService
+
+<button class="col btn btn-primary" @onclick="AddIon">Add</button>
+
+@code {
+
+    void AddIon()
+    {
+        LjpService.AddIon();
+        LjpService.OnIonTableChange.Invoke();
+    }
+}
