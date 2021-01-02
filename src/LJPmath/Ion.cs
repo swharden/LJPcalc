@@ -12,7 +12,7 @@ namespace LJPmath
         public bool isCation { get { return charge > 0; } }
         public double conductivity { get; private set; } = 0;
         public double mu { get; private set; } = 0;
-        public double muE11 { get { return mu / 1e11; } }
+        public double muE11 { get { return mu / 1e11; } set { mu = value * 1e11; } }
         public double cdadc { get; } = 1.0;
 
         public double c0 { get; set; } = 0;

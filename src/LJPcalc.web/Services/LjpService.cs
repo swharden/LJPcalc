@@ -36,17 +36,9 @@ namespace LJPcalc.web.Services
 
         public double TemperatureC = 25;
 
-
         public LjpService()
         {
-            IonList = new List<Ion>
-            {
-                IonTable.GetIon("Ca", 50, 0),
-                IonTable.GetIon("Cl", 200, 100),
-                IonTable.GetIon("Mg", 50, 0),
-                IonTable.GetIon("Li", 0, 100)
-            };
-
+            IonList = SampleIonSet.PotassiumGluconate.Ions;
             IsValidIonList = true;
         }
 
@@ -56,7 +48,7 @@ namespace LJPcalc.web.Services
 
         public void CalculateLJP()
         {
-            var result = Calculate.Ljp(IonList, TemperatureC);
+            var result = Calculate.Ljp(IonList, TemperatureC, timeoutMilliseconds: 25_000);
             IsValidResult = !double.IsNaN(result.mV);
             ResultLJP = result.mV;
             ResultText = result.report;

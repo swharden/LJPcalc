@@ -31,16 +31,19 @@
             if (!canParse)
             {
                 ErrorMessage = "invalid charge";
+                LjpService.OnSelectedIonChange.Invoke();
                 return;
             }
 
             if (LjpService.AddIonCharge == 0)
             {
                 ErrorMessage = "ions must have charge";
+                LjpService.OnSelectedIonChange.Invoke();
                 return;
             }
 
             ErrorMessage = null;
+            LjpService.OnSelectedIonChange.Invoke();
         }
     }
 }

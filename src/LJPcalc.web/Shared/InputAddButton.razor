@@ -1,6 +1,6 @@
 ﻿@inject Services.LjpService LjpService
 
-<button class="col btn btn-primary" @onclick="AddIon">Add</button>
+<button class="col btn btn-primary" @onclick="AddIon" disabled="@(LjpService.HasError ? "disabled" : null)">Add</button>
 
 @code {
 
@@ -8,5 +8,11 @@
     {
         LjpService.AddIon();
         LjpService.OnIonTableChange.Invoke();
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        LjpService.OnSelectedIonChange += StateHasChanged;
     }
 }

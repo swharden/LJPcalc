@@ -28,16 +28,19 @@
             if (!canParse)
             {
                 ErrorMessage = "invalid mobility";
+                LjpService.OnSelectedIonChange.Invoke();
                 return;
             }
 
             if (LjpService.AddIonMobility <= 0)
             {
                 ErrorMessage = "mobility must be >0";
+                LjpService.OnSelectedIonChange.Invoke();
                 return;
             }
 
             ErrorMessage = null;
+            LjpService.OnSelectedIonChange.Invoke();
         }
     }
 }

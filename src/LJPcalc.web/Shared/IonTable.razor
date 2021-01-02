@@ -29,8 +29,8 @@
             {
                 <tr>
                     <td><input class="form-control" value=@ion.name /></td>
-                    <td><input class="form-control" value=@ion.charge readonly /></td>
-                    <td><input class="form-control" value=@ion.mu readonly /></td>
+                    <td><input class="form-control" value=@PrettyCharge(@ion.charge) readonly /></td>
+                    <td><input class="form-control" value=@PrettyMobility(@ion.mu) readonly /></td>
                     <td><input class="form-control" value=@ion.c0 /></td>
                     <td><input class="form-control" value=@ion.cL /></td>
                     <td><button class="btn" @onclick="@(e => Remove(ion))">❌</button></td>
@@ -61,4 +61,7 @@
         LjpService.IonList.Remove(ion);
         LjpService.OnIonTableChange.Invoke();
     }
+
+    private string PrettyCharge(int charge) => (charge >= 0 ? "+" : "") + charge.ToString();
+    private string PrettyMobility(double mu) => (mu / 1e11).ToString("#.#####");
 }
