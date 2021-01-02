@@ -9,8 +9,19 @@
 
     @Body
 
-    <footer class="text-muted">
-        <a href='https://swharden.com/software/LJPcalc'>LJPcalc @LjpService.Version</a>
-        by Scott Harden and Doriano Brogioli
-    </footer>
+<footer class="text-muted mt-5">
+    <div>
+        <a href='https://swharden.com/software/LJPcalc'>
+            LJPcalc @LjpService.Version
+        </a>
+        by Scott Harden and Doriano Brogioli.
+    </div>
+    <div>
+        Built on January 2, 2021 using Blazor WebAssembly running on .NET @DotNetVersionString
+    </div>
+</footer>
 </div>
+
+@code{
+    private string DotNetVersionString => Environment.Version.ToString();
+}
