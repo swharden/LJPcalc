@@ -1,4 +1,4 @@
-﻿@inject Services.LjpService LjpService
+﻿@inject LJPcalc.web.Services.LjpService LjpService
 
 <div class="text-center">
     <button class="btn btn-primary btn-lg" type="button" disabled=@Calculating @onclick="CalculateLJP">
@@ -12,22 +12,20 @@
             <span>Calculate LJP</span>
         }
     </button>
+
+    <div class="m-2 mt-5 alert alert-danger @(string.IsNullOrWhiteSpace(@LjpService.ResultErrorMessage) ? "d-none" : "d-block")" role="alert">
+        @LjpService.ResultErrorMessage
+    </div>
 </div>
 
-<div class=@(ShowResults ? "" : "invisible")>
-    <section class="m-2 mt-5 text-center">
-        <div class="display-4">LJP = @Math.Round(LjpService.ResultLJP, 3) mV</div>
-    </section>
-
-    <section class="m-2 mt-5 text-muted">
-        <pre>@LjpService.ResultText</pre>
-    </section>
+<div class=" text-center @(double.IsNaN(LjpService.ResultLJP) || Calculating ? "invisible" : "")">
+    <div class="display-4 m-2 mt-5">LJP = @Math.Round(LjpService.ResultLJP, 3) mV</div>
+    <pre class="m-2 mt-5 text-muted d-inline-block text-left">@LjpService.ResultDetails</pre>
 </div>
 
 @code {
 
     private bool Calculating;
-    private bool ShowResults => (!Calculating && LjpService.IsValidResult);
 
     private async Task CalculateLJP()
     {

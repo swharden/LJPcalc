@@ -35,11 +35,11 @@ namespace LJPcalc.web.Services
         public string LabelType;
         public bool UseGenericLabels => LabelType == "generic";
 
-        public string ResultText { get; private set; }
-        public double ResultLJP { get; private set; }
+        public double ResultLJP = double.NaN;
+        public string ResultDetails;
+        public string ResultErrorMessage;
 
         public bool IsValidIonList => IonList.All(x => x.IsValid);
-        public bool IsValidResult { get; private set; }
 
         public readonly IonLookup KnownIons = new IonLookup();
 
@@ -55,11 +55,50 @@ namespace LJPcalc.web.Services
 
         public void CalculateLJP()
         {
-            var ions = IonList.Select(x => x.ToIon()).ToList();
-            var result = Calculate.Ljp(ions, Temperature.TemperatureC, timeoutMilliseconds: 25_000);
-            IsValidResult = !double.IsNaN(result.mV);
-            ResultLJP = result.mV;
-            ResultText = result.report;
+            ResultLJP = double.NaN;
+            ResultDetails = null;
+            ResultErrorMessage = null;
+
+            if (!IsValidIonList)
+            {
+                ResultErrorMessage = "All ions in the table must be valid";
+                return;
+            }
+
+            if (IonList.Count < 2)
+            {
+                ResultErrorMessage = "There must be at least 2 ions to calculate LJP";
+                return;
+            }
+
+            int LeftCations = IonList.Where(x => x.C0.Concentration > 0 && x.Charge.Charge > 0).Count();
+            int RightCations = IonList.Where(x => x.C0.Concentration > 0 && x.Charge.Charge > 0).Count();
+            int LeftAnions = IonList.Where(x => x.C0.Concentration > 0 && x.Charge.Charge < 0).Count();
+            int RightAnions = IonList.Where(x => x.C0.Concentration > 0 && x.Charge.Charge < 0).Count();
+
+            if (LeftCations == 0 || RightCations == 0)
+            {
+                ResultErrorMessage = "Each solution must contain at least one positive ion";
+                return;
+            }
+
+            if (LeftAnions == 0 || RightAnions == 0)
+            {
+                ResultErrorMessage = "Each solution must contain at least one negative ion";
+                return;
+            }
+
+            try
+            {
+                var ions = IonList.Select(x => x.ToIon()).ToList();
+                var result = Calculate.Ljp(ions, Temperature.TemperatureC, timeoutMilliseconds: 25_000);
+                ResultLJP = result.mV;
+                ResultDetails = result.report;
+            }
+            catch (Exception ex)
+            {
+                ResultErrorMessage = ex.ToString();
+            }
         }
     }
 }
