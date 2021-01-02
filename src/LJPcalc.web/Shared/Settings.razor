@@ -2,9 +2,9 @@
 
 <section class="mt-3 mb-3">
 
-    <div class="d-inline-block m-2">
+    <div class="d-inline-block m-2 align-top">
         <label><strong>Solution Labels</strong></label>
-        <select class="form-control" @bind="LabelType">
+        <select class="form-control" @bind="LjpService.LabelType">
             <option value="pipette">pipette</option>
             <option value="generic">generic</option>
         </select>
@@ -12,32 +12,14 @@
 
     <div class="d-inline-block m-2">
         <label><strong>Temperature (C)</strong></label>
-        <input class="form-control" @bind-value="TempC" size="10" />
+        <input class="form-control" @bind=LjpService.Temperature.Input @bind:event="oninput" size="10" />
+        <div class="@(LjpService.Temperature.IsValid ? "d-none" : "d-block")">
+            &#9888;&#65039; @LjpService.Temperature.ErrorMessage
+        </div>
     </div>
 
 </section>
 
 @code {
-    private string LabelType
-    {
-        get => LjpService.UseGenericLabels ? "generic" : "pipette";
-        set
-        {
-            LjpService.UseGenericLabels = (value == "generic");
-            LjpService.OnSolutionLabelChange.Invoke();
-        }
-    }
-
-    private string TempC
-    {
-        get => LjpService.TemperatureC.ToString();
-        set
-        {
-            if (double.TryParse(value, out double result))
-                LjpService.TemperatureC = result;
-            else
-                LjpService.ErrorMessage = "invalid temperature";
-        }
-    }
 
 }

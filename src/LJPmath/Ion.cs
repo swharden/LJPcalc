@@ -84,7 +84,7 @@ namespace LJPmath
             if (charge == 0)
                 return 0;
             double bigNumber = Constants.Nav * Math.Pow(Constants.e, 2) * Math.Abs(charge);
-            return bigNumber / mobility;
+            return bigNumber * mobility;
         }
 
         public static double Mobility(double conductivity, int charge)

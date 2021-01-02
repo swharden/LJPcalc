@@ -3,11 +3,11 @@ using LJPmath;
 
 namespace LJPcalc.web.Services
 {
-    public class KnownIons
+    public class IonLookup
     {
         private readonly IonTable Table;
 
-        public KnownIons()
+        public IonLookup()
         {
             var mdTableBytes = Properties.Resources.IonTable;
             string mdTableString = System.Text.Encoding.Default.GetString(mdTableBytes);

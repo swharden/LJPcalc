@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LJPmath\LJPmath.csproj" />
+    <ProjectReference Include="..\LJPmath\LJPcalc.csproj" />
   </ItemGroup>
 
 </Project>

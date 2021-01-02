@@ -1,10 +1,10 @@
-﻿using LJPmath;
+﻿using LJPcalc.web.InputModels;
+using LJPmath;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace LJPcalc.web.Services
 {
     public class LjpService
@@ -13,35 +13,40 @@ namespace LJPcalc.web.Services
         public Action OnSelectedIonChange;
         public Action OnIonTableChange;
 
-        public readonly KnownIons KnownIons = new KnownIons();
-        public readonly List<Ion> IonList;
-        public string AddIonName;
-        public int AddIonCharge;
-        public double AddIonMobility
-        {
-            get => Ion.Mobility(AddIonConductivity, AddIonCharge);
-            set { AddIonConductivity = Ion.Conductivity(value, AddIonCharge); }
-        }
-        public double AddIonConductivity;
-        public void AddIon() => IonList.Add(new Ion(AddIonName, AddIonCharge, AddIonConductivity, 0, 0));
+        public readonly List<UserIon> IonList = new List<UserIon>();
+        public readonly UserIon IonToAdd = new UserIon();
+        public readonly UserTemperature Temperature = new UserTemperature();
 
-        public string ErrorMessage;
-        public bool HasError => !string.IsNullOrWhiteSpace(ErrorMessage);
-        public bool UseGenericLabels = false;
+        public string SelectedIonName
+        {
+            get => IonToAdd.Name.Input;
+            set
+            {
+                var ion = KnownIons.GetIon(value);
+                IonToAdd.Name.Input = ion.name;
+                IonToAdd.Charge.Input = ion.charge.ToString();
+                IonToAdd.Mobility.Input = ion.muE11.ToString();
+                OnSelectedIonChange?.Invoke();
+            }
+        }
+
+        public void AddSelectedIon() => IonList.Add(IonToAdd.Copy());
+
+        public string LabelType;
+        public bool UseGenericLabels => LabelType == "generic";
 
         public string ResultText { get; private set; }
         public double ResultLJP { get; private set; }
 
-        public bool IsValidIonList { get; private set; }
+        public bool IsValidIonList => IonList.All(x => x.IsValid);
         public bool IsValidResult { get; private set; }
 
-        public double TemperatureC = 25;
+        public readonly IonLookup KnownIons = new IonLookup();
 
         public LjpService()
         {
             var samples = new SampleIonSet();
-            IonList = samples.PotassiumGluconate.Ions;
-            IsValidIonList = true;
+            IonList.AddRange(samples.PotassiumGluconate.Ions);
         }
 
         public string Version =>
@@ -50,7 +55,8 @@ namespace LJPcalc.web.Services
 
         public void CalculateLJP()
         {
-            var result = Calculate.Ljp(IonList, TemperatureC, timeoutMilliseconds: 25_000);
+            var ions = IonList.Select(x => x.ToIon()).ToList();
+            var result = Calculate.Ljp(ions, Temperature.TemperatureC, timeoutMilliseconds: 25_000);
             IsValidResult = !double.IsNaN(result.mV);
             ResultLJP = result.mV;
             ResultText = result.report;

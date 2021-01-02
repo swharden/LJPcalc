@@ -25,22 +25,59 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (LJPmath.Ion ion in LjpService.IonList)
+            @foreach (var ion in LjpService.IonList)
             {
                 <tr>
-                    <td><input class="form-control" value=@ion.name /></td>
-                    <td><input class="form-control" value=@PrettyCharge(@ion.charge) readonly /></td>
-                    <td><input class="form-control" value=@PrettyMobility(@ion.mu) readonly /></td>
-                    <td><input class="form-control" value=@ion.c0 /></td>
-                    <td><input class="form-control" value=@ion.cL /></td>
-                    <td><button class="btn" @onclick="@(e => Remove(ion))">❌</button></td>
+                    <td>
+                        <input class="form-control" @bind=ion.Name.Input @bind:event="oninput" />
+                        <div class="@(ion.Name.IsValid ? "d-none" : "d-block")">&#9888;&#65039; @ion.Name.ErrorMessage</div>
+                    </td>
+                    <td>
+                        <input class="form-control" @bind=ion.Charge.Input readonly />
+                    </td>
+                    <td>
+                        <input class="form-control" @bind=ion.Mobility.Input readonly />
+                    </td>
+                    <td>
+                        <input class="form-control" @bind=ion.C0.Input @bind:event="oninput" />
+                        <div class="@(ion.C0.IsValid ? "d-none" : "d-block")">&#9888;&#65039; @ion.C0.ErrorMessage</div>
+                    </td>
+                    <td>
+                        <input class="form-control" @bind=ion.CL.Input @bind:event="oninput" />
+                        <div class="@(ion.CL.IsValid ? "d-none" : "d-block")">&#9888;&#65039; @ion.CL.ErrorMessage</div>
+                    </td>
+                    <td><button class="btn" @onclick="@(e => LjpService.IonList.Remove(ion))">❌</button></td>
                 </tr>
             }
             <tr class="highlight">
-                <td><InputAddIonName /></td>
-                <td><InputAddCharge /></td>
-                <td><InputAddMobility /></td>
-                <td><InputAddButton /></td>
+                <td>
+                    <select class="form-control" @bind="LjpService.SelectedIonName">
+                        <option value="" selected disabled hidden>Select Ion</option>
+                        @foreach (string ionName in LjpService.KnownIons.GetIonNames())
+                        {
+                            <option value="@ionName">@ionName</option>
+                        }
+                    </select>
+                </td>
+                <td>
+                    <input class="form-control" @bind=LjpService.IonToAdd.Charge.Input @bind:event="oninput" />
+                    <div class="@(LjpService.IonToAdd.Charge.IsValid ? "d-none" : "d-block")">
+                        &#9888;&#65039; @LjpService.IonToAdd.Charge.ErrorMessage
+                    </div>
+                </td>
+                <td>
+                    <input class="form-control" @bind=LjpService.IonToAdd.Mobility.Input @bind:event="oninput" />
+                    <div class="@(LjpService.IonToAdd.Mobility.IsValid ? "d-none" : "d-block")">
+                        &#9888;&#65039; @LjpService.IonToAdd.Mobility.ErrorMessage
+                    </div>
+                </td>
+                <td>
+                    <button class="col btn btn-primary"
+                            @onclick="LjpService.AddSelectedIon"
+                            disabled="@(LjpService.IonToAdd.IsValid ? null : "disabled")">
+                        Add
+                    </button>
+                </td>
                 <td></td>
                 <td></td>
             </tr>
@@ -50,18 +87,4 @@
 
 @code {
 
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        LjpService.OnIonTableChange += StateHasChanged;
-    }
-
-    private void Remove(LJPmath.Ion ion)
-    {
-        LjpService.IonList.Remove(ion);
-        LjpService.OnIonTableChange.Invoke();
-    }
-
-    private string PrettyCharge(int charge) => (charge >= 0 ? "+" : "") + charge.ToString();
-    private string PrettyMobility(double mu) => (mu / 1e11).ToString("#.#####");
 }
