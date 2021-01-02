@@ -13,6 +13,7 @@ namespace LJPcalc.web.Services
         public Action OnSelectedIonChange;
         public Action OnIonTableChange;
 
+        public readonly KnownIons KnownIons = new KnownIons();
         public readonly List<Ion> IonList;
         public string AddIonName;
         public int AddIonCharge;
@@ -38,7 +39,8 @@ namespace LJPcalc.web.Services
 
         public LjpService()
         {
-            IonList = SampleIonSet.PotassiumGluconate.Ions;
+            var samples = new SampleIonSet();
+            IonList = samples.PotassiumGluconate.Ions;
             IsValidIonList = true;
         }
 

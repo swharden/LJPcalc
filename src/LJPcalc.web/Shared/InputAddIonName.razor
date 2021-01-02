@@ -2,7 +2,7 @@
 
 <select class="form-control" @bind="SelectedIonName">
     <option value="" selected disabled hidden>Select Ion</option>
-    @foreach (string ionName in Services.IonTable.GetIonNames())
+    @foreach (string ionName in LjpService.KnownIons.GetIonNames())
     {
         <option value="@ionName">@ionName</option>
     }
@@ -16,7 +16,7 @@
         set
         {
             _selectedIonName = value;
-            var ion = Services.IonTable.GetIon(value);
+            var ion = LjpService.KnownIons.GetIon(value);
             LjpService.AddIonCharge = ion.charge;
             LjpService.AddIonConductivity = ion.conductivity;
             LjpService.AddIonName = ion.name;
