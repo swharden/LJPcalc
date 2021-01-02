@@ -72,13 +72,6 @@ steps:
       command: "build"
       projects: "src/LJPcalc/*.csproj"
 
-  # RESTORE LJPapp PACKAGES
-  - task: NuGetCommand@2
-    displayName: "Restore Android LJPapp (Windows)"
-    condition: contains(variables['agent.os'], 'Windows')
-    inputs:
-      restoreSolution: "src/LJPapp/LJPapp.sln"
-
   # BUILD LJPresearch
   - task: DotNetCoreCLI@2
     displayName: "Build LJPresearch (Windows)"
@@ -86,33 +79,3 @@ steps:
     inputs:
       command: "build"
       projects: "src/LJPresearch/*.csproj"
-      
-  # BUILD LJPapp for Android
-  - task: XamarinAndroid@1
-    displayName: "Build Android LJPapp (Windows)"
-    condition: contains(variables['agent.os'], 'Windows')
-    inputs:
-      projectFile: "src/LJPapp/LJPapp/LJPapp.Android/*.csproj"
-
-  ### MAC ONLY ################################################################
-
-  # # RESTORE LJPapp PACKAGES
-  # - task: NuGetCommand@2
-  #   displayName: "Restore iOS LJPapp (MacOS)"
-  #   condition: contains(variables['agent.os'], 'Darwin')
-  #   inputs:
-  #     restoreSolution: "src/LJPapp/LJPapp.sln"
-
-  # # BUILD LJPapp for iPhone
-  # - task: XamariniOS@2
-  #   displayName: "Build iOS LJPapp (MacOS)"
-  #   condition: contains(variables['agent.os'], 'Darwin')
-  #   inputs:
-  #     projectFile: "src/LJPapp/LJPapp/LJPapp.iOS/*.csproj"
-
-  # # BUILD LJPapp for iPhone
-  # - task: XamariniOS@2
-  #   displayName: "Build iOS LJPapp (MacOS)"
-  #   condition: contains(variables['agent.os'], 'Darwin')
-  #   inputs:
-  #     projectFile: "src/LJPapp/LJPapp/LJPapp.sln"
