@@ -1,0 +1,43 @@
+﻿@inject Services.LjpService LjpService
+
+<input class="form-control" @bind="Text" />
+
+@if (HasError)
+{
+    <div>&#9888;&#65039; @ErrorMessage</div>
+}
+
+@code {
+    private bool HasError => !string.IsNullOrEmpty(ErrorMessage);
+    private string ErrorMessage;
+    public string ActualInput = "123.45";
+
+    protected override void OnInitialized()
+    {
+        LjpService.OnSelectedIonChange += StateHasChanged;
+    }
+
+    public string Text
+    {
+        get => HasError ? ActualInput : LjpService.AddIonMobility.ToString();
+        set
+        {
+            ActualInput = value;
+            bool canParse = double.TryParse(ActualInput, out LjpService.AddIonMobility);
+
+            if (!canParse)
+            {
+                ErrorMessage = "invalid mobility";
+                return;
+            }
+
+            if (LjpService.AddIonMobility <= 0)
+            {
+                ErrorMessage = "mobility must be >0";
+                return;
+            }
+
+            ErrorMessage = null;
+        }
+    }
+}

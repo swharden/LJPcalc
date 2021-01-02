@@ -1,0 +1,32 @@
+﻿@inject Services.LjpService LjpService
+
+<div class="text-center">
+    <button class="btn btn-primary" @onclick="CalculateLJP">Calculate LJP</button>
+</div>
+
+<section class="m-2 mt-5 text-center">
+    <div class="display-2">@ResultLJP</div>
+</section>
+
+<section class="m-2 mt-5 text-muted">
+    <pre>@ResultDetails</pre>
+</section>
+
+@code {
+    private string ResultLJP = "LJP not yet calculated";
+    private string ResultDetails = "Analysis not yet performed";
+
+    private async Task CalculateLJP()
+    {
+        ResultLJP = "calculating...";
+        ResultDetails = "calculating...";
+        StateHasChanged();
+
+        // give it some time to show the user the calculation message
+        await Task.Delay(TimeSpan.FromMilliseconds(100))
+                  .ContinueWith(task => LjpService.CalculateLJP());
+
+        ResultLJP = $"LJP = {Math.Round(LjpService.ResultLJP, 3)} mV";
+        ResultDetails = LjpService.ResultText;
+    }
+}

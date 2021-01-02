@@ -9,27 +9,50 @@ namespace LJPcalc.web.Services
 {
     public class LjpService
     {
-        private readonly List<Ion> IonList = new List<Ion>();
+        public Action OnSolutionLabelChange;
+        public Action OnSelectedIonChange;
+
+        public readonly List<Ion> IonList;
+        public string AddIonName;
+        public int AddIonCharge;
+        public double AddIonMobility;
+
+        public string ErrorMessage;
+        public bool HasError => !string.IsNullOrWhiteSpace(ErrorMessage);
+        public bool UseGenericLabels = false;
 
         public string ResultText { get; private set; }
         public double ResultLJP { get; private set; }
+
+        public bool IsValidIonList { get; private set; }
+        public bool IsValidResult { get; private set; }
+
+        public double TemperatureC = 25;
+
+
+        public LjpService()
+        {
+            IonList = new List<Ion>
+            {
+                IonTable.GetIon("Ca", 50, 0),
+                IonTable.GetIon("Cl", 200, 100),
+                IonTable.GetIon("Mg", 50, 0),
+                IonTable.GetIon("Li", 0, 100)
+            };
+
+            IsValidIonList = true;
+        }
 
         public string Version =>
             typeof(Ion).Assembly.GetName().Version.Major + "." +
             typeof(Ion).Assembly.GetName().Version.Minor;
 
-        public void AddIon(string name, int charge, double conductivity, double concA, double concB) =>
-            IonList.Add(new Ion(name, charge, conductivity, concA, concB));
-
-        public void Clear() => IonList.Clear();
-
-        public void RemoveAt(int index) => IonList.RemoveAt(index);
-
-        public void CalculateLJP(double temperatureC)
+        public void CalculateLJP()
         {
-            var result = Calculate.Ljp(IonList, temperatureC);
-            ResultText = result.report;
+            var result = Calculate.Ljp(IonList, TemperatureC);
+            IsValidResult = !double.IsNaN(result.mV);
             ResultLJP = result.mV;
+            ResultText = result.report;
         }
     }
 }

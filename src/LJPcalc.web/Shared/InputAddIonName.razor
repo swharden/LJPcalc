@@ -1,0 +1,26 @@
+﻿@inject Services.LjpService LjpService
+
+<select class="form-control" @bind="SelectedIonName">
+    <option value="" selected disabled hidden>Select Ion</option>
+    @foreach (string ionName in Services.IonTable.GetIonNames())
+    {
+        <option value="@ionName">@ionName</option>
+    }
+</select>
+
+@code {
+    private string _selectedIonName;
+    public string SelectedIonName
+    {
+        get => _selectedIonName;
+        set
+        {
+            _selectedIonName = value;
+            var ion = Services.IonTable.GetIon(value);
+            LjpService.AddIonCharge = ion.charge;
+            LjpService.AddIonMobility = ion.muE11;
+            LjpService.AddIonName = ion.name;
+            LjpService.OnSelectedIonChange.Invoke();
+        }
+    }
+}

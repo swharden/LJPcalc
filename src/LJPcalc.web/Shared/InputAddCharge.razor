@@ -1,0 +1,46 @@
+﻿@inject Services.LjpService LjpService
+
+<input class="form-control" @bind="Text" />
+
+@if (HasError)
+{
+    <div>&#9888;&#65039; @ErrorMessage</div>
+}
+
+@code {
+    private bool HasError => !string.IsNullOrEmpty(ErrorMessage);
+    private string ErrorMessage;
+    public string ActualInput;
+
+    protected override void OnInitialized()
+    {
+        LjpService.OnSelectedIonChange += StateHasChanged;
+    }
+
+    private string PrettyCharge(int charge) =>
+        ((charge < 0) ? "" : "+") + charge.ToString();
+
+    public string Text
+    {
+        get => HasError ? ActualInput : PrettyCharge(LjpService.AddIonCharge);
+        set
+        {
+            ActualInput = value;
+            bool canParse = int.TryParse(ActualInput, out LjpService.AddIonCharge);
+
+            if (!canParse)
+            {
+                ErrorMessage = "invalid charge";
+                return;
+            }
+
+            if (LjpService.AddIonCharge == 0)
+            {
+                ErrorMessage = "ions must have charge";
+                return;
+            }
+
+            ErrorMessage = null;
+        }
+    }
+}

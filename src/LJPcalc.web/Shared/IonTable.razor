@@ -1,0 +1,54 @@
+﻿@inject Services.LjpService LjpService
+
+<section class="mt-5">
+    <table class="table table-borderless table-hover">
+        <thead>
+            <tr>
+                <td>
+                    <strong>Ion</strong>
+                </td>
+                <td>
+                    <strong>Charge</strong>
+                </td>
+                <td>
+                    <strong>Mobility</strong>
+                    <span class="small text-muted">10<sup>11</sup>&times;m<sup>2</sup>/V/s</span>
+                </td>
+                <td>
+                    <strong>@(LjpService.UseGenericLabels ? "Solution A" : "Pipette")</strong>
+                    <span class="small text-muted">mM</span>
+                </td>
+                <td>
+                    <strong>@(LjpService.UseGenericLabels ? "Solution B" : "Bath")</strong>
+                    <span class="small text-muted">mM</span>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (LJPmath.Ion ion in LjpService.IonList)
+            {
+                <tr>
+                    <td><input class="form-control" value=@ion.name /></td>
+                    <td><input class="form-control" value=@ion.charge readonly /></td>
+                    <td><input class="form-control" value=@ion.mu readonly /></td>
+                    <td><input class="form-control" value=@ion.c0 /></td>
+                    <td><input class="form-control" value=@ion.cL /></td>
+                    <td><button class="btn">❌</button></td>
+                </tr>
+            }
+            <tr class="highlight">
+                <td><InputAddIonName /></td>
+                <td><InputAddCharge /></td>
+                <td><InputAddMobility /></td>
+                <td><button class="col btn btn-primary">Add</button></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+@code {
+
+
+}
