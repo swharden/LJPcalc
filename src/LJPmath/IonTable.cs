@@ -14,6 +14,12 @@ namespace LJPmath
     {
         public string filePath { get; private set; }
 
+        public IonTable(string[] markdownLines)
+        {
+            Load(markdownLines, ignoreDuplicates: true, sort: true);
+            Debug.WriteLine($"Loaded {ions.Count} ions from {filePath}");
+        }
+
         public IonTable(string filePath = "IonTable.md")
         {
             filePath = FindFile(filePath);

@@ -84,10 +84,13 @@ namespace LJPmath
             System.IO.File.WriteAllText(filePath, GetTableString(prefix: true));
         }
 
-        public void Load(string filePath, bool ignoreDuplicates = false, bool sort = false)
+        public void Load(string filePath, bool ignoreDuplicates = false, bool sort = false) =>
+            Load(System.IO.File.ReadAllLines(filePath), ignoreDuplicates, sort);
+
+        public void Load(string[] markdownLines, bool ignoreDuplicates = false, bool sort = false)
         {
             ions.Clear();
-            foreach (string line in System.IO.File.ReadAllLines(filePath))
+            foreach (string line in markdownLines)
             {
                 Ion ion = IonFromMarkdownLine(line);
                 if (ion != null)
