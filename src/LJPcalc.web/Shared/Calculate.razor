@@ -37,11 +37,14 @@
                     LJP at @LjpService.Result.temperatureC C (@LjpService.Result.temperatureK K) = @LjpService.Result.mV mV
                 </li>
                 <li>
+                    @LjpService.ResultSummarized
+                </li>
+                <li>
                     LJP was calculated according to the stationary Nernst-Planck equation.
                     This method is typically regarded as superior to the simpler Henderson equation used
-                    by most commercial LJP calculators. Both equations produce nearly identical LJPs,
+                    by most commercial LJP calculators. These two equations produce similar values,
                     but the Henderson equation becomes inaccurate as ion concentrations increase
-                    and when polyvalent ions are involved. 
+                    and when polyvalent ions are involved.
                     See <a href="https://arxiv.org/abs/1403.3640">Marino et al., 2014</a> for details.
                 </li>
                 @if (LjpService.Result.FirstIonM > 1)

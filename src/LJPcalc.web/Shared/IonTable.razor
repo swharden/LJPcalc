@@ -100,18 +100,25 @@
         </tbody>
     </table>
 
-    <!--
-    <div class="container p-2">
-        <div class="row">
-            <div class="alert alert-primary text-start text-break @(string.IsNullOrEmpty(LjpService.SampleSetDescription) ? "d-none" : "d-inline-block")" role="alert">
-                <small>
-                    <div><strong>Loaded the "@LjpService.SampleSetTitle" sample ion set.</strong></div>
-                    @LjpService.SampleSetDescription
-                </small>
-            </div>
+</section>
+
+<section class="mt-3 mb-3">
+
+    <div class="d-inline-block m-2 align-top">
+        <label><strong>Solution Labels</strong></label>
+        <select class="form-select" @bind="LjpService.LabelType">
+            <option value="pipette">pipette</option>
+            <option value="generic">generic</option>
+        </select>
+    </div>
+
+    <div class="d-inline-block m-2">
+        <label><strong>Temperature (C)</strong></label>
+        <input class="form-control" @bind=LjpService.Temperature.Input @bind:event="oninput" size="10" />
+        <div class="@(LjpService.Temperature.IsValid ? "d-none" : "d-block")">
+            &#9888;&#65039; @LjpService.Temperature.ErrorMessage
         </div>
     </div>
-    -->
 
 </section>
 

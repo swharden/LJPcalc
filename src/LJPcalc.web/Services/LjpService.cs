@@ -48,6 +48,20 @@ namespace LJPcalc.web.Services
         public double ResultLJP = double.NaN;
         public string ResultDetails;
         public string ResultErrorMessage;
+        public string ResultSummarized
+        {
+            get
+            {
+                if (Result is null)
+                    return null;
+
+                string direction = Result.mV > 0 ? "positive" : "negative";
+
+                return UseGenericLabels ?
+                    $"Solution B is {direction} relative to Solution A" :
+                    $"The bath solution is {direction} relative to the pipette solution";
+            }
+        }
         public LjpResult Result;
 
         public bool IsValidIonList => IonList.All(x => x.IsValid);
