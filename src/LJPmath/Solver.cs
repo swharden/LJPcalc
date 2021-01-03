@@ -32,7 +32,7 @@ namespace LJPmath
         /// <summary>
         /// Solve the equations and reutrn the M for the first point
         /// </summary>
-        public double Solve(double[] x, double timeoutMilliseconds = double.PositiveInfinity)
+        public double Solve(double[] x, double timeoutMilliseconds, bool throwIfTimeout)
         {
             if (Equations.Count == 0)
                 return double.NaN;
@@ -49,7 +49,11 @@ namespace LJPmath
 
                 Debug.WriteLine(Points[0].M);
                 if (stopwatch.ElapsedMilliseconds > timeoutMilliseconds)
+                {
+                    if (throwIfTimeout)
+                        throw new OperationCanceledException($"Solver timed out while calculating Phis ({timeoutMilliseconds} ms)");
                     break;
+                }
             }
 
             for (int j = 0; j < Equations.Count; j++)

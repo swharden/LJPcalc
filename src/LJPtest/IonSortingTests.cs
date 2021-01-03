@@ -26,7 +26,7 @@ namespace LJPtest
             ionSet = ionTable.Lookup(ionSet);
 
             // it does not solve in this order
-            Assert.Throws<OperationCanceledException>(() => Calculate.Ljp(ionSet, autoSort: false));
+            Assert.Throws<OperationCanceledException>(() => Calculate.Ljp(ionSet, autoSort: false, throwIfTimeout: true));
 
             // but it does solve if allowed to auto-sort
             var ljp = Calculate.Ljp(ionSet);
@@ -53,7 +53,7 @@ namespace LJPtest
             ionSet = ionTable.Lookup(ionSet);
 
             // it does not solve in this order
-            Assert.Throws<OperationCanceledException>(() => Calculate.Ljp(ionSet, autoSort: false));
+            Assert.Throws<OperationCanceledException>(() => Calculate.Ljp(ionSet, autoSort: false, throwIfTimeout: true));
 
             // but it does solve if allowed to auto-sort
             var ljp = Calculate.Ljp(ionSet);

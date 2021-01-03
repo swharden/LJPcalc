@@ -45,7 +45,7 @@ namespace LJPmath
         /// <summary>
         /// Calculate the LJP from an ion set and temperature.
         /// </summary>
-        public static LjpResult Ljp(List<Ion> ionList, double temperatureC = 25, bool autoSort = true, double timeoutMilliseconds = 5000)
+        public static LjpResult Ljp(List<Ion> ionList, double temperatureC = 25, bool autoSort = true, double timeoutMilliseconds = 5000, bool throwIfTimeout = false)
         {
             foreach (Ion ion in ionList)
             {
@@ -86,7 +86,7 @@ namespace LJPmath
             {
                 var phiEquations = new PhiEquations(ionList, temperatureC);
                 Solver s = new Solver(phiEquations);
-                FirstPointM = s.Solve(phis, timeoutMilliseconds);
+                FirstPointM = s.Solve(phis, timeoutMilliseconds, throwIfTimeout);
             }
 
             // calculate LJP
