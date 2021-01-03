@@ -29,10 +29,13 @@ namespace LJPmath
             };
         }
 
-        public void Solve(double[] x, double timeoutMilliseconds = double.PositiveInfinity)
+        /// <summary>
+        /// Solve the equations and reutrn the M for the first point
+        /// </summary>
+        public double Solve(double[] x, double timeoutMilliseconds = double.PositiveInfinity)
         {
             if (Equations.Count == 0)
-                return;
+                return double.NaN;
 
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -44,12 +47,15 @@ namespace LJPmath
                 Points.Sort();
                 RemovePointsAfter(Equations.Count * 4);
 
+                Debug.WriteLine(Points[0].M);
                 if (stopwatch.ElapsedMilliseconds > timeoutMilliseconds)
-                    throw new OperationCanceledException($"Solver timed out while calculating Phis ({timeoutMilliseconds} ms)");
+                    break;
             }
 
             for (int j = 0; j < Equations.Count; j++)
                 x[j] = Points[0].X[j];
+
+            return Points[0].M;
         }
 
         private void RemovePointsAfter(int maxCount)

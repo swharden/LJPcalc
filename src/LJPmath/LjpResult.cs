@@ -49,7 +49,7 @@ namespace LJPmath
             return $"LJP result: {mV} mV";
         }
 
-        public void Finished(List<Ion> ionList, double ljpVolts)
+        public void Finished(List<Ion> ionList, double ljpVolts, double FirstIonM)
         {
             stopwatch.Stop();
             benchmark_s = (double)stopwatch.ElapsedTicks / Stopwatch.Frequency;
@@ -61,18 +61,6 @@ namespace LJPmath
                 ionListSolved.Add(new Ion(ion));
             var solvedIonSet = new IonSet(ionListSolved);
 
-            double chlorideConcC0 = 0;
-            double chlorideConcCL = 0;
-            foreach (Ion ion in solvedIonSet.ions)
-            {
-                if (ion.name == "Cl")
-                {
-                    chlorideConcC0 += ion.c0;
-                    chlorideConcCL += ion.cL;
-                }
-            }
-            bool isChlorideOnBothSides = (chlorideConcC0 > 0 && chlorideConcCL > 0);
-
             // build report
             StringBuilder txt = new StringBuilder();
             txt.AppendLine("Concentrations were slightly adjusted to achieve electroneutrality:");
@@ -80,20 +68,15 @@ namespace LJPmath
             txt.AppendLine(solvedIonSet.GetTableString());
             txt.AppendLine();
             txt.AppendLine($"Equations were solved in {benchmark}");
-            txt.AppendLine($"LJP at {temperatureC} C ({temperatureK} K) = {mV} mV");
-
-            if (isChlorideOnBothSides)
+            if (FirstIonM > 1)
             {
-                /*
-                double chlorideLjp_C0_Mv = -1000 * (Constants.R * temperatureK / Constants.F) * Math.Log(chlorideConcC0);
-                double chlorideLjp_CL_Mv = -1000 * (Constants.R * temperatureK / Constants.F) * Math.Log(chlorideConcCL);
-                txt.AppendLine();
-                txt.AppendLine($"Chloride LJPs may be useful if using Ag/AgCl electrodes:");
-                txt.AppendLine($"LJP[Cl] c0 = {chlorideLjp_C0_Mv} mV");
-                txt.AppendLine($"LJP[Cl] cL = {chlorideLjp_CL_Mv} mV");
-                txt.AppendLine($"difference = {chlorideLjp_CL_Mv - chlorideLjp_C0_Mv} mV");
-                */
+                txt.AppendLine($"WARNING: First ion's M ({Math.Round(FirstIonM, 3)}) did not reach 1.");
+                txt.AppendLine("  This indicates the solver may have timed out while balancing phis.");
+                txt.AppendLine("  LJP may be accurate, but a fully solved set of equations is preferred.");
+                txt.AppendLine("  Reduce the number of ions in the list to achieve this.");
+                txt.AppendLine("  Ions with small concentrations can be removed without affecting LJP much.");
             }
+            txt.AppendLine($"LJP at {temperatureC} C ({temperatureK} K) = {mV} mV");
 
             report = txt.ToString().TrimEnd();
         }

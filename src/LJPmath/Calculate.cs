@@ -81,19 +81,18 @@ namespace LJPmath
             }
 
             // all phis except the last two get solved
+            double FirstPointM = 0;
             if (ionCount > 2)
             {
                 var phiEquations = new PhiEquations(ionList, temperatureC);
                 Solver s = new Solver(phiEquations);
-                Debug.WriteLine("solving phis...");
-                s.Solve(phis, timeoutMilliseconds);
-                Debug.WriteLine("phis solved.");
+                FirstPointM = s.Solve(phis, timeoutMilliseconds);
             }
 
             // calculate LJP
             double[] cLs = new double[phis.Length];
             double ljp_V = SolveForLJP(ionList, phis, cLs, temperatureC);
-            if (ljp_V == Double.NaN)
+            if (double.IsNaN(ljp_V))
                 throw new Exception("ERROR: Singularity (calculation aborted)");
 
             // update ions based on what was just calculated
@@ -125,7 +124,7 @@ namespace LJPmath
             }
             LastIon.cL = -totalChargeWeightedCL / LastIon.charge;
 
-            result.Finished(ionList, ljp_V);
+            result.Finished(ionList, ljp_V, FirstPointM);
             return result;
         }
 
