@@ -61,7 +61,7 @@ namespace LJPcalc.web.Services
             LoadDefaultSet();
         }
 
-        public void LoadDefaultSet() => LoadSampleSet(SampleIonSets[3]);
+        public void LoadDefaultSet() => LoadSampleSet(SampleIonSets.Last());
 
         public string SampleSetTitle;
         public string SampleSetDescription;
@@ -131,6 +131,17 @@ namespace LJPcalc.web.Services
                 ResultErrorMessage = "All ions in the table must be valid. Invalid ions: " +
                     string.Join(",", IonList.Where(x => !x.IsValid).Select(x => x.Name.Input));
                 return;
+            }
+
+            HashSet<string> seen = new HashSet<string>();
+            foreach (string ionName in IonList.Select(x => x.Name.Input))
+            {
+                if (seen.Contains(ionName))
+                {
+                    ResultErrorMessage = $"{ionName} appears multiple times in the ion list";
+                    return;
+                }
+                seen.Add(ionName);
             }
 
             try
