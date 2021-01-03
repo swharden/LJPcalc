@@ -1,118 +1,158 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 
 namespace LJPmath
 {
     class Solver
     {
-        private readonly PhiEquations es;
+        private readonly PhiEquations Equations;
+        private readonly List<Point> Points = new List<Point>();
         private readonly Random rand = new Random(0);
 
-        public Solver(PhiEquations es)
+        private int Iterations;
+        private readonly List<Action> AddPointMethods;
+        private void AddSuggestedPoint() => AddPointMethods[Iterations++ % AddPointMethods.Count].Invoke();
+
+        public Solver(PhiEquations equations)
         {
-            this.es = es;
+            Equations = equations;
+
+            AddPointMethods = new List<Action>()
+            {
+                AddSuggestedPoint_ShiftedBySolutionDelta,
+                AddSuggestedPoint_NearFirstPoint,
+                AddSuggestedPoint_TotallyRandom,
+                AddSuggestedPoint_ConsideringMinMax,
+            };
         }
 
-        private readonly List<Point> list = new List<Point>();
-        public void Solve(double[] x, double timeoutMilliseconds = 0)
+        public void Solve(double[] x, double timeoutMilliseconds = double.PositiveInfinity)
         {
-            if (es.number() == 0)
+            if (Equations.Count == 0)
                 return;
 
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            list.Add(new Point(x, es));
-            while (list[0].getM() > 1.0)
+            Points.Add(new Point(x, Equations));
+            while (Points[0].M > 1.0)
             {
-                Suggest();
-                list.Sort();
-                while (list.Count > es.number() * 4)
-                    list.RemoveAt(list.Count - 1);
-                if ((timeoutMilliseconds > 0) && (stopwatch.ElapsedMilliseconds > timeoutMilliseconds))
+                AddSuggestedPoint();
+                Points.Sort();
+                RemovePointsAfter(Equations.Count * 4);
+
+                if (stopwatch.ElapsedMilliseconds > timeoutMilliseconds)
                     throw new OperationCanceledException($"Solver timed out while calculating Phis ({timeoutMilliseconds} ms)");
             }
 
-            for (int j = 0; j < es.number(); j++)
-                x[j] = list[0].getIndex(j);
+            for (int j = 0; j < Equations.Count; j++)
+                x[j] = Points[0].X[j];
         }
 
-        public int sn = 0; // TODO: make sn an enumeration
-        private void Suggest()
+        private void RemovePointsAfter(int maxCount)
         {
-            double[] x = new double[es.number()];
-            switch (sn)
+            while (Points.Count > maxCount)
+                Points.RemoveAt(Points.Count - 1);
+        }
+
+        /// <summary>
+        /// Add a point with Xs shifted by the delta of the solved matrix
+        /// </summary>
+        private void AddSuggestedPoint_ShiftedBySolutionDelta()
+        {
+            if (Points.Count < Equations.Count + 1)
             {
-                case 0:
-                    if (list.Count >= es.number() + 1)
-                    {
-                        double[,] Mm = new double[es.number(), es.number()];
-                        for (int j = 0; j < es.number(); j++)
-                            for (int k = 0; k < es.number(); k++)
-                                Mm[j, k] = list[k].getF(j) - list[es.number()].getF(j);
-                        double[] mF0 = new double[es.number()];
-                        for (int j = 0; j < es.number(); j++)
-                            mF0[j] = -list[es.number()].getF(j);
-                        double[] u = Linalg.Solve(Mm, mF0);
-                        double[,] Vm = new double[es.number(), es.number()];
-                        for (int j = 0; j < es.number(); j++)
-                            for (int k = 0; k < es.number(); k++)
-                                Vm[j, k] = list[k].getIndex(j) - list[es.number()].getIndex(j);
-                        double[] delta = Linalg.Product(Vm, u);
-                        for (int j = 0; j < es.number(); j++)
-                            x[j] = list[es.number()].getIndex(j) + delta[j];
-                    }
-                    break;
-                case 1:
-                    for (int j = 0; j < es.number(); j++)
-                        x[j] = list[0].getIndex(j) * (rand.NextDouble() - 0.5) * 4.0;
-                    break;
-                case 2:
-                    for (int j = 0; j < es.number(); j++)
-                        x[j] = (rand.NextDouble() - 0.5) * 4.0;
-                    break;
-                case 3:
-                    for (int j = 0; j < es.number(); j++)
-                    {
-                        double min, max;
-                        min = max = list[0].getIndex(j);
-                        for (int k = 0; k < list.Count; k++)
-                        {
-                            double v = list[k].getIndex(j);
-                            if (v < min)
-                                min = v;
-                            if (v > max)
-                                max = v;
-                        }
-                        if (min == max)
-                        {
-                            if (min > 0.0)
-                            {
-                                min *= 0.8;
-                                max *= 1.2;
-                            }
-                            else if (min < 0.0)
-                            {
-                                min *= 1.2;
-                                max *= 0.8;
-                            }
-                            else
-                            {
-                                min = -1.0;
-                                max = 1.0;
-                            }
-                        }
-                        x[j] = (min + max) / 2.0 + (max - min) * (rand.NextDouble() - 0.5) * 3.0;
-                    }
-                    break;
+                AddSuggestedPoint_NearFirstPoint();
+                return;
             }
 
-            list.Add(new Point(x, es));
-            sn++;
-            if (sn > 3)
-                sn = 0;
+            double[] suggestedXs = new double[Equations.Count];
+
+            double[,] Mm = new double[Equations.Count, Equations.Count];
+            for (int j = 0; j < Equations.Count; j++)
+                for (int k = 0; k < Equations.Count; k++)
+                    Mm[j, k] = Points[k].F[j] - Points[Equations.Count].F[j];
+
+            double[] mF0 = new double[Equations.Count];
+            for (int j = 0; j < Equations.Count; j++)
+                mF0[j] = -Points[Equations.Count].F[j];
+
+            double[,] Vm = new double[Equations.Count, Equations.Count];
+            for (int j = 0; j < Equations.Count; j++)
+                for (int k = 0; k < Equations.Count; k++)
+                    Vm[j, k] = Points[k].X[j] - Points[Equations.Count].X[j];
+
+            double[] u = Linalg.Solve(Mm, mF0);
+            double[] delta = Linalg.Product(Vm, u);
+
+            for (int j = 0; j < Equations.Count; j++)
+                suggestedXs[j] = Points[Equations.Count].X[j] + delta[j];
+
+            Points.Add(new Point(suggestedXs, Equations));
+        }
+
+        /// <summary>
+        /// Add a point with Xs randomly offset from the Xs of the first point
+        /// </summary>
+        private void AddSuggestedPoint_NearFirstPoint()
+        {
+            const double randomness = 4; // TODO: could this value be optimized?
+
+            double[] suggestedXs = Points[0].X.Select(x => x * (rand.NextDouble() - 0.5) * randomness)
+                                              .ToArray();
+
+            Points.Add(new Point(suggestedXs, Equations));
+        }
+
+        /// <summary>
+        /// Add a point with totally random Xs
+        /// </summary>
+        private void AddSuggestedPoint_TotallyRandom()
+        {
+            const double randomness = 4; // TODO: could this value be optimized?
+
+            double[] suggestedXs = Enumerable.Range(0, Equations.Count)
+                                             .Select(x => (rand.NextDouble() - 0.5) * randomness)
+                                             .ToArray();
+
+            Points.Add(new Point(suggestedXs, Equations));
+        }
+
+        /// <summary>
+        /// Add a point with Xs randomized centered and scaled to the min/max of the existing Xs
+        /// </summary>
+        private void AddSuggestedPoint_ConsideringMinMax()
+        {
+            const double randomness = 3; // TODO: could this value be optimized?
+
+            double[] suggestedXs = new double[Equations.Count];
+
+            for (int equationIndex = 0; equationIndex < Equations.Count; equationIndex++)
+            {
+                var equationXs = Points.Select(x => x.X[equationIndex]);
+                double xMin = equationXs.Min();
+                double xMax = equationXs.Max();
+
+                if (xMin == xMax)
+                {
+                    if (xMin > 0)
+                        (xMin, xMax) = (xMin * .8, xMin * 1.2);
+                    else if (xMin > 0)
+                        (xMin, xMax) = (xMin * 1.2, xMin * 0.8);
+                    else
+                        (xMin, xMax) = (-1, 1);
+                }
+
+                double mean = (xMin + xMax) / 2.0;
+                double span = xMax - xMin;
+                double randomOffset = span * randomness * (rand.NextDouble() - 0.5);
+                suggestedXs[equationIndex] = mean + randomOffset;
+            }
+
+            Points.Add(new Point(suggestedXs, Equations));
         }
     }
 }

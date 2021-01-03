@@ -42,6 +42,9 @@ namespace LJPmath
             return ionList;
         }
 
+        /// <summary>
+        /// Calculate the LJP from an ion set and temperature.
+        /// </summary>
         public static LjpResult Ljp(List<Ion> ionList, double temperatureC = 25, bool autoSort = true, double timeoutMilliseconds = 5000)
         {
             foreach (Ion ion in ionList)
@@ -89,7 +92,7 @@ namespace LJPmath
 
             // calculate LJP
             double[] cLs = new double[phis.Length];
-            double ljp_V = Ljp(ionList, phis, cLs, temperatureC);
+            double ljp_V = SolveForLJP(ionList, phis, cLs, temperatureC);
             if (ljp_V == Double.NaN)
                 throw new Exception("ERROR: Singularity (calculation aborted)");
 
@@ -126,13 +129,12 @@ namespace LJPmath
             return result;
         }
 
-        // This function is balanced by the equation solver, not called directly by the user.
-        public static double Ljp(List<Ion> ionList, double[] startingPhis, double[] startingCLs, double temperatureC)
+        /// <summary>
+        /// WARNING: this method modifies input arrays (the last ion's C0 and all the CLs).
+        /// It is only to be called by the solver.
+        /// </summary>
+        public static double SolveForLJP(List<Ion> ionList, double[] startingPhis, double[] CLs, double temperatureC)
         {
-            double KT = Constants.boltzmann * (temperatureC + Constants.zeroCinK);
-
-            double cdadc = 1.0; // fine for low concentrations
-
             int ionCount = ionList.Count;
             int ionCountMinusOne = ionCount - 1;
             int ionCountMinusTwo = ionCount - 2;
@@ -145,7 +147,7 @@ namespace LJPmath
             if (startingPhis.Length != ionCount - 2)
                 throw new ArgumentException();
 
-            if (startingCLs.Length != ionCount - 2)
+            if (CLs.Length != ionCount - 2)
                 throw new ArgumentException();
 
             // populate charges, mus, and rhos from all ions except the last one
@@ -182,11 +184,11 @@ namespace LJPmath
             lastIon.c0 = rhoCl;
 
             // cycle to determine junction voltage
-
             double V = 0.0;
+            double KT = Constants.boltzmann * (temperatureC + Constants.zeroCinK);
+            double cdadc = 1.0; // fine for low concentrations
             for (double rhoK = KC0; ((dK > 0) ? rhoK <= KCL : rhoK >= KCL); rhoK += dK)
             {
-
                 rhoCl = -Linalg.ScalarProduct(rhos, charges) / zCl;
 
                 double DCl = lastIon.mu * KT * cdadc;
@@ -209,7 +211,7 @@ namespace LJPmath
 
                 if (Linalg.ScalarProduct(charges, v) + zCl * vCl == 0.0)
                 {
-                    return Double.NaN; // Singularity; abort calculation
+                    return double.NaN; // Singularity; abort calculation
                 }
 
                 double[,] identity = Linalg.Identity(ionCountMinusOne);
@@ -234,9 +236,9 @@ namespace LJPmath
 
             }
 
-            // modify CLs based on the rhos we calculated
+            // modify the input CLs based on the rhos we calculated
             for (int j = 0; j < ionCountMinusTwo; j++)
-                startingCLs[j] = rhos[j];
+                CLs[j] = rhos[j];
 
             return V;
         }

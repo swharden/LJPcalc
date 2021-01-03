@@ -1,66 +1,30 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
+using System.Linq;
 
 namespace LJPmath
 {
     class Point : IComparable<Point>
     {
-        public double[] x;
-        public double[] f;
-        public double m;
+        public readonly double[] X;
+        public readonly double[] F;
+        public readonly double M;
 
         public Point(double[] x, PhiEquations es)
         {
-
-            this.x = x;
-            f = new double[es.number()];
-            try
-            {
-                es.equations(x, f);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.StackTrace);
-                f[0] = 10000.0;
-            }
-
-            m = 0.0;
-            for (int j = 0; j < es.number(); j++)
-            {
-                double mm = Math.Abs(f[j]);
-                if (mm > m)
-                    m = mm;
-            }
+            X = x;
+            F = new double[es.Count];
+            es.equations(x, F);
+            M = F.Select(f => Math.Abs(f)).Max();
         }
 
         public int CompareTo(Point p)
         {
-            // TODO: one liner
-            if (m < p.m)
+            if (M < p.M)
                 return -1;
-            else if (m > p.m)
+            else if (M > p.M)
                 return 1;
             else
                 return 0;
-        }
-
-        // TODO: remove getters and setters
-        public double getM()
-        {
-            return m;
-        }
-
-        public double getIndex(int n)
-        {
-            return x[n];
-        }
-
-        public double getF(int n)
-        {
-            return f[n];
         }
     }
 }

@@ -6,23 +6,25 @@ namespace LJPmath
 {
     class PhiEquations
     {
-        private List<Ion> list;
-        private int ionCount;
-        private double[] sigma;
-        private double temperatureC;
+        public readonly int Count;
+        private readonly double TemperatureC;
 
-        public PhiEquations(List<Ion> list, double temperatureC)
+        private readonly List<Ion> Ions;
+        private readonly int IonCount;
+        private readonly double[] Sigmas;
+
+        public PhiEquations(List<Ion> ions, double temperatureC)
         {
-            this.list = list;
-            ionCount = list.Count;
-
-            this.temperatureC = temperatureC;
+            Ions = ions;
+            TemperatureC = temperatureC;
+            IonCount = ions.Count;
+            Count = Ions.Count - 2;
 
             // determine smallest nonzero cL of all ions
             double smallestCL = Double.PositiveInfinity;
-            for (int j = 0; j < ionCount; j++)
+            for (int j = 0; j < IonCount; j++)
             {
-                Ion ion = list[j];
+                Ion ion = ions[j];
                 bool ionHasCL = (ion.cL > 0);
                 if (ionHasCL)
                 {
@@ -32,31 +34,23 @@ namespace LJPmath
             }
 
             // set sigmas to cLs (unless cL is zero, then use smallest nonzero cL)
-            sigma = new double[ionCount];
-            for (int j = 0; j < ionCount; j++)
+            Sigmas = new double[IonCount];
+            for (int j = 0; j < IonCount; j++)
             {
-                Ion ion = list[j];
+                Ion ion = ions[j];
                 bool ionHasCL = (ion.cL > 0);
                 if (ionHasCL)
-                    sigma[j] = 0.01 * Math.Abs(ion.cL);
+                    Sigmas[j] = 0.01 * Math.Abs(ion.cL);
                 else
-                    sigma[j] = 0.01 * smallestCL;
+                    Sigmas[j] = 0.01 * smallestCL;
             }
         }
 
         public void equations(double[] x, double[] f)
         {
-            Calculate.Ljp(list, x, f, temperatureC);
-            for (int j = 0; j < ionCount - 2; j++)
-            {
-                Ion ion = list[j];
-                f[j] = (f[j] - ion.cL) / sigma[j];
-            }
-        }
-
-        public int number()
-        {
-            return list.Count - 2;
+            Calculate.SolveForLJP(Ions, x, f, TemperatureC);
+            for (int j = 0; j < IonCount - 2; j++)
+                f[j] = (f[j] - Ions[j].cL) / Sigmas[j];
         }
     }
 }

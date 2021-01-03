@@ -352,6 +352,40 @@ namespace LJPtest
         }
 
         [Test]
+        public void Test_DifficultSet_Owen2013()
+        {
+            // This ion set came from https://www.nature.com/articles/nature12330
+
+            var ionSet = new List<Ion>()
+            {
+                new Ion("K", 50, 3),
+                new Ion("Gluconate", 50, 0),
+                new Ion("Cs", 70, 0),
+                new Ion("HSO3", 70, 0),
+                new Ion("TEA (TetraethylAmmonium)", 10, 10),
+                new Ion("Cl", 12, 131.6),
+                new Ion("Mg", 5, 1.3),
+                new Ion("HEPES", 10, 0),
+                new Ion("EGTA(2-)", .3, 0),
+                new Ion("Tris", 10, 0),
+                new Ion("ATP (Adenosine 5'-Triphosphate)", 4, 0),
+                new Ion("Na", 0.3, 139.25),
+                new Ion("HCO3", 0, 26),
+                new Ion("H2PO4", 0, 1.25),
+                new Ion("Ca", 0, 2),
+                new Ion("4-AP (4-aminopyridine)", 0, 5),
+            };
+
+            var ionTable = new IonTable();
+            ionSet = ionTable.Lookup(ionSet);
+
+            var ljp = Calculate.Ljp(ionSet, temperatureC: 33);
+            Assert.AreEqual(15.1 - 3.3, ljp.mV, 0.5);
+
+            Console.WriteLine(ljp.report);
+        }
+
+        [Test]
         public void Test_KnownIonSets_LjpWithinExpectedRange()
         {
             var ionTable = new IonTable();
