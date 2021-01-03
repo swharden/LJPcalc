@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <link href="bootstrap.min.css" rel="stylesheet" >
+    <link href="bootstrap.min.css" rel="stylesheet">
     <script src="bootstrap.bundle.min.js"></script>
 </head>
 
@@ -12,17 +12,6 @@
             <h1 class="display-4">LJPcalc</h1>
             <h4 class="lead">Liquid Junction Potential Calculator</h4>
         </header>
-
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Dropdown button
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-          </div>
 
         <section class="">
             <table class="table table-sm table-borderless table-hover">
@@ -384,7 +373,23 @@
                         <td><input class="form-control" value="+2" /></td>
                         <td><input class="form-control" value="123.45" /></td>
                         <td><button class="col btn btn-primary">Add</button></td>
-                        <td></td>
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Table
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <li><a class="dropdown-item" href="#">Clear</a></li>
+                                    <li><a class="dropdown-item" href="#">Reset</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#">Patch-Clamp K-glu</a></li>
+                                    <li><a class="dropdown-item" href="#">Patch-Clamp high [Cl]</a></li>
+                                    <li><a class="dropdown-item" href="#">JPCalcWin manual page 7</a></li>
+                                    <li><a class="dropdown-item" href="#">AxoBits Article (Issue 39, page 8)</a></li>
+                                </ul>
+                            </div>
+                        </td>
                         <td></td>
                     </tr>
                 </tbody>
@@ -439,7 +444,7 @@ HEPES              | -1     | 22.05              | 5            | 4.9990023
 Gluconate          | -1     | 24.255             | 145          | 0            
 Cl                 | -1     | 76.31              | 10           | 148.789725 
                 </pre>
-            </div>
+        </div>
         </section>
 
         <hr class="m-5 invisible">

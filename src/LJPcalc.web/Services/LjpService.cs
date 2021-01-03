@@ -11,8 +11,8 @@ namespace LJPcalc.web.Services
     {
         public Action OnSolutionLabelChange;
         public Action OnSelectedIonChange;
-        public Action OnIonTableChange;
 
+        public readonly List<SampleIonSet> SampleIonSets = new List<SampleIonSet>();
         public readonly List<UserIon> IonList = new List<UserIon>();
         public readonly UserIon IonToAdd = new UserIon();
         public readonly UserTemperature Temperature = new UserTemperature();
@@ -30,7 +30,17 @@ namespace LJPcalc.web.Services
             }
         }
 
-        public void AddSelectedIon() => IonList.Add(IonToAdd.Copy());
+        public void AddSelectedIon()
+        {
+            IonList.Add(IonToAdd.Copy());
+            LoadSampleSet(null);
+        }
+
+        public void RemoveIon(UserIon ion)
+        {
+            IonList.Remove(ion);
+            LoadSampleSet(null);
+        }
 
         public string LabelType;
         public bool UseGenericLabels => LabelType == "generic";
@@ -45,29 +55,57 @@ namespace LJPcalc.web.Services
 
         public LjpService()
         {
-            var samples = new SampleIonSet();
-            IonList.AddRange(samples.PotassiumGluconate.Ions);
+            var knownSets = new KnownIonSets(KnownIons.Table);
+            foreach (var knownSet in knownSets.ionSets)
+                SampleIonSets.Add(SampleIonSet.FromKnownSet(knownSet));
+            LoadDefaultSet();
+        }
+
+        public void LoadDefaultSet() => LoadSampleSet(SampleIonSets[3]);
+
+        public string SampleSetTitle;
+        public string SampleSetDescription;
+        public void LoadSampleSet(SampleIonSet sampleSet)
+        {
+            if (sampleSet is null)
+            {
+                SampleSetTitle = null;
+                SampleSetDescription = null;
+                return;
+            }
+
+            IonList.Clear();
+            IonList.AddRange(sampleSet.Ions);
+            SampleSetTitle = sampleSet.Title;
+            SampleSetDescription = sampleSet.Description + " This ion set is expected to have a " +
+               $"LJP near near {sampleSet.LjpMV} mV at {sampleSet.TemperatureC} C.";
         }
 
         public string Version =>
             typeof(Ion).Assembly.GetName().Version.Major + "." +
             typeof(Ion).Assembly.GetName().Version.Minor;
 
-        public void CalculateLJP()
+        public void CalculateLJP(int timeoutSec = 30)
         {
             ResultLJP = double.NaN;
             ResultDetails = null;
             ResultErrorMessage = null;
 
-            if (!IsValidIonList)
-            {
-                ResultErrorMessage = "All ions in the table must be valid";
-                return;
-            }
-
             if (IonList.Count < 2)
             {
                 ResultErrorMessage = "There must be at least 2 ions to calculate LJP";
+                return;
+            }
+
+            if (IonList.Any(x => x.Charge.Charge == 0))
+            {
+                ResultErrorMessage = "Molecules without charge must be removed from the table. They are not ions!";
+                return;
+            }
+
+            if (IonList.Any(x => x.C0.Concentration == 0 && x.CL.Concentration == 0))
+            {
+                ResultErrorMessage = "Ions with no concentration on both sides must be removed from the table.";
                 return;
             }
 
@@ -88,12 +126,26 @@ namespace LJPcalc.web.Services
                 return;
             }
 
+            if (!IsValidIonList)
+            {
+                ResultErrorMessage = "All ions in the table must be valid. Invalid ions: " +
+                    string.Join(",", IonList.Where(x => !x.IsValid).Select(x => x.Name.Input));
+                return;
+            }
+
             try
             {
                 var ions = IonList.Select(x => x.ToIon()).ToList();
-                var result = Calculate.Ljp(ions, Temperature.TemperatureC, timeoutMilliseconds: 25_000);
+                var result = Calculate.Ljp(ions, Temperature.TemperatureC, timeoutMilliseconds: timeoutSec * 1e3);
                 ResultLJP = result.mV;
                 ResultDetails = result.report;
+            }
+            catch (OperationCanceledException)
+            {
+                ResultErrorMessage = $"ERROR: The solver was unable to calculate LJP within {timeoutSec} seconds. " +
+                    "To reduce complexity of the system consider removing ions with small concentrations that " +
+                    "contribute little to the overall LJP. Alternatively, consider using the desktop application, " +
+                    "as it is significantly more powerful than LJPcalc running in the browser.";
             }
             catch (Exception ex)
             {

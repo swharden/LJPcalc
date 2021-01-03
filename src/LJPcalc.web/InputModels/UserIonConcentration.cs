@@ -15,7 +15,7 @@ namespace LJPcalc.web.InputModels
 
         public string Input
         {
-            get => IsValid ? Concentration.ToString() : input;
+            get => input;
             set
             {
                 input = value;

@@ -5,7 +5,7 @@ namespace LJPcalc.web.Services
 {
     public class IonLookup
     {
-        private readonly IonTable Table;
+        public readonly IonTable Table;
 
         public IonLookup()
         {

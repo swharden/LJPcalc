@@ -20,7 +20,7 @@
 
 <div class=" text-center @(double.IsNaN(LjpService.ResultLJP) || Calculating ? "invisible" : "")">
     <div class="display-4 m-2 mt-5">LJP = @Math.Round(LjpService.ResultLJP, 3) mV</div>
-    <pre class="m-2 mt-5 text-muted d-inline-block text-left">@LjpService.ResultDetails</pre>
+    <pre class="m-2 mt-5 text-muted d-inline-block text-start">@LjpService.ResultDetails</pre>
 </div>
 
 @code {
@@ -29,6 +29,7 @@
 
     private async Task CalculateLJP()
     {
+        LjpService.LoadSampleSet(null);
         Calculating = true;
         StateHasChanged();
 
