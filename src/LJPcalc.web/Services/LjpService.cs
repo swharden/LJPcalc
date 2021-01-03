@@ -48,6 +48,7 @@ namespace LJPcalc.web.Services
         public double ResultLJP = double.NaN;
         public string ResultDetails;
         public string ResultErrorMessage;
+        public LjpResult Result;
 
         public bool IsValidIonList => IonList.All(x => x.IsValid);
 
@@ -90,6 +91,7 @@ namespace LJPcalc.web.Services
             ResultLJP = double.NaN;
             ResultDetails = null;
             ResultErrorMessage = null;
+            Result = null;
 
             if (IonList.Count < 2)
             {
@@ -150,6 +152,7 @@ namespace LJPcalc.web.Services
                 var result = Calculate.Ljp(ions, Temperature.TemperatureC, timeoutMilliseconds: timeoutSec * 1e3);
                 ResultLJP = result.mV;
                 ResultDetails = result.report;
+                Result = result;
             }
             catch (OperationCanceledException)
             {

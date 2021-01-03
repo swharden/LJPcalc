@@ -20,8 +20,70 @@
 
 <div class=" text-center @(double.IsNaN(LjpService.ResultLJP) || Calculating ? "invisible" : "")">
     <div class="display-4 m-2 mt-5">LJP = @Math.Round(LjpService.ResultLJP, 3) mV</div>
-    <pre class="m-2 mt-5 text-muted d-inline-block text-start">@LjpService.ResultDetails</pre>
 </div>
+
+@if (LjpService.Result != null)
+{
+    <button class="btn btn-secondary btn-lg mt-5" type="button" data-bs-toggle="collapse"
+            data-bs-target="#calculationDetails" aria-expanded="false" aria-controls="calculationDetails">
+        Calculation Details
+    </button>
+    <div class="collapse m-4" id="calculationDetails">
+        <div class="card card-body bg-transparent border-0">
+            <ul>
+                <li>Concentrations were slightly adjusted to achieve electroneutrality.</li>
+                <li>Equations were solved in @Math.Round(LjpService.Result.benchmark_s, 5) seconds.</li>
+                <li>
+                    LJP at @LjpService.Result.temperatureC C (@LjpService.Result.temperatureK K) = @LjpService.Result.mV mV
+                </li>
+                <li>
+                    LJP was calculated according to the stationary Nernst-Planck equation.
+                    This method is typically regarded as superior to the simpler Henderson equation used
+                    by most commercial LJP calculators. Both equations produce nearly identical LJPs,
+                    but the Henderson equation becomes inaccurate as ion concentrations increase
+                    and when polyvalent ions are involved. 
+                    See <a href="https://arxiv.org/abs/1403.3640">Marino et al., 2014</a> for details.
+                </li>
+                @if (LjpService.Result.FirstIonM > 1)
+                {
+                    <li>
+                        &#9888;&#65039; WARNING: the equation solver timed out before finding a set of phis that fully satisfied
+                        the given ion table. Although  the LJP calculated is probably close to accurate, a fully solved
+                        set of equations is preferred. Balanced phis are more difficult to calculate the more ions there are, so
+                        removing unecessary ions may help reach a solution faster. Remove ions with small concentrations because
+                        they minimally contribute to the total LJP. Alternatively, use the desktop client which is more powerful
+                        and can solve equations for complex ion sets much faster.
+                    </li>
+                }
+            </ul>
+            <table class="table table-sm table-hover font-monospace border mt-4">
+                <thead>
+                    <tr>
+                        <td class="h3">Ion</td>
+                        <td class="h3">z</td>
+                        <td class="h3">μ</td>
+                        <td class="h3">Φ</td>
+                        <td class="h3">C0</td>
+                        <td class="h3">CL</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (LJPmath.Ion ion in LjpService.Result.ionListSolved)
+                    {
+                        <tr>
+                            <td>@ion.name</td>
+                            <td>@ion.charge</td>
+                            <td>@ion.mu</td>
+                            <td>@ion.phi</td>
+                            <td>@ion.c0</td>
+                            <td>@ion.cL</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
 
 @code {
 
@@ -40,4 +102,5 @@
 
         Calculating = false;
     }
+
 }

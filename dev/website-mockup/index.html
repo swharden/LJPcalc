@@ -382,7 +382,9 @@
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <li><a class="dropdown-item" href="#">Clear</a></li>
                                     <li><a class="dropdown-item" href="#">Reset</a></li>
-                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
                                     <li><a class="dropdown-item" href="#">Patch-Clamp K-glu</a></li>
                                     <li><a class="dropdown-item" href="#">Patch-Clamp high [Cl]</a></li>
                                     <li><a class="dropdown-item" href="#">JPCalcWin manual page 7</a></li>
@@ -421,30 +423,107 @@
                 </div>
 
                 <div class="text-center">
-                    <button class="col btn btn-primary" disabled>Calculate LJP</button>
+                    <button class="col btn btn-primary" disabled>
+                        Calculate LJP
+                    </button>
+
+                    <button class="btn btn-secondary" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#calculationDetails" aria-expanded="false" aria-controls="calculationDetails">
+                        details
+                    </button>
                 </div>
 
                 <div class="display-2">
                     LJP = 14.345 mV
                 </div>
+
             </div>
         </section>
 
-        <div class="m-2 mt-5 text-center">
-            <pre class="d-inline-block text-muted mt-5 text-start">
-Analysis details:
-
-Name               | Charge | Conductivity (E-4) | C0 (mM)      | CL (mM)      
--------------------|--------|--------------------|--------------|--------------
-K                  | +1     | 73.5               | 145          | 2.8098265    
-Na                 | +1     | 50.11              | 13           | 144.9794365
-Mg                 | +2     | 53.06              | 1            | 1.9998212    
-Ca                 | +2     | 59.5               | 0            | 0.9999109 
-HEPES              | -1     | 22.05              | 5            | 4.9990023    
-Gluconate          | -1     | 24.255             | 145          | 0            
-Cl                 | -1     | 76.31              | 10           | 148.789725 
-                </pre>
+        <div class="collapse" id="calculationDetails">
+            <div class="card card-body bg-transparent border-0">
+                <table class="table table-sm table-hover font-monospace">
+                    <thead>
+                        <tr>
+                            <td class="h3">Ion</td>
+                            <td class="h3">Z</td>
+                            <td class="h3">Mu</td>
+                            <td class="h3">Cond</td>
+                            <td class="h3">Phi</td>
+                            <td class="h3">C0</td>
+                            <td class="h3">CL</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>K</td>
+                            <td>1</td>
+                            <td>4.754618208564326</td>
+                            <td>0.007350000000000001</td>
+                            <td>-224.69276968222982</td>
+                            <td>145</td>
+                            <td>2.817964369615083</td>
+                        </tr>
+                        <tr>
+                            <td>Na</td>
+                            <td>1</td>
+                            <td>3.241549910628004</td>
+                            <td>0.005011</td>
+                            <td>285.92903240176037</td>
+                            <td>13</td>
+                            <td>144.9562143568475</td>
+                        </tr>
+                        <tr>
+                            <td>Mg</td>
+                            <td>2</td>
+                            <td>1.7161907629008377</td>
+                            <td>0.005306000000000001</td>
+                            <td>2.4687982536141715</td>
+                            <td>1</td>
+                            <td>2.000330628096924</td>
+                        </tr>
+                        <tr>
+                            <td>Ca</td>
+                            <td>2</td>
+                            <td>1.9244883225141318</td>
+                            <td>0.00595</td>
+                            <td>1.6112852557194015</td>
+                            <td>0</td>
+                            <td>1.0010611188374094</td>
+                        </tr>
+                        <tr>
+                            <td>HEPES</td>
+                            <td>-1</td>
+                            <td>1.4263854625692975</td>
+                            <td>0.002205</td>
+                            <td>-2.1385621751664257</td>
+                            <td>5</td>
+                            <td>4.997211426221574</td>
+                        </tr>
+                        <tr>
+                            <td>Gluconate</td>
+                            <td>-1</td>
+                            <td>1.5690240088262275</td>
+                            <td>0.0024255</td>
+                            <td>-145</td>
+                            <td>145</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>Cl</td>
+                            <td>-1</td>
+                            <td>4.936393408102635</td>
+                            <td>0.007631000000000001</td>
+                            <td>216.53499191336414</td>
+                            <td>10</td>
+                            <td>148.77975079410967</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
+
+
         </section>
 
         <hr class="m-5 invisible">

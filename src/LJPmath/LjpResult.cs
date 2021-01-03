@@ -49,12 +49,25 @@ namespace LJPmath
             return $"LJP result: {mV} mV";
         }
 
-        public void Finished(List<Ion> ionList, double ljpVolts, double FirstIonM)
+        public string GetTimeoutWarning()
+        {
+            StringBuilder txt = new StringBuilder();
+            txt.AppendLine($"WARNING: First ion's M ({Math.Round(FirstIonM, 3)}) did not reach 1.");
+            txt.AppendLine("  This indicates the solver may have timed out while balancing phis.");
+            txt.AppendLine("  LJP may be accurate, but a fully solved set of equations is preferred.");
+            txt.AppendLine("  Reduce the number of ions in the list to achieve this.");
+            txt.AppendLine("  Ions with small concentrations can be removed without affecting LJP much.");
+            return txt.ToString();
+        }
+
+        public double FirstIonM = double.NaN;
+        public void Finished(List<Ion> ionList, double ljpVolts, double firstIonM)
         {
             stopwatch.Stop();
             benchmark_s = (double)stopwatch.ElapsedTicks / Stopwatch.Frequency;
 
             V = ljpVolts;
+            FirstIonM = firstIonM;
 
             ionListSolved.Clear();
             foreach (Ion ion in ionList)
@@ -69,13 +82,7 @@ namespace LJPmath
             txt.AppendLine();
             txt.AppendLine($"Equations were solved in {benchmark}");
             if (FirstIonM > 1)
-            {
-                txt.AppendLine($"WARNING: First ion's M ({Math.Round(FirstIonM, 3)}) did not reach 1.");
-                txt.AppendLine("  This indicates the solver may have timed out while balancing phis.");
-                txt.AppendLine("  LJP may be accurate, but a fully solved set of equations is preferred.");
-                txt.AppendLine("  Reduce the number of ions in the list to achieve this.");
-                txt.AppendLine("  Ions with small concentrations can be removed without affecting LJP much.");
-            }
+                txt.AppendLine(GetTimeoutWarning());
             txt.AppendLine($"LJP at {temperatureC} C ({temperatureK} K) = {mV} mV");
 
             report = txt.ToString().TrimEnd();
