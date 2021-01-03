@@ -5,12 +5,12 @@ using System.Text;
 
 namespace LJPmath
 {
-    public class Solver
+    class Solver
     {
-        private readonly IEquationSystem es;
+        private readonly PhiEquations es;
         private readonly Random rand = new Random(0);
 
-        public Solver(IEquationSystem es)
+        public Solver(PhiEquations es)
         {
             this.es = es;
         }

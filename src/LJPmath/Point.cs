@@ -6,13 +6,13 @@ using System.Text;
 
 namespace LJPmath
 {
-    public class Point : IComparable<Point>
+    class Point : IComparable<Point>
     {
         public double[] x;
         public double[] f;
         public double m;
 
-        public Point(double[] x, IEquationSystem es)
+        public Point(double[] x, PhiEquations es)
         {
 
             this.x = x;

@@ -80,7 +80,7 @@ namespace LJPmath
             // all phis except the last two get solved
             if (ionCount > 2)
             {
-                var phiEquations = new PhiEquations(ionList, temperatureC) as IEquationSystem;
+                var phiEquations = new PhiEquations(ionList, temperatureC);
                 Solver s = new Solver(phiEquations);
                 Debug.WriteLine("solving phis...");
                 s.Solve(phis, timeoutMilliseconds);

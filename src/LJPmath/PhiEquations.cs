@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LJPmath
 {
-    class PhiEquations : IEquationSystem
+    class PhiEquations
     {
         private List<Ion> list;
         private int ionCount;
