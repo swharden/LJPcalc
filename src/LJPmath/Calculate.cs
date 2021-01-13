@@ -8,45 +8,8 @@ namespace LJPmath
 {
     public class Calculate
     {
-        private static Ion[] AutoSort(Ion[] inputIons)
-        {
-            List<Ion> ionList = inputIons.ToList();
-
-            // largest cL should be last
-            int indexLargestCl = 0;
-            double largestCl = 0;
-            for (int i = 0; i < ionList.Count; i++)
-            {
-                if (ionList[i].cL > largestCl)
-                {
-                    indexLargestCl = i;
-                    largestCl = ionList[i].cL;
-                }
-            }
-            Ion ionLargestCl = ionList[indexLargestCl];
-            ionList.RemoveAt(indexLargestCl);
-
-            // largest diff should be second from last
-            int indexLargestCdiff = 0;
-            double largestCdiff = 0;
-            for (int i = 0; i < ionList.Count; i++)
-            {
-                if (ionList[i].cDiff > largestCdiff)
-                {
-                    indexLargestCdiff = i;
-                    largestCdiff = ionList[i].cDiff;
-                }
-            }
-            Ion ionLargestCdiff = ionList[indexLargestCdiff];
-            ionList.RemoveAt(indexLargestCdiff);
-
-            ionList.Add(ionLargestCdiff);
-            ionList.Add(ionLargestCl);
-            return ionList.ToArray();
-        }
-
         [Obsolete("use the method that takes an array, not a list")]
-        public static LjpResult Ljp(List<Ion> ionList, double temperatureC = 25, bool autoSort = true, double timeoutMilliseconds = 5000, bool throwIfTimeout = false) => 
+        public static LjpResult Ljp(List<Ion> ionList, double temperatureC = 25, bool autoSort = true, double timeoutMilliseconds = 5000, bool throwIfTimeout = false) =>
             Ljp(ionList.ToArray(), temperatureC, autoSort, timeoutMilliseconds, throwIfTimeout);
 
         /// <summary>
@@ -54,40 +17,33 @@ namespace LJPmath
         /// </summary>
         public static LjpResult Ljp(Ion[] ions, double temperatureC = 25, bool autoSort = true, double timeoutMilliseconds = 5000, bool throwIfTimeout = false)
         {
-            foreach (Ion ion in ions)
-            {
-                if (ion.charge == 0)
-                    throw new ArgumentException("ion charge cannot be zero");
-                if (ion.mu == 0)
-                    throw new ArgumentException("ion mu cannot be zero");
-            }
+            if (ions.Any(x => x.charge == 0))
+                throw new ArgumentException("ion charge cannot be zero");
+
+            if (ions.Any(x => x.mu == 0))
+                throw new ArgumentException("ion mu cannot be zero");
 
             if (autoSort)
-                ions = AutoSort(ions);
+                ions = PreCalculationIonListSort(ions);
 
-            LjpResult result = new LjpResult(ions, temperatureC);
-
-            int ionCount = ions.Length;
-            int ionCountMinusOne = ionCount - 1;
-            int ionCountMinusTwo = ionCount - 2;
-
-            Ion secondFromLastIon = ions[ionCount - 2];
-            Ion LastIon = ions[ionCount - 1];
+            Ion secondFromLastIon = ions[ions.Length - 2];
+            Ion LastIon = ions[ions.Length - 1];
 
             if (secondFromLastIon.c0 == secondFromLastIon.cL)
                 throw new InvalidOperationException("second from last ion concentrations cannot be equal");
 
-            //// PHIS HERE
+            // create this now to preserve original stats about each ion
+            LjpResult result = new LjpResult(ions, temperatureC);
+
+            // solve for phis (if the number of ions is greater than 2)
             var phiSolution = new Solver.PhiSolver(ions, temperatureC, timeoutMilliseconds, throwIfTimeout);
             double[] phis = phiSolution.SolvedPhis;
 
-            // calculate LJP
+            // calculate LJP (modifies one of the phis and all the CLs)
             double[] cLs = new double[phis.Length];
             double ljp_V = SolveForLJP(ions, phis, cLs, temperatureC);
-            if (double.IsNaN(ljp_V))
-                throw new Exception("ERROR: Singularity (calculation aborted)");
 
-            // update ions based on what was just calculated
+            // update ions based on new phis and CLs (all ions except the last two)
             for (int j = 0; j < phis.Length; j++)
             {
                 Ion ion = ions[j];
@@ -99,24 +55,14 @@ namespace LJPmath
             secondFromLastIon.phi = secondFromLastIon.cL - secondFromLastIon.c0;
 
             // last ion's phi is calculated from all the phis before it
-            double totalChargeWeightedPhi = 0.0;
-            for (int j = 0; j < ionCountMinusOne; j++)
-            {
-                Ion ion = ions[j];
-                totalChargeWeightedPhi += ion.phi * ion.charge;
-            }
-            LastIon.phi = -totalChargeWeightedPhi / LastIon.charge;
+            LastIon.phi = -ions.Take(ions.Length - 1).Sum(x => x.phi * x.charge) / LastIon.charge;
 
             // last ion's cL is calculated from all the cLs before it
-            double totalChargeWeightedCL = 0.0;
-            for (int j = 0; j < ionCountMinusOne; j++)
-            {
-                Ion ion = ions[j];
-                totalChargeWeightedCL += ion.cL * ion.charge;
-            }
-            LastIon.cL = -totalChargeWeightedCL / LastIon.charge;
+            LastIon.cL = -ions.Take(ions.Length - 1).Sum(x => x.cL * x.charge) / LastIon.charge;
 
+            // load new details into the result
             result.Finished(ions, ljp_V, phiSolution.SolutionM);
+
             return result;
         }
 
@@ -232,6 +178,28 @@ namespace LJPmath
                 CLs[j] = rhos[j];
 
             return V;
+        }
+
+        /// <summary>
+        /// This strategy places the ion with the largest difference between C0 and CL last
+        /// and the remaining ion with the largest CL second to last.
+        /// </summary>
+        public static Ion[] PreCalculationIonListSort(Ion[] inputIons)
+        {
+            List<Ion> ionList = inputIons.ToList();
+
+            // absolute largest cL should be last
+            Ion ionWithLargestCL = ionList.OrderBy(x => x.cL).Last();
+            ionList.Remove(ionWithLargestCL);
+
+            // largest diff should be second from last
+            Ion ionWithLargestCDiff = ionList.OrderBy(x => x.cDiff).Last();
+            ionList.Remove(ionWithLargestCDiff);
+
+            // place the removed ions back in the proper order
+            ionList.Add(ionWithLargestCDiff);
+            ionList.Add(ionWithLargestCL);
+            return ionList.ToArray();
         }
     }
 }

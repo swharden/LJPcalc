@@ -37,7 +37,7 @@ namespace LJPmath.Solver
         public double Solve(double[] x, double timeoutMilliseconds, bool throwIfTimeout)
         {
             if (EquationCount == 0)
-                return double.NaN;
+                throw new Exception("equation count cannot be 0");
 
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
