@@ -7,7 +7,7 @@ namespace LJPmath
 {
     class PhiEquationSystem : IEquationSystem
     {
-        public int Count { get; private set; }
+        public int GetEquationCount { get; private set; }
         private readonly double TemperatureC;
 
         private readonly List<Ion> Ions;
@@ -18,7 +18,7 @@ namespace LJPmath
             Ions = ions;
             TemperatureC = temperatureC;
             IonCount = ions.Count;
-            Count = Ions.Count - 2;
+            GetEquationCount = Ions.Count - 2;
         }
 
         /// <summary>

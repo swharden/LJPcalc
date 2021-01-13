@@ -12,7 +12,7 @@ namespace LJPmath
         public Point(double[] x, IEquationSystem es)
         {
             X = x;
-            F = new double[es.Count];
+            F = new double[es.GetEquationCount];
             es.Equations(x, F);
             M = F.Select(f => Math.Abs(f)).Max();
         }

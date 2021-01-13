@@ -11,6 +11,7 @@ namespace LJPmath
         private readonly IEquationSystem Equations;
         private readonly List<Point> Points = new List<Point>();
         private readonly Random rand = new Random(0);
+        private readonly int EquationCount;
 
         private int Iterations;
         private readonly List<Action> AddPointMethods;
@@ -19,6 +20,7 @@ namespace LJPmath
         public EquationSolver(IEquationSystem equations)
         {
             Equations = equations;
+            EquationCount = equations.GetEquationCount;
 
             AddPointMethods = new List<Action>()
             {
@@ -34,7 +36,7 @@ namespace LJPmath
         /// </summary>
         public double Solve(double[] x, double timeoutMilliseconds, bool throwIfTimeout)
         {
-            if (Equations.Count == 0)
+            if (EquationCount == 0)
                 return double.NaN;
 
             Stopwatch stopwatch = new Stopwatch();
@@ -45,7 +47,7 @@ namespace LJPmath
             {
                 AddSuggestedPoint();
                 Points.Sort();
-                RemovePointsAfter(Equations.Count * 4);
+                RemovePointsAfter(EquationCount * 4);
 
                 Debug.WriteLine(Points[0].M);
                 if (stopwatch.ElapsedMilliseconds > timeoutMilliseconds)
@@ -56,7 +58,7 @@ namespace LJPmath
                 }
             }
 
-            for (int j = 0; j < Equations.Count; j++)
+            for (int j = 0; j < EquationCount; j++)
                 x[j] = Points[0].X[j];
 
             return Points[0].M;
@@ -73,33 +75,33 @@ namespace LJPmath
         /// </summary>
         private void AddSuggestedPoint_ShiftedBySolutionDelta()
         {
-            if (Points.Count < Equations.Count + 1)
+            if (Points.Count < EquationCount + 1)
             {
                 AddSuggestedPoint_NearFirstPoint();
                 return;
             }
 
-            double[] suggestedXs = new double[Equations.Count];
+            double[] suggestedXs = new double[EquationCount];
 
-            double[,] Mm = new double[Equations.Count, Equations.Count];
-            for (int j = 0; j < Equations.Count; j++)
-                for (int k = 0; k < Equations.Count; k++)
-                    Mm[j, k] = Points[k].F[j] - Points[Equations.Count].F[j];
+            double[,] Mm = new double[EquationCount, EquationCount];
+            for (int j = 0; j < EquationCount; j++)
+                for (int k = 0; k < EquationCount; k++)
+                    Mm[j, k] = Points[k].F[j] - Points[EquationCount].F[j];
 
-            double[] mF0 = new double[Equations.Count];
-            for (int j = 0; j < Equations.Count; j++)
-                mF0[j] = -Points[Equations.Count].F[j];
+            double[] mF0 = new double[EquationCount];
+            for (int j = 0; j < EquationCount; j++)
+                mF0[j] = -Points[EquationCount].F[j];
 
-            double[,] Vm = new double[Equations.Count, Equations.Count];
-            for (int j = 0; j < Equations.Count; j++)
-                for (int k = 0; k < Equations.Count; k++)
-                    Vm[j, k] = Points[k].X[j] - Points[Equations.Count].X[j];
+            double[,] Vm = new double[EquationCount, EquationCount];
+            for (int j = 0; j < EquationCount; j++)
+                for (int k = 0; k < EquationCount; k++)
+                    Vm[j, k] = Points[k].X[j] - Points[EquationCount].X[j];
 
             double[] u = Linalg.Solve(Mm, mF0);
             double[] delta = Linalg.Product(Vm, u);
 
-            for (int j = 0; j < Equations.Count; j++)
-                suggestedXs[j] = Points[Equations.Count].X[j] + delta[j];
+            for (int j = 0; j < EquationCount; j++)
+                suggestedXs[j] = Points[EquationCount].X[j] + delta[j];
 
             Points.Add(new Point(suggestedXs, Equations));
         }
@@ -124,7 +126,7 @@ namespace LJPmath
         {
             const double randomness = 4; // TODO: could this value be optimized?
 
-            double[] suggestedXs = Enumerable.Range(0, Equations.Count)
+            double[] suggestedXs = Enumerable.Range(0, EquationCount)
                                              .Select(x => (rand.NextDouble() - 0.5) * randomness)
                                              .ToArray();
 
@@ -138,9 +140,9 @@ namespace LJPmath
         {
             const double randomness = 3; // TODO: could this value be optimized?
 
-            double[] suggestedXs = new double[Equations.Count];
+            double[] suggestedXs = new double[EquationCount];
 
-            for (int equationIndex = 0; equationIndex < Equations.Count; equationIndex++)
+            for (int equationIndex = 0; equationIndex < EquationCount; equationIndex++)
             {
                 var equationXs = Points.Select(x => x.X[equationIndex]);
                 double xMin = equationXs.Min();
