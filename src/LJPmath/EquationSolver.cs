@@ -6,9 +6,9 @@ using System.Text;
 
 namespace LJPmath
 {
-    class Solver
+    class EquationSolver
     {
-        private readonly PhiEquations Equations;
+        private readonly IEquationSystem Equations;
         private readonly List<Point> Points = new List<Point>();
         private readonly Random rand = new Random(0);
 
@@ -16,7 +16,7 @@ namespace LJPmath
         private readonly List<Action> AddPointMethods;
         private void AddSuggestedPoint() => AddPointMethods[Iterations++ % AddPointMethods.Count].Invoke();
 
-        public Solver(PhiEquations equations)
+        public EquationSolver(IEquationSystem equations)
         {
             Equations = equations;
 

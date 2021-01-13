@@ -84,8 +84,8 @@ namespace LJPmath
             double FirstPointM = 0;
             if (ionCount > 2)
             {
-                var phiEquations = new PhiEquations(ionList, temperatureC);
-                Solver s = new Solver(phiEquations);
+                IEquationSystem equationSystem = new PhiEquationSystem(ionList, temperatureC);
+                EquationSolver s = new EquationSolver(equationSystem);
                 FirstPointM = s.Solve(phis, timeoutMilliseconds, throwIfTimeout);
             }
 

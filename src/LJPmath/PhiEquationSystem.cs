@@ -4,16 +4,16 @@ using System.Text;
 
 namespace LJPmath
 {
-    class PhiEquations
+    class PhiEquationSystem : IEquationSystem
     {
-        public readonly int Count;
+        public int Count { get; private set; }
         private readonly double TemperatureC;
 
         private readonly List<Ion> Ions;
         private readonly int IonCount;
         private readonly double[] Sigmas;
 
-        public PhiEquations(List<Ion> ions, double temperatureC)
+        public PhiEquationSystem(List<Ion> ions, double temperatureC)
         {
             Ions = ions;
             TemperatureC = temperatureC;
@@ -46,9 +46,10 @@ namespace LJPmath
             }
         }
 
-        public void equations(double[] x, double[] f)
+        public void Equations(double[] x, double[] f)
         {
-            Calculate.SolveForLJP(Ions, x, f, TemperatureC);
+            Calculate.SolveForLJP(Ions, startingPhis: x, CLs: f, TemperatureC);
+
             for (int j = 0; j < IonCount - 2; j++)
                 f[j] = (f[j] - Ions[j].cL) / Sigmas[j];
         }

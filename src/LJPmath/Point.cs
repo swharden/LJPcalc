@@ -9,11 +9,11 @@ namespace LJPmath
         public readonly double[] F;
         public readonly double M;
 
-        public Point(double[] x, PhiEquations es)
+        public Point(double[] x, IEquationSystem es)
         {
             X = x;
             F = new double[es.Count];
-            es.equations(x, F);
+            es.Equations(x, F);
             M = F.Select(f => Math.Abs(f)).Max();
         }
 
