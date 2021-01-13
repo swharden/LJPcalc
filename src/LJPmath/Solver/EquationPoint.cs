@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace LJPmath
+namespace LJPmath.Solver
 {
     class EquationPoint : IComparable<EquationPoint>
     {

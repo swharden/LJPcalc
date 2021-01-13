@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace LJPmath
+namespace LJPmath.Solver
 {
     class EquationSolver
     {

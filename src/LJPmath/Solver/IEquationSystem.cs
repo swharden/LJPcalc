@@ -1,4 +1,4 @@
-﻿namespace LJPmath
+﻿namespace LJPmath.Solver
 {
     /// <summary>
     /// A system of equations that can be solved by the Solver
