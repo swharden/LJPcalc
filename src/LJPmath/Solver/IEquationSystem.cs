@@ -1,9 +1,6 @@
 ﻿namespace LJPmath.Solver
 {
-    /// <summary>
-    /// A system of equations that can be solved by the Solver
-    /// </summary>
-    public interface IEquationSystem
+    interface IEquationSystem
     {
         /// <summary>
         /// Vectorial equations in the form f(x) = 0.

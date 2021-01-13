@@ -7,8 +7,4 @@
     <FileVersion>1.3.0.0</FileVersion>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Solver\" />
-  </ItemGroup>
-
 </Project>

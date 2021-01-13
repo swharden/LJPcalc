@@ -7,21 +7,21 @@ namespace LJPmath.Solver
     {
         public readonly double[] X;
         public readonly double[] F;
-        public readonly double M;
+        public readonly double FMax;
 
         public EquationPoint(double[] x, IEquationSystem equationSystem)
         {
             X = x;
             F = new double[equationSystem.EquationCount];
             equationSystem.Calculate(x, F);
-            M = F.Select(f => Math.Abs(f)).Max();
+            FMax = F.Select(f => Math.Abs(f)).Max();
         }
 
         public int CompareTo(EquationPoint p)
         {
-            if (M < p.M)
+            if (FMax < p.FMax)
                 return -1;
-            else if (M > p.M)
+            else if (FMax > p.FMax)
                 return 1;
             else
                 return 0;

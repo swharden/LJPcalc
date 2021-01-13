@@ -33,7 +33,7 @@ namespace LJPmath
 
         readonly Stopwatch stopwatch = new Stopwatch();
 
-        public LjpResult(List<Ion> ionList, double temperatureC)
+        public LjpResult(Ion[] ionList, double temperatureC)
         {
             ionListOriginal.Clear();
             foreach (Ion ion in ionList)
@@ -61,7 +61,7 @@ namespace LJPmath
         }
 
         public double FirstIonM = double.NaN;
-        public void Finished(List<Ion> ionList, double ljpVolts, double firstIonM)
+        public void Finished(Ion[] ions, double ljpVolts, double firstIonM)
         {
             stopwatch.Stop();
             benchmark_s = (double)stopwatch.ElapsedTicks / Stopwatch.Frequency;
@@ -70,7 +70,7 @@ namespace LJPmath
             FirstIonM = firstIonM;
 
             ionListSolved.Clear();
-            foreach (Ion ion in ionList)
+            foreach (Ion ion in ions)
                 ionListSolved.Add(new Ion(ion));
             var solvedIonSet = new IonSet(ionListSolved);
 

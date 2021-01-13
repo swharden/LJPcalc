@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 
 namespace LJPmath.Solver
 {
@@ -44,13 +43,13 @@ namespace LJPmath.Solver
             stopwatch.Start();
 
             Points.Add(new EquationPoint(x, Equations));
-            while (Points[0].M > 1.0)
+            while (Points[0].FMax > 1.0)
             {
                 AddSuggestedPoint();
                 Points.Sort();
                 RemovePointsAfter(EquationCount * 4);
 
-                Debug.WriteLine(Points[0].M);
+                Debug.WriteLine(Points[0].FMax);
                 if (stopwatch.ElapsedMilliseconds > timeoutMilliseconds)
                 {
                     if (throwIfTimeout)
@@ -62,7 +61,7 @@ namespace LJPmath.Solver
             for (int j = 0; j < EquationCount; j++)
                 x[j] = Points[0].X[j];
 
-            return Points[0].M;
+            return Points[0].FMax;
         }
 
         private void RemovePointsAfter(int maxCount)

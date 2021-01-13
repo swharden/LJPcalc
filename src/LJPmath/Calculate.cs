@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 
 namespace LJPmath
 {
     public class Calculate
     {
-        private static List<Ion> AutoSort(List<Ion> ionList)
+        private static Ion[] AutoSort(Ion[] inputIons)
         {
+            List<Ion> ionList = inputIons.ToList();
+
             // largest cL should be last
             int indexLargestCl = 0;
             double largestCl = 0;
@@ -39,15 +42,19 @@ namespace LJPmath
 
             ionList.Add(ionLargestCdiff);
             ionList.Add(ionLargestCl);
-            return ionList;
+            return ionList.ToArray();
         }
+
+        [Obsolete("use the method that takes an array, not a list")]
+        public static LjpResult Ljp(List<Ion> ionList, double temperatureC = 25, bool autoSort = true, double timeoutMilliseconds = 5000, bool throwIfTimeout = false) => 
+            Ljp(ionList.ToArray(), temperatureC, autoSort, timeoutMilliseconds, throwIfTimeout);
 
         /// <summary>
         /// Calculate the LJP from an ion set and temperature.
         /// </summary>
-        public static LjpResult Ljp(List<Ion> ionList, double temperatureC = 25, bool autoSort = true, double timeoutMilliseconds = 5000, bool throwIfTimeout = false)
+        public static LjpResult Ljp(Ion[] ions, double temperatureC = 25, bool autoSort = true, double timeoutMilliseconds = 5000, bool throwIfTimeout = false)
         {
-            foreach (Ion ion in ionList)
+            foreach (Ion ion in ions)
             {
                 if (ion.charge == 0)
                     throw new ArgumentException("ion charge cannot be zero");
@@ -56,49 +63,34 @@ namespace LJPmath
             }
 
             if (autoSort)
-                AutoSort(ionList);
+                ions = AutoSort(ions);
 
-            LjpResult result = new LjpResult(ionList, temperatureC);
+            LjpResult result = new LjpResult(ions, temperatureC);
 
-            int ionCount = ionList.Count;
+            int ionCount = ions.Length;
             int ionCountMinusOne = ionCount - 1;
             int ionCountMinusTwo = ionCount - 2;
 
-            Ion secondFromLastIon = ionList[ionCount - 2];
-            Ion LastIon = ionList[ionCount - 1];
+            Ion secondFromLastIon = ions[ionCount - 2];
+            Ion LastIon = ions[ionCount - 1];
 
             if (secondFromLastIon.c0 == secondFromLastIon.cL)
                 throw new InvalidOperationException("second from last ion concentrations cannot be equal");
 
-            // phis will be solved for all ions except the last two
-            double[] phis = new double[ionCountMinusTwo];
-
-            // phis to solve are initialized to the concentration difference
-            for (int j = 0; j < phis.Length; j++)
-            {
-                Ion ion = ionList[j];
-                phis[j] = ion.cL - ion.c0;
-            }
-
-            // all phis except the last two get solved
-            double FirstPointM = 0;
-            if (ionCount > 2)
-            {
-                Solver.IEquationSystem equationSystem = new PhiEquationSystem(ionList, temperatureC);
-                var equationSolver = new Solver.EquationSolver(equationSystem);
-                FirstPointM = equationSolver.Solve(phis, timeoutMilliseconds, throwIfTimeout);
-            }
+            //// PHIS HERE
+            var phiSolution = new Solver.PhiSolver(ions, temperatureC, timeoutMilliseconds, throwIfTimeout);
+            double[] phis = phiSolution.SolvedPhis;
 
             // calculate LJP
             double[] cLs = new double[phis.Length];
-            double ljp_V = SolveForLJP(ionList, phis, cLs, temperatureC);
+            double ljp_V = SolveForLJP(ions, phis, cLs, temperatureC);
             if (double.IsNaN(ljp_V))
                 throw new Exception("ERROR: Singularity (calculation aborted)");
 
             // update ions based on what was just calculated
             for (int j = 0; j < phis.Length; j++)
             {
-                Ion ion = ionList[j];
+                Ion ion = ions[j];
                 ion.phi = phis[j];
                 ion.cL = cLs[j];
             }
@@ -110,7 +102,7 @@ namespace LJPmath
             double totalChargeWeightedPhi = 0.0;
             for (int j = 0; j < ionCountMinusOne; j++)
             {
-                Ion ion = ionList[j];
+                Ion ion = ions[j];
                 totalChargeWeightedPhi += ion.phi * ion.charge;
             }
             LastIon.phi = -totalChargeWeightedPhi / LastIon.charge;
@@ -119,12 +111,12 @@ namespace LJPmath
             double totalChargeWeightedCL = 0.0;
             for (int j = 0; j < ionCountMinusOne; j++)
             {
-                Ion ion = ionList[j];
+                Ion ion = ions[j];
                 totalChargeWeightedCL += ion.cL * ion.charge;
             }
             LastIon.cL = -totalChargeWeightedCL / LastIon.charge;
 
-            result.Finished(ionList, ljp_V, FirstPointM);
+            result.Finished(ions, ljp_V, phiSolution.SolutionM);
             return result;
         }
 
@@ -132,9 +124,9 @@ namespace LJPmath
         /// WARNING: this method modifies input arrays (the last ion's C0 and all the CLs).
         /// It is only to be called by the solver.
         /// </summary>
-        public static double SolveForLJP(List<Ion> ionList, double[] startingPhis, double[] CLs, double temperatureC)
+        public static double SolveForLJP(Ion[] ionList, double[] startingPhis, double[] CLs, double temperatureC)
         {
-            int ionCount = ionList.Count;
+            int ionCount = ionList.Length;
             int ionCountMinusOne = ionCount - 1;
             int ionCountMinusTwo = ionCount - 2;
             int indexLastIon = ionCount - 1;

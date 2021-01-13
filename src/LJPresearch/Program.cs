@@ -22,7 +22,7 @@ namespace LJPresearch
             {
                 Console.WriteLine($"Calculating for {temps[i]}C...");
                 var ionSet = new List<Ion> { new Ion("Zn", 9, 0.0284), new Ion("K", 0, 3), new Ion("Cl", 18, 3.0568) };
-                ljps[i] = Calculate.Ljp(ionTable.Lookup(ionSet), temps[i]).mV;
+                ljps[i] = Calculate.Ljp(ionTable.Lookup(ionSet).ToArray(), temps[i]).mV;
             }
 
             var plt = new ScottPlot.Plot(800, 600);

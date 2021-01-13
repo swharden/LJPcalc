@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LJPmath
+namespace LJPmath.Solver
 {
     class PhiEquationSystem : Solver.IEquationSystem
     {
         public int EquationCount { get; private set; }
         private readonly double TemperatureC;
-        private readonly List<Ion> Ions;
+        private readonly Ion[] Ions;
 
-        public PhiEquationSystem(List<Ion> ions, double temperatureC)
+        public PhiEquationSystem(Ion[] ions, double temperatureC)
         {
             Ions = ions;
             TemperatureC = temperatureC;
-            EquationCount = Ions.Count - 2;
+            EquationCount = Ions.Length - 2;
         }
 
         /// <summary>
