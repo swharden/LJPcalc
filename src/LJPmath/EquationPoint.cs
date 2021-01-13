@@ -3,21 +3,21 @@ using System.Linq;
 
 namespace LJPmath
 {
-    class Point : IComparable<Point>
+    class EquationPoint : IComparable<EquationPoint>
     {
         public readonly double[] X;
         public readonly double[] F;
         public readonly double M;
 
-        public Point(double[] x, IEquationSystem es)
+        public EquationPoint(double[] x, IEquationSystem equationSystem)
         {
             X = x;
-            F = new double[es.GetEquationCount];
-            es.Equations(x, F);
+            F = new double[equationSystem.EquationCount];
+            equationSystem.Calculate(x, F);
             M = F.Select(f => Math.Abs(f)).Max();
         }
 
-        public int CompareTo(Point p)
+        public int CompareTo(EquationPoint p)
         {
             if (M < p.M)
                 return -1;

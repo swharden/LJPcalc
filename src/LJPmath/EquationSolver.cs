@@ -9,7 +9,8 @@ namespace LJPmath
     class EquationSolver
     {
         private readonly IEquationSystem Equations;
-        private readonly List<Point> Points = new List<Point>();
+
+        private readonly List<EquationPoint> Points = new List<EquationPoint>();
         private readonly Random rand = new Random(0);
         private readonly int EquationCount;
 
@@ -20,7 +21,7 @@ namespace LJPmath
         public EquationSolver(IEquationSystem equations)
         {
             Equations = equations;
-            EquationCount = equations.GetEquationCount;
+            EquationCount = equations.EquationCount;
 
             AddPointMethods = new List<Action>()
             {
@@ -42,7 +43,7 @@ namespace LJPmath
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            Points.Add(new Point(x, Equations));
+            Points.Add(new EquationPoint(x, Equations));
             while (Points[0].M > 1.0)
             {
                 AddSuggestedPoint();
@@ -103,7 +104,7 @@ namespace LJPmath
             for (int j = 0; j < EquationCount; j++)
                 suggestedXs[j] = Points[EquationCount].X[j] + delta[j];
 
-            Points.Add(new Point(suggestedXs, Equations));
+            Points.Add(new EquationPoint(suggestedXs, Equations));
         }
 
         /// <summary>
@@ -116,7 +117,7 @@ namespace LJPmath
             double[] suggestedXs = Points[0].X.Select(x => x * (rand.NextDouble() - 0.5) * randomness)
                                               .ToArray();
 
-            Points.Add(new Point(suggestedXs, Equations));
+            Points.Add(new EquationPoint(suggestedXs, Equations));
         }
 
         /// <summary>
@@ -130,7 +131,7 @@ namespace LJPmath
                                              .Select(x => (rand.NextDouble() - 0.5) * randomness)
                                              .ToArray();
 
-            Points.Add(new Point(suggestedXs, Equations));
+            Points.Add(new EquationPoint(suggestedXs, Equations));
         }
 
         /// <summary>
@@ -164,7 +165,7 @@ namespace LJPmath
                 suggestedXs[equationIndex] = mean + randomOffset;
             }
 
-            Points.Add(new Point(suggestedXs, Equations));
+            Points.Add(new EquationPoint(suggestedXs, Equations));
         }
     }
 }

@@ -7,7 +7,7 @@ namespace LJPmath
 {
     class PhiEquationSystem : IEquationSystem
     {
-        public int GetEquationCount { get; private set; }
+        public int EquationCount { get; private set; }
         private readonly double TemperatureC;
 
         private readonly List<Ion> Ions;
@@ -18,7 +18,7 @@ namespace LJPmath
             Ions = ions;
             TemperatureC = temperatureC;
             IonCount = ions.Count;
-            GetEquationCount = Ions.Count - 2;
+            EquationCount = Ions.Count - 2;
         }
 
         /// <summary>
@@ -26,9 +26,9 @@ namespace LJPmath
         /// </summary>
         /// <param name="x">phis</param>
         /// <param name="f">scaled difference between expected CL and actual CL</param>
-        public void Equations(double[] x, double[] f)
+        public void Calculate(double[] x, double[] f)
         {
-            Calculate.SolveForLJP(Ions, startingPhis: x, CLs: f, TemperatureC);
+            LJPmath.Calculate.SolveForLJP(Ions, startingPhis: x, CLs: f, TemperatureC);
 
             // Sigma is a scaling factor later used to scale equation error.
             // Ions with larger CLs have larger sigmas.
