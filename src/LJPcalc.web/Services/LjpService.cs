@@ -2,7 +2,10 @@
 using LJPmath;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 namespace LJPcalc.web.Services
@@ -101,7 +104,7 @@ namespace LJPcalc.web.Services
             typeof(Ion).Assembly.GetName().Version.Major + "." +
             typeof(Ion).Assembly.GetName().Version.Minor;
 
-        public void CalculateLJP(int timeoutSec = 30)
+        public void CalculateLJP()
         {
             ResultLJP = double.NaN;
             ResultDetails = null;
@@ -161,9 +164,17 @@ namespace LJPcalc.web.Services
                 seen.Add(ionName);
             }
 
+            if (ServerType == "Server")
+                CalculateLjpRemotelyAsync();
+            else
+                CalculateLjplocally();
+        }
+
+        private void CalculateLjplocally(int timeoutSec = 30)
+        {
             try
             {
-                var ions = IonList.Select(x => x.ToIon()).ToList();
+                Ion[] ions = IonList.Select(x => x.ToIon()).ToArray();
                 var result = Calculate.Ljp(ions, Temperature.TemperatureC, timeoutMilliseconds: timeoutSec * 1e3);
                 ResultLJP = result.mV;
                 ResultDetails = result.report;
@@ -179,6 +190,36 @@ namespace LJPcalc.web.Services
             catch (Exception ex)
             {
                 ResultErrorMessage = ex.ToString();
+            }
+        }
+
+        private async Task CalculateLjpRemotelyAsync()
+        {
+            try
+            {
+                // design an experiment and encode it as JSON
+                Ion[] ions = IonList.Select(x => x.ToIon()).ToArray();
+                var exp = new Experiment(ions, temperatureC: 25);
+                string txJson = exp.ToJson();
+                Console.WriteLine(txJson);
+
+                // execute the HTTP request, get the response, and update the experiment
+                string functionKey = "MiPqBqy0Bv0EYQ1QslBBgyMIX6qeeutZFJ27rJC9H/3ObKooolIfYQ==";
+                string url = "https://ljpcalcapi.azurewebsites.net/api/CalculateLJP?code=" + functionKey;
+                var data = new StringContent(txJson, Encoding.UTF8, "application/json");
+                var client = new HttpClient();
+                var response = await client.PostAsync(url, data);
+                string rxJson = response.Content.ReadAsStringAsync().Result;
+                exp.AddResultsJson(rxJson);
+
+                // update things
+                ResultLJP = exp.LjpMillivolts;
+                ResultDetails = exp.GetReport();
+                Result = new LjpResult(exp.SolvedIons, exp.TemperatureC);
+            }
+            catch (Exception ex)
+            {
+                ResultErrorMessage = $"ERROR: Could not connect with LJPcalc HTTP API. {ex}";
             }
         }
     }
