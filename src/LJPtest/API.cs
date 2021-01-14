@@ -2,10 +2,8 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
+using System.Net.Http;
 using System.Text;
-using System.Text.Json;
 
 namespace LJPtest
 {
@@ -29,25 +27,14 @@ namespace LJPtest
             string txJson = exp.ToJson();
             Console.WriteLine(txJson);
 
-            // design the HTTP request
+            // execute the HTTP request, get the response, and update the experiment
             string functionKey = "MiPqBqy0Bv0EYQ1QslBBgyMIX6qeeutZFJ27rJC9H/3ObKooolIfYQ==";
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://ljpcalcapi.azurewebsites.net/api/CalculateLJP?code=" + functionKey);
-            httpWebRequest.ContentType = "application/json";
-            httpWebRequest.Method = "POST";
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
-
-            // add experiment design JSON to body
-            using var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream());
-            streamWriter.Write(txJson);
-            streamWriter.Flush();
-            streamWriter.Close();
-
-            // execute the request and get the response
-            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-            using var streamReader = new StreamReader(httpResponse.GetResponseStream());
-            var rxJson = streamReader.ReadToEnd();
+            string url = "https://ljpcalcapi.azurewebsites.net/api/CalculateLJP?code=" + functionKey;
+            var data = new StringContent(txJson, Encoding.UTF8, "application/json");
+            var client = new HttpClient();
+            var response = client.PostAsync(url, data);
+            string rxJson = response.Result.Content.ReadAsStringAsync().Result;
             exp.AddResultsJson(rxJson);
-
             Console.WriteLine(exp.GetReport());
 
             Assert.AreEqual(-20.79558643, exp.LjpMillivolts, 0.1);
