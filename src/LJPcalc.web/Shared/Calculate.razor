@@ -22,7 +22,7 @@
     <div class="display-4 m-2 mt-5">LJP = @Math.Round(LjpService.ResultLJP, 3) mV</div>
 </div>
 
-@if (LjpService.Result != null)
+@if (!double.IsNaN(LjpService.ResultLJP))
 {
     <button class="btn btn-secondary mt-5" type="button" data-bs-toggle="collapse"
             data-bs-target="#calculationDetails" aria-expanded="false" aria-controls="calculationDetails">
@@ -32,9 +32,9 @@
         <div class="card card-body bg-transparent border-0">
             <ul>
                 <li>Concentrations were slightly adjusted to achieve electroneutrality.</li>
-                <li>Equations were solved in @Math.Round(LjpService.Result.benchmark_s, 5) seconds.</li>
+                <li>Equations were solved in @Math.Round(LjpService.ResultSeconds, 5) seconds.</li>
                 <li>
-                    LJP at @LjpService.Result.temperatureC C (@LjpService.Result.temperatureK K) = @LjpService.Result.mV mV
+                    LJP = @LjpService.ResultLJP mV
                 </li>
                 <li>
                     @LjpService.ResultSummarized
@@ -47,10 +47,10 @@
                     and when polyvalent ions are involved.
                     See <a href="https://arxiv.org/abs/1403.3640">Marino et al., 2014</a> for details.
                 </li>
-                @if (LjpService.Result.FirstIonM > 1)
+                @if (LjpService.ResultSeconds > 4)
                 {
                     <li>
-                        &#9888;&#65039; WARNING: the equation solver timed out before finding a set of phis that fully satisfied
+                        &#9888;&#65039; WARNING: the equation solver may have timed out before finding a set of phis that fully satisfied
                         the given ion table. Although  the LJP calculated is probably close to accurate, a fully solved
                         set of equations is preferred. Balanced phis are more difficult to calculate the more ions there are, so
                         removing unecessary ions may help reach a solution faster. Remove ions with small concentrations because
@@ -71,7 +71,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (LJPmath.Ion ion in LjpService.Result.ionListSolved)
+                    @foreach (LJPmath.Ion ion in LjpService.ResultIons)
                     {
                         <tr>
                             <td>@ion.name</td>

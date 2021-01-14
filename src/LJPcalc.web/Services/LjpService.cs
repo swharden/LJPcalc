@@ -50,23 +50,24 @@ namespace LJPcalc.web.Services
         public bool UseGenericLabels => LabelType == "generic";
 
         public double ResultLJP = double.NaN;
+        public Ion[] ResultIons;
         public string ResultDetails;
+        public double ResultSeconds;
         public string ResultErrorMessage;
         public string ResultSummarized
         {
             get
             {
-                if (Result is null)
+                if (double.IsNaN(ResultLJP))
                     return null;
 
-                string direction = Result.mV > 0 ? "positive" : "negative";
+                string direction = ResultLJP > 0 ? "positive" : "negative";
 
                 return UseGenericLabels ?
                     $"Solution B is {direction} relative to Solution A" :
                     $"The bath solution is {direction} relative to the pipette solution";
             }
         }
-        public LjpResult Result;
 
         public bool IsValidIonList => IonList.All(x => x.IsValid);
 
@@ -109,7 +110,7 @@ namespace LJPcalc.web.Services
             ResultLJP = double.NaN;
             ResultDetails = null;
             ResultErrorMessage = null;
-            Result = null;
+            ResultIons = null;
 
             if (IonList.Count < 2)
             {
@@ -178,7 +179,8 @@ namespace LJPcalc.web.Services
                 var result = Calculate.Ljp(ions, Temperature.TemperatureC, timeoutMilliseconds: timeoutSec * 1e3);
                 ResultLJP = result.mV;
                 ResultDetails = result.report;
-                Result = result;
+                ResultSeconds = result.benchmark_s;
+                ResultIons = result.ionListSolved.ToArray();
             }
             catch (OperationCanceledException)
             {
@@ -215,7 +217,8 @@ namespace LJPcalc.web.Services
                 // update things
                 ResultLJP = exp.LjpMillivolts;
                 ResultDetails = exp.GetReport();
-                Result = new LjpResult(exp.SolvedIons, exp.TemperatureC);
+                ResultSeconds = exp.CalculationSeconds;
+                ResultIons = exp.SolvedIons;
             }
             catch (Exception ex)
             {
