@@ -120,8 +120,46 @@
         </div>
     </div>
 
+    <div class="d-inline-block m-2 align-top">
+        <label><strong>Calculation</strong></label>
+        <select class="form-select" 
+                @bind="ServerType" 
+                @onfocusin="ShowServerMessage"
+                @onfocusout="HideServerMessage">
+            <option value="Server">Server</option>
+            <option value="Local">Local</option>
+        </select>
+    </div>
+
+    @if (!string.IsNullOrEmpty(ServerMessage))
+    {
+        <div class="alert alert-primary">
+            <div>@ServerMessage</div>
+        </div>
+    }
+
 </section>
 
-@code {
+@code{
+    string ServerMessage;
+    string ServerType
+    {
+        get => LjpService.ServerType;
+        set
+        {
+            LjpService.ServerType = value;
 
+            ServerMessage = (value == "Server")
+                            ?
+                            "Calculations will be performed on a remote server. " +
+                            "This method is fast but requires an active internet connection."
+                            :
+                            "Calculations will be performed on your local computer in your browser. " +
+                            "This method uses Blazor and WebAssembly and can be performed offline, but is slower " +
+                            "and extremely complex solutions may take a very long time to solve. ";
+        }
+    }
+
+    void HideServerMessage() => ServerMessage = "";
+    void ShowServerMessage() => ServerType = LjpService.ServerType;
 }

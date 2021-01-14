@@ -43,6 +43,7 @@ namespace LJPcalc.web.Services
         }
 
         public string LabelType;
+        public string ServerType = "Server";
         public bool UseGenericLabels => LabelType == "generic";
 
         public double ResultLJP = double.NaN;
