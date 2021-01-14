@@ -131,7 +131,7 @@ namespace LJPmath
                 details: "This ion set came from a publication (https://www.nature.com/articles/nature12330) which indicated pClamp was used to correct for LJP.",
                 expectedLjp_mV: 15.1 - 3.3,
                 temperatureC: 33,
-                expectedAccuracy_mV: .5,
+                expectedAccuracy_mV: 1,
                 ions: new List<Ion>(){
                         new Ion("K", 50, 3),
                         new Ion("Gluconate", 50, 0),
