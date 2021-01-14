@@ -11,6 +11,7 @@ namespace LJPcalc.API
         public double Result { get; set; }
         public double ExecutionTime { get; set; }
         public string IP { get; set; }
+        public string Version { get; set; }
 
         public CalcTableEntry(string description, double result, double executionTime, string ip)
         {
@@ -20,6 +21,7 @@ namespace LJPcalc.API
             Result = result;
             ExecutionTime = executionTime;
             IP = ip;
+            Version = typeof(LJPmath.Ion).Assembly.GetName().Version.ToString();
         }
     }
 }
