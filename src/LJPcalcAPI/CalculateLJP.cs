@@ -16,7 +16,7 @@ namespace LJPcalc.API
     {
         [FunctionName("CalculateLJP")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequest req,
             ILogger log)
         {
             string ip = (req.Headers["X-Forwarded-For"].FirstOrDefault() ?? "").Split(new char[] { ':' }).FirstOrDefault();
