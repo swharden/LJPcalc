@@ -49,11 +49,13 @@ namespace LJPcalc.web.Services
         public string ServerType = "Server";
         public bool UseGenericLabels => LabelType == "generic";
 
+        public event Action OnNewResult;
         public double ResultLJP = double.NaN;
         public Ion[] ResultIons;
         public string ResultDetails;
         public double ResultSeconds;
         public string ResultErrorMessage;
+        public bool ResultCalculating;
         public string ResultSummarized
         {
             get
@@ -105,7 +107,7 @@ namespace LJPcalc.web.Services
             typeof(Ion).Assembly.GetName().Version.Major + "." +
             typeof(Ion).Assembly.GetName().Version.Minor;
 
-        public void CalculateLJP()
+        public async Task CalculateLJPAsync()
         {
             ResultLJP = double.NaN;
             ResultDetails = null;
@@ -166,7 +168,7 @@ namespace LJPcalc.web.Services
             }
 
             if (ServerType == "Server")
-                CalculateLjpRemotelyAsync();
+                await CalculateLjpRemotelyAsync();
             else
                 CalculateLjplocally();
         }
@@ -193,6 +195,9 @@ namespace LJPcalc.web.Services
             {
                 ResultErrorMessage = ex.ToString();
             }
+
+            ResultCalculating = false;
+            OnNewResult?.Invoke();
         }
 
         private async Task CalculateLjpRemotelyAsync()
@@ -212,18 +217,33 @@ namespace LJPcalc.web.Services
                 var client = new HttpClient();
                 var response = await client.PostAsync(url, data);
                 string rxJson = response.Content.ReadAsStringAsync().Result;
+
+                System.Threading.Thread.Sleep(500);
+                Console.WriteLine("RX: " + rxJson);
+
                 exp.AddResultsJson(rxJson);
 
                 // update things
                 ResultLJP = exp.LjpMillivolts;
                 ResultDetails = exp.GetReport();
                 ResultSeconds = exp.CalculationSeconds;
+
                 ResultIons = exp.SolvedIons;
+            }
+            catch (HttpRequestException ex)
+            {
+                if (ex.StatusCode == HttpStatusCode.Forbidden)
+                    ResultErrorMessage = $"This website is not permitted to make API calls to LJPcalc API. {ex}";
+                else
+                    ResultErrorMessage = ex.ToString();
             }
             catch (Exception ex)
             {
-                ResultErrorMessage = $"ERROR: Could not connect with LJPcalc HTTP API. {ex}";
+                ResultErrorMessage = ex.ToString();
             }
+
+            ResultCalculating = false;
+            OnNewResult?.Invoke();
         }
     }
 }

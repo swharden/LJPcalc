@@ -1,8 +1,8 @@
 ﻿@inject LJPcalc.web.Services.LjpService LjpService
 
 <div class="text-center">
-    <button class="btn btn-primary btn-lg" type="button" disabled=@Calculating @onclick="CalculateLJP">
-        @if (Calculating)
+    <button class="btn btn-primary btn-lg" type="button" disabled=@LjpService.ResultCalculating @onclick="CalculateLJP">
+        @if (LjpService.ResultCalculating)
         {
             <span class="spinner-border spinner-border" role="status" aria-hidden="true"></span>
             <span>Calculating...</span>
@@ -18,7 +18,7 @@
     </div>
 </div>
 
-<div class=" text-center @(double.IsNaN(LjpService.ResultLJP) || Calculating ? "invisible" : "")">
+<div class=" text-center @(double.IsNaN(LjpService.ResultLJP) || LjpService.ResultCalculating ? "invisible" : "")">
     <div class="display-4 m-2 mt-5">LJP = @Math.Round(LjpService.ResultLJP, 3) mV</div>
 </div>
 
@@ -89,21 +89,20 @@
 }
 
 @code {
-
-    private bool Calculating;
-
     private async Task CalculateLJP()
     {
+        LjpService.ResultCalculating = true;
         LjpService.LoadSampleSet(null);
-        Calculating = true;
         StateHasChanged();
 
         // give it some time to show the user the calculation message
         await Task.Delay(TimeSpan.FromMilliseconds(100))
-                  .ContinueWith(task => LjpService.CalculateLJP());
-
-
-        Calculating = false;
+                  .ContinueWith(task => LjpService.CalculateLJPAsync());
     }
 
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        LjpService.OnNewResult += StateHasChanged;
+    }
 }
