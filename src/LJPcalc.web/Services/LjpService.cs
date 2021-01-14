@@ -83,7 +83,11 @@ namespace LJPcalc.web.Services
             LoadDefaultSet();
         }
 
-        public void LoadDefaultSet() => LoadSampleSet(SampleIonSets.Last());
+        public void LoadDefaultSet()
+        {
+            var defaultIonSet = SampleIonSets.Where(x => x.Title.Contains("AxoBits")).FirstOrDefault();
+            LoadSampleSet(defaultIonSet);
+        }
 
         public string SampleSetTitle;
         public string SampleSetDescription;

@@ -126,7 +126,6 @@ namespace LJPmath
                 },
                 ionTable: ionTable));
 
-            /*
             ionSets.Add(new KnownIonSet(
                 name: "Owen et al., 2013",
                 details: "This ion set came from a publication (https://www.nature.com/articles/nature12330) which indicated pClamp was used to correct for LJP.",
@@ -152,7 +151,6 @@ namespace LJPmath
                         new Ion("4-AP (4-aminopyridine)", 0, 5),
                 },
                 ionTable: ionTable));
-            */
         }
     }
 }
