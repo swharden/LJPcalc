@@ -15,6 +15,7 @@ namespace LJPmath
         // configuration going in
         public bool AutoSortIons = true;
         public double TimeoutSeconds = 10;
+        public double TimeoutMilliSeconds => TimeoutSeconds * 1e3;
 
         // results coming out
         public double CalculationSeconds = double.NaN;
@@ -28,7 +29,7 @@ namespace LJPmath
         }
 
         public LjpResult Execute() =>
-            Calculate.Ljp(Ions, TemperatureC, AutoSortIons, TimeoutSeconds, throwIfTimeout: false);
+            Calculate.Ljp(Ions, TemperatureC, AutoSortIons, TimeoutMilliSeconds, throwIfTimeout: false);
 
         public string GetShortDescription()
         {
