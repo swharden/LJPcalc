@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
+using System.Text.Json;
 
 namespace LJPmath
 {
@@ -24,12 +26,12 @@ namespace LJPmath
                     return true;
             }
         }
-        public string report = "report not generated";
 
+        public string report = "report not generated";
         public readonly List<Ion> ionListOriginal = new List<Ion>();
         public readonly List<Ion> ionListSolved = new List<Ion>();
         public readonly double temperatureC;
-        public double temperatureK { get { return temperatureC + Constants.zeroCinK; } }
+        public double temperatureK => temperatureC + Constants.zeroCinK;
 
         readonly Stopwatch stopwatch = new Stopwatch();
 
@@ -47,6 +49,57 @@ namespace LJPmath
         public override string ToString()
         {
             return $"LJP result: {mV} mV";
+        }
+
+        public string GetShortDescription()
+        {
+            return $"{mV} mV ({benchmark_s} sec)";
+        }
+
+        public string ToJson(bool pretty = true)
+        {
+            using (var stream = new MemoryStream())
+            {
+                var writerOptions = new JsonWriterOptions { Indented = pretty };
+                using (var writer = new Utf8JsonWriter(stream, writerOptions))
+                {
+                    writer.WriteStartObject();
+                    writer.WriteNumber("temperatureC", temperatureC);
+                    writer.WriteNumber("mV", mV);
+                    writer.WriteNumber("calculation seconds", benchmark_s);
+
+                    writer.WriteStartArray("original ion list");
+                    foreach (var ion in ionListOriginal)
+                    {
+                        writer.WriteStartObject();
+                        writer.WriteString("name", ion.name);
+                        writer.WriteNumber("charge", ion.charge);
+                        writer.WriteNumber("conductivity", ion.conductivity);
+                        writer.WriteNumber("c0", ion.c0);
+                        writer.WriteNumber("cL", ion.cL);
+                        writer.WriteEndObject();
+                    }
+                    writer.WriteEndArray();
+
+                    writer.WriteStartArray("solved ion list");
+                    foreach (var ion in ionListSolved)
+                    {
+                        writer.WriteStartObject();
+                        writer.WriteString("name", ion.name);
+                        writer.WriteNumber("charge", ion.charge);
+                        writer.WriteNumber("conductivity", ion.conductivity);
+                        writer.WriteNumber("phi", ion.phi);
+                        writer.WriteNumber("c0", ion.c0);
+                        writer.WriteNumber("cL", ion.cL);
+                        writer.WriteEndObject();
+                    }
+                    writer.WriteEndArray();
+
+                    writer.WriteEndObject();
+                }
+
+                return Encoding.UTF8.GetString(stream.ToArray());
+            }
         }
 
         public string GetTimeoutWarning()
