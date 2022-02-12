@@ -46,6 +46,8 @@ namespace LJPcalc.web.Services
         }
 
         public string LabelType;
+
+        [Obsolete("API no longer in use", true)]
         public string ServerType = "Server";
         public bool UseGenericLabels => LabelType == "generic";
 
@@ -111,7 +113,7 @@ namespace LJPcalc.web.Services
             typeof(Ion).Assembly.GetName().Version.Major + "." +
             typeof(Ion).Assembly.GetName().Version.Minor;
 
-        public async Task CalculateLJPAsync()
+        public void CalculateLJPAsync()
         {
             ResultLJP = double.NaN;
             ResultDetails = null;
@@ -171,10 +173,7 @@ namespace LJPcalc.web.Services
                 seen.Add(ionName);
             }
 
-            if (ServerType == "Server")
-                await CalculateLjpRemotelyAsync();
-            else
-                CalculateLjplocally();
+            CalculateLjplocally();
         }
 
         private void CalculateLjplocally(int timeoutSec = 30)
@@ -194,52 +193,6 @@ namespace LJPcalc.web.Services
                     "To reduce complexity of the system consider removing ions with small concentrations that " +
                     "contribute little to the overall LJP. Alternatively, consider using the desktop application, " +
                     "as it is significantly more powerful than LJPcalc running in the browser.";
-            }
-            catch (Exception ex)
-            {
-                ResultErrorMessage = ex.ToString();
-            }
-
-            ResultCalculating = false;
-            OnNewResult?.Invoke();
-        }
-
-        private async Task CalculateLjpRemotelyAsync()
-        {
-            try
-            {
-                // design an experiment and encode it as JSON
-                Ion[] ions = IonList.Select(x => x.ToIon()).ToArray();
-                var exp = new Experiment(ions, temperatureC: 25);
-                string txJson = exp.ToJson();
-                Console.WriteLine(txJson);
-
-                // execute the HTTP request, get the response, and update the experiment
-                string functionKey = "MiPqBqy0Bv0EYQ1QslBBgyMIX6qeeutZFJ27rJC9H/3ObKooolIfYQ==";
-                string url = "https://ljpcalcapi.azurewebsites.net/api/CalculateLJP?code=" + functionKey;
-                var data = new StringContent(txJson, Encoding.UTF8, "application/json");
-                var client = new HttpClient();
-                var response = await client.PostAsync(url, data);
-                string rxJson = response.Content.ReadAsStringAsync().Result;
-
-                System.Threading.Thread.Sleep(500);
-                Console.WriteLine("RX: " + rxJson);
-
-                exp.AddResultsJson(rxJson);
-
-                // update things
-                ResultLJP = exp.LjpMillivolts;
-                ResultDetails = exp.GetReport();
-                ResultSeconds = exp.CalculationSeconds;
-
-                ResultIons = exp.SolvedIons;
-            }
-            catch (HttpRequestException ex)
-            {
-                if (ex.StatusCode == HttpStatusCode.Forbidden)
-                    ResultErrorMessage = $"This website is not permitted to make API calls to LJPcalc API. {ex}";
-                else
-                    ResultErrorMessage = ex.ToString();
             }
             catch (Exception ex)
             {
