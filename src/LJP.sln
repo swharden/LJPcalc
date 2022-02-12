@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29728.190
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LJPcalc", "LJPmath\LJPcalc.csproj", "{4CE52415-69E8-4BE4-827D-FDFEF7DEAEF6}"
 EndProject
@@ -14,8 +14,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LJPcalc.research", "LJPresearch\LJPcalc.research.csproj", "{ECE22E5D-0C12-4A2D-8F2D-51DB5F7EE5DA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LJPcalc.web", "LJPcalc.web\LJPcalc.web.csproj", "{FE47CCF2-05E2-4FE3-905B-90D0EB1FC0EA}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LJPcalc.API", "LJPcalcAPI\LJPcalc.API.csproj", "{AC4E2294-DB57-456A-9855-B8DADBCF5FBD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,10 +45,6 @@ Global
 		{FE47CCF2-05E2-4FE3-905B-90D0EB1FC0EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE47CCF2-05E2-4FE3-905B-90D0EB1FC0EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE47CCF2-05E2-4FE3-905B-90D0EB1FC0EA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AC4E2294-DB57-456A-9855-B8DADBCF5FBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AC4E2294-DB57-456A-9855-B8DADBCF5FBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AC4E2294-DB57-456A-9855-B8DADBCF5FBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AC4E2294-DB57-456A-9855-B8DADBCF5FBD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
