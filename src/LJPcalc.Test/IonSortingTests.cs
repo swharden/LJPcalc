@@ -11,7 +11,7 @@ class IonSortingTests
         /* Known to crash due to poor ion order https://github.com/swharden/LJPcalc/issues/9 */
         // fixed by autoSort prior to calculation
 
-        var ionSet = new List<Ion>(){
+        var ionSet = new Ion[] {
                 new Ion("Zn", 9, .0284),
                 new Ion("K", 0, 3),
                 new Ion("Cl", 18, 3.062),
@@ -36,7 +36,7 @@ class IonSortingTests
         /* Known to crash due to poor ion order https://github.com/swharden/LJPcalc/issues/9 */
         // fixed by autoSort prior to calculation
 
-        var ionSet = new List<Ion>(){
+        var ionSet = new Ion[] {
                 new Ion("K", 145, 2.8),
                 new Ion("Na", 13, 145),
                 new Ion("Cl", 10, 148.8),

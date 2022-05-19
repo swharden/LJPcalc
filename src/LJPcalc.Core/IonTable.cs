@@ -73,6 +73,13 @@ public class IonTable : IonSet
         return ionList;
     }
 
+    public Ion[] Lookup(Ion[] ionList)
+    {
+        for (int i = 0; i < ionList.Length; i++)
+            ionList[i] = Lookup(ionList[i]);
+        return ionList;
+    }
+
     public Ion Lookup(Ion ion)
     {
         foreach (Ion tableIon in ions)

@@ -10,7 +10,7 @@ class LjpCalculationTest
     {
         /* Test came from screenshot on original JLJP website */
 
-        var ionSet = new List<Ion>
+        var ionSet = new Ion[]
         {
             new Ion("Zn", 9, 0.0284),
             new Ion("K", 0, 3),
@@ -28,7 +28,7 @@ class LjpCalculationTest
     public void Test_LjpMathThrowsExceptionIf_ChargeOrMuIsZero()
     {
         // here the ions aren't looked up from a table so charge and mu is 0
-        var ionSet = new List<Ion>
+        var ionSet = new Ion[]
         {
             new Ion("Zn", 9, 0.0284),
             new Ion("K", 0, 3),
@@ -42,7 +42,7 @@ class LjpCalculationTest
     public void Test_LjpMathIsAccurateWhen_ChargeAndConductanceAreSetManually()
     {
         // here the ions aren't looked up from a table but charge and mu are set manually
-        var ionSet = new List<Ion>
+        var ionSet = new Ion[]
         {
             new Ion("Zn", 2, 52.8, 9, 0.0284),
             new Ion("K", 1, 73.5, 0, 3),
@@ -67,7 +67,7 @@ class LjpCalculationTest
         Ion K = new Ion("K", MolsPerCubicMeter(0), MolsPerCubicMeter(3));
         Ion Cl = new Ion("Cl", MolsPerCubicMeter(18), MolsPerCubicMeter(3.0568));
 
-        var ionSet = new List<Ion> { Zn, K, Cl };
+        var ionSet = new Ion[] { Zn, K, Cl };
         var ionTable = new IonTable();
         ionSet = ionTable.Lookup(ionSet);
         var ljp = Calculate.Ljp(ionSet, autoSort: false);
@@ -82,7 +82,7 @@ class LjpCalculationTest
         /* LJP for this test came from Ng and Barry (1994) Table 2 */
 
         // 50 mM NaCl : 50 mM KCl
-        var ionSet = new List<Ion>
+        var ionSet = new Ion[]
         {
             new Ion("Na", 50, 0),
             new Ion("K", 0, 50),
@@ -104,7 +104,7 @@ class LjpCalculationTest
 
         // 150 mM NaCl : 150 mM KCl
         // Na (150), Cl (150) : K (150) Cl (150)
-        var ionSet = new List<Ion>
+        var ionSet = new Ion[]
         {
             new Ion("Na", 150, 0),
             new Ion("K", 0, 150),
@@ -126,7 +126,7 @@ class LjpCalculationTest
 
         // 50 NaCl : 50 CsCl
         // Na (50), Cl (50) : Cs (50) Cl (50)
-        var ionSet = new List<Ion>
+        var ionSet = new Ion[]
         {
             new Ion("Na", 50, 0),
             new Ion("Cs", 0, 50),
@@ -148,7 +148,7 @@ class LjpCalculationTest
 
         // 100 NaCl : 100 MgCl2
         // Na (100), Cl (100) : Mg (100) Cl (100)
-        var ionSet = new List<Ion>
+        var ionSet = new Ion[]
         {
             new Ion("Na", 100, 0),
             new Ion("Mg", 0, 100),
@@ -170,7 +170,7 @@ class LjpCalculationTest
 
         // 100 CaCl2 : 100 MgCl2
         // Ca (100), Cl (200) : Mg (100) Cl (200)
-        var ionSet = new List<Ion>
+        var ionSet = new Ion[]
         {
             new Ion("Ca", 100, 0),
             new Ion("Mg", 0, 100),
@@ -192,7 +192,7 @@ class LjpCalculationTest
 
         // 100 KCl + 2 CaCl2 : 100 LiCl + 2 CaCl2
         // K (100), Cl (104), Ca (2) : Li (100), Cl (104), Ca (2)
-        var ionSet = new List<Ion>
+        var ionSet = new Ion[]
         {
             new Ion("Ca", 2, 2),
             new Ion("K", 100, 0),
@@ -215,7 +215,7 @@ class LjpCalculationTest
 
         // 50 CaCl2 + 50 MgCl2 : 100 LiCl
         // Ca (50), Cl (200), Mg (50) : Li (100), Cl (100)
-        var ionSet = new List<Ion>
+        var ionSet = new Ion[]
         {
             new Ion("Ca", 50, 0),
             new Ion("Cl", 200, 100),
@@ -236,7 +236,7 @@ class LjpCalculationTest
         // ion set shown in JPCalcWin manual (page 7)
         // https://tinyurl.com/wk7otn7
 
-        var ionSet = new List<Ion>
+        var ionSet = new Ion[]
         {
             new Ion("Na", 10, 145),
             new Ion("Cl", 10, 145),
@@ -257,7 +257,7 @@ class LjpCalculationTest
         // ion set shown in JPCalcWin manual (page 10)
         // https://tinyurl.com/wk7otn7
 
-        var ionSet = new List<Ion>
+        var ionSet = new Ion[]
         {
             new Ion("Cs", 145, 0),
             new Ion("Na", 0, 145),
@@ -278,7 +278,7 @@ class LjpCalculationTest
         // ion set from Harper (1985) Table I
         // https://pubs.acs.org/doi/pdf/10.1021/j100255a022
 
-        var ionSet = new List<Ion>
+        var ionSet = new Ion[]
         {
             new Ion("Na", 0.0995, 0.00499),
             new Ion("Cl", 0.0995, 0.00499)
@@ -297,7 +297,7 @@ class LjpCalculationTest
         // ion set from Harper (1985) Table I
         // https://pubs.acs.org/doi/pdf/10.1021/j100255a022
 
-        var ionSet = new List<Ion>
+        var ionSet = new Ion[]
         {
             new Ion("H", .1, .00345),
             new Ion("Cl", .1, .00345)
@@ -316,7 +316,7 @@ class LjpCalculationTest
         // ion set from Harper (1985) Table I
         // https://pubs.acs.org/doi/pdf/10.1021/j100255a022
 
-        var ionSet = new List<Ion>
+        var ionSet = new Ion[]
         {
             new Ion("Ca", .29, .00545),
             new Ion("Cl", .29*2, .00545*2)
@@ -335,7 +335,7 @@ class LjpCalculationTest
         // ion set from Harper (1985) Table I
         // https://pubs.acs.org/doi/pdf/10.1021/j100255a022
 
-        var ionSet = new List<Ion>
+        var ionSet = new Ion[]
         {
             new Ion("Zn", .4, .0186),
             new Ion("SO4", .4, .0186),
@@ -353,7 +353,7 @@ class LjpCalculationTest
     {
         // This ion set came from https://www.nature.com/articles/nature12330
 
-        var ionSet = new List<Ion>()
+        var ionSet = new Ion[]
         {
             new Ion("K", 50, 3),
             new Ion("Gluconate", 50, 0),
@@ -387,7 +387,7 @@ class LjpCalculationTest
     {
         var ionTable = new IonTable();
         var knownSets = new KnownIonSets(ionTable);
-        foreach (var ionSet in knownSets.ionSets)
+        foreach (var ionSet in knownSets.KnownSets)
         {
             Console.WriteLine($"Testing known ion set: {ionSet.name}");
             var ljp = Calculate.Ljp(ionSet.ions, ionSet.temperatureC);

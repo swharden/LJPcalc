@@ -2,13 +2,6 @@
 
 public class Calculate
 {
-    [Obsolete("use the method that takes an array, not a list")]
-    public static LjpResult Ljp(List<Ion> ionList, double temperatureC = 25, bool autoSort = true, double timeoutMilliseconds = 5000, bool throwIfTimeout = false) =>
-        Ljp(ionList.ToArray(), temperatureC, autoSort, timeoutMilliseconds, throwIfTimeout);
-
-    /// <summary>
-    /// Calculate the LJP from an ion set and temperature.
-    /// </summary>
     public static LjpResult Ljp(Ion[] ions, double temperatureC = 25, bool autoSort = true, double timeoutMilliseconds = 5000, bool throwIfTimeout = false)
     {
         if (ions.Any(x => x.charge == 0))

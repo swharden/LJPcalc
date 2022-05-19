@@ -2,11 +2,11 @@
 
 public class KnownIonSets
 {
-    public readonly List<KnownIonSet> ionSets;
+    public readonly KnownIonSet[] KnownSets;
 
     public KnownIonSets(IonTable ionTable)
     {
-        ionSets = new List<KnownIonSet>();
+        List<KnownIonSet> ionSets = new();
 
         if (ionTable is null)
             ionTable = new IonTable();
@@ -17,7 +17,8 @@ public class KnownIonSets
             expectedLjp_mV: -20.79558643,
             temperatureC: 25,
             expectedAccuracy_mV: .5,
-            ions: new List<Ion>(){
+            ions: new Ion[]
+            {
                     new Ion("Zn", 9, 2.84E-2),
                     new Ion("K", 0, 3),
                     new Ion("Cl", 18, 3.062)
@@ -30,7 +31,8 @@ public class KnownIonSets
             expectedLjp_mV: -8.2,
             temperatureC: 25,
             expectedAccuracy_mV: .5,
-            ions: new List<Ion>(){
+            ions: new Ion[]
+            {
                     new Ion("Ca", 50, 0),
                     new Ion("Cl", 200, 100),
                     new Ion("Mg", 50, 0),
@@ -44,7 +46,8 @@ public class KnownIonSets
             expectedLjp_mV: +8.74,
             temperatureC: 20,
             expectedAccuracy_mV: 0.5,
-            ions: new List<Ion>(){
+            ions: new Ion[]
+            {
                     new Ion("Na", 10, 145),
                     new Ion("Cl", 10, 145),
                     new Ion("Cs", 135, 0),
@@ -69,7 +72,8 @@ public class KnownIonSets
             expectedLjp_mV: +15.729,
             temperatureC: 25,
             expectedAccuracy_mV: .5,
-            ions: new List<Ion>(){
+            ions: new Ion[]
+            {
                     new Ion("Ca", 0, 2.4),
                     new Ion("Cl", 2, 133.8),
                     new Ion("Gluconate", 125, 0),
@@ -91,7 +95,8 @@ public class KnownIonSets
             expectedLjp_mV: +12.441,
             temperatureC: 25,
             expectedAccuracy_mV: .5,
-            ions: new List<Ion>(){
+            ions: new Ion[]
+            {
                     new Ion("Ca", 0, 2.4),
                     new Ion("Cl", 2 + 30, 133.8),
                     new Ion("Gluconate", 125 - 30, 0),
@@ -111,7 +116,8 @@ public class KnownIonSets
             expectedLjp_mV: 15.6,
             temperatureC: 20,
             expectedAccuracy_mV: .5,
-            ions: new List<Ion>(){
+            ions: new Ion[]
+            {
                     new Ion("K", 145, 2.8),
                     new Ion("Na", 13, 145),
                     new Ion("Cl", 10, 148.8),
@@ -128,7 +134,8 @@ public class KnownIonSets
             expectedLjp_mV: 15.1 - 3.3,
             temperatureC: 33,
             expectedAccuracy_mV: 1,
-            ions: new List<Ion>(){
+            ions: new Ion[]
+            {
                     new Ion("K", 50, 3),
                     new Ion("Gluconate", 50, 0),
                     new Ion("Cs", 70, 0),
@@ -147,5 +154,7 @@ public class KnownIonSets
                     new Ion("4-AP (4-aminopyridine)", 0, 5),
             },
             ionTable: ionTable));
+
+        KnownSets = ionSets.ToArray();
     }
 }

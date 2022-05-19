@@ -7,9 +7,9 @@ public class KnownIonSet
     public readonly double expectedLjp_mV;
     public readonly double expectedAccuracy_mV;
     public readonly double temperatureC;
-    public readonly List<Ion> ions;
+    public readonly Ion[] ions;
 
-    public KnownIonSet(string name, string details, double expectedLjp_mV, double expectedAccuracy_mV, List<Ion> ions, double temperatureC, IonTable ionTable)
+    public KnownIonSet(string name, string details, double expectedLjp_mV, double expectedAccuracy_mV, Ion[] ions, double temperatureC, IonTable ionTable)
     {
         this.name = name;
         this.details = details;
