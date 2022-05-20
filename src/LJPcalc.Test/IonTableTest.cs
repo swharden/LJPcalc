@@ -11,7 +11,7 @@ class IonTableTest
     {
         Ion ion = IonLibrary.Lookup("glutamate");
         Console.WriteLine(ion);
-        Assert.AreEqual(-1, ion.Charge);
+        Assert.That(ion.Charge, Is.EqualTo(-1));
     }
 
     [Test]
@@ -19,7 +19,7 @@ class IonTableTest
     {
         Ion ion = IonLibrary.Lookup("gLuTaMaTe");
         Console.WriteLine(ion);
-        Assert.AreEqual(-1, ion.Charge);
+        Assert.That(ion.Charge, Is.EqualTo(-1));
     }
 
     [Test]
@@ -27,7 +27,7 @@ class IonTableTest
     {
         Ion ion = IonLibrary.Lookup("Glutamate");
         Console.WriteLine(ion);
-        Assert.AreEqual(-1, ion.Charge);
+        Assert.That(ion.Charge, Is.EqualTo(-1));
     }
 
     [Test]
@@ -35,7 +35,7 @@ class IonTableTest
     {
         Ion ion = IonLibrary.Lookup("adfasdfasdfasdf");
         Console.WriteLine(ion);
-        Assert.AreEqual(0, ion.Charge);
+        Assert.That(ion.Charge, Is.EqualTo(0));
     }
 
     struct ionJLJP
@@ -51,7 +51,7 @@ class IonTableTest
         // ion charges and mus came from the JLJP project source code
         // https://github.com/swharden/JLJP/blob/b585ab99d78f39960f85b17988374f3445b7dadb/src/Ion.java#L29-L125
 
-        List<ionJLJP> ionsFromJLJP = new List<ionJLJP>
+        List<ionJLJP> ionsFromJLJP = new()
         {
             new ionJLJP() { name = "Ag", charge = 1, mu = 401656000000 },
             new ionJLJP() { name = "Al", charge = 3, mu = 131939000000 },

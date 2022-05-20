@@ -46,19 +46,19 @@ class JSON
         Ion[] ions2 = exp2.Ions;
         double temperature2 = exp2.TemperatureC;
 
-        Assert.AreEqual(temperature1, temperature2);
+        Assert.That(temperature2, Is.EqualTo(temperature1));
         Assert.IsNotNull(ions2);
-        Assert.AreEqual(ions1.Length, ions2.Length);
+        Assert.That(ions2.Length, Is.EqualTo(ions1.Length));
         for (int i = 0; i < ions1.Length; i++)
         {
-            Assert.AreEqual(ions1[i].Name, ions2[i].Name);
-            Assert.AreEqual(ions1[i].Charge, ions2[i].Charge);
-            Assert.AreEqual(ions1[i].Conductivity, ions2[i].Conductivity);
-            Assert.AreEqual(ions1[i].Mu, ions2[i].Mu);
-            Assert.AreEqual(ions1[i].C0, ions2[i].C0);
-            Assert.AreEqual(ions1[i].CL, ions2[i].CL);
+            Assert.That(ions2[i].Name, Is.EqualTo(ions1[i].Name));
+            Assert.That(ions2[i].Charge, Is.EqualTo(ions1[i].Charge));
+            Assert.That(ions2[i].Conductivity, Is.EqualTo(ions1[i].Conductivity));
+            Assert.That(ions2[i].Mu, Is.EqualTo(ions1[i].Mu));
+            Assert.That(ions2[i].C0, Is.EqualTo(ions1[i].C0));
+            Assert.That(ions2[i].CL, Is.EqualTo(ions1[i].CL));
         }
 
-        Assert.AreEqual(exp1.ToJson(), exp2.ToJson());
+        Assert.That(exp2.ToJson(), Is.EqualTo(exp1.ToJson()));
     }
 }

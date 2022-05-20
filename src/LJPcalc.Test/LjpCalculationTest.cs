@@ -20,7 +20,7 @@ class LjpCalculationTest
         ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet, autoSort: false);
-        Assert.AreEqual(-20.79558643, ljp.mV, 1e-6);
+        Assert.That(ljp.mV, Is.EqualTo(-20.79558643).Within(1e-6));
     }
 
     [Test]
@@ -49,7 +49,7 @@ class LjpCalculationTest
         };
 
         var ljp = Calculate.Ljp(ionSet, autoSort: false);
-        Assert.AreEqual(-20.79558643, ljp.mV, 1e-6);
+        Assert.That(ljp.mV, Is.EqualTo(-20.79558643).Within(1e-6));
     }
 
     private double MolsPerCubicMeter(double mM)
@@ -70,7 +70,7 @@ class LjpCalculationTest
         ionSet = IonLibrary.Lookup(ionSet);
         var ljp = Calculate.Ljp(ionSet, autoSort: false);
 
-        Assert.AreEqual(-20.79558643, ljp.mV, 1e-6);
+        Assert.That(ljp.mV, Is.EqualTo(-20.79558643).Within(1e-6));
     }
 
     [Test]
@@ -90,7 +90,7 @@ class LjpCalculationTest
         ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
-        Assert.AreEqual(-4.3, ljp.mV, 0.5);
+        Assert.That(ljp.mV, Is.EqualTo(-4.3).Within(0.5));
     }
 
     [Test]
@@ -111,7 +111,7 @@ class LjpCalculationTest
         ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
-        Assert.AreEqual(-4.3, ljp.mV, 0.5);
+        Assert.That(ljp.mV, Is.EqualTo(-4.3).Within(0.5));
     }
 
     [Test]
@@ -132,7 +132,7 @@ class LjpCalculationTest
         ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
-        Assert.AreEqual(-4.9, ljp.mV, 0.5);
+        Assert.That(ljp.mV, Is.EqualTo(-4.9).Within(0.5));
     }
 
     [Test]
@@ -153,7 +153,7 @@ class LjpCalculationTest
         ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
-        Assert.AreEqual(+10.0, ljp.mV, 0.5);
+        Assert.That(ljp.mV, Is.EqualTo(+10.0).Within(0.5));
     }
 
     [Test]
@@ -174,7 +174,7 @@ class LjpCalculationTest
         ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
-        Assert.AreEqual(+0.6, ljp.mV, 0.5);
+        Assert.That(ljp.mV, Is.EqualTo(+0.6).Within(0.5));
     }
 
     [Test]
@@ -196,7 +196,7 @@ class LjpCalculationTest
         ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
-        Assert.AreEqual(+6.4, ljp.mV, 0.5);
+        Assert.That(ljp.mV, Is.EqualTo(+6.4).Within(0.5));
     }
 
     [Test]
@@ -218,7 +218,7 @@ class LjpCalculationTest
         ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
-        Assert.AreEqual(-8.2, ljp.mV, 0.5);
+        Assert.That(ljp.mV, Is.EqualTo(-8.2).Within(0.5));
     }
 
     [Test]
@@ -238,7 +238,7 @@ class LjpCalculationTest
         ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
-        Assert.AreEqual(+8.74, ljp.mV, 0.5);
+        Assert.That(ljp.mV, Is.EqualTo(+8.74).Within(0.5));
     }
 
     [Test]
@@ -258,7 +258,7 @@ class LjpCalculationTest
         ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
-        Assert.AreEqual(+8.71, ljp.mV, 0.5);
+        Assert.That(ljp.mV, Is.EqualTo(+8.71).Within(0.5));
     }
 
     [Test]
@@ -276,7 +276,7 @@ class LjpCalculationTest
         ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
-        Assert.AreEqual(-15.6, ljp.mV, 0.5);
+        Assert.That(ljp.mV, Is.EqualTo(-15.6).Within(0.5));
     }
 
     [Test]
@@ -294,7 +294,7 @@ class LjpCalculationTest
         ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
-        Assert.AreEqual(55.5, ljp.mV, 0.5);
+        Assert.That(ljp.mV, Is.EqualTo(55.5).Within(0.5));
     }
 
     [Test]
@@ -312,7 +312,7 @@ class LjpCalculationTest
         ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
-        Assert.AreEqual(-35, ljp.mV, 0.5);
+        Assert.That(ljp.mV, Is.EqualTo(-35).Within(0.5));
     }
 
     [Test]
@@ -330,7 +330,7 @@ class LjpCalculationTest
         ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
-        Assert.AreEqual(-8.1, ljp.mV, 0.5);
+        Assert.That(ljp.mV, Is.EqualTo(-8.1).Within(0.5));
     }
 
     [Test]
@@ -361,7 +361,7 @@ class LjpCalculationTest
         ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet, temperatureC: 33);
-        Assert.AreEqual(15.1 - 3.3, ljp.mV, 0.5);
+        Assert.That(ljp.mV, Is.EqualTo(15.1 - 3.3).Within(0.5));
     }
 
     [Test]
