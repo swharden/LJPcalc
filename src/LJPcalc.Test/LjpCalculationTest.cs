@@ -383,13 +383,19 @@ class LjpCalculationTest
     [Test]
     public void Test_KnownIonSets_LjpWithinExpectedRange()
     {
-        var ionTable = new IonTable();
-        var knownSets = new KnownIonSets(ionTable);
-        foreach (var ionSet in knownSets.KnownSets)
+        var table = new IonTable();
+
+        Core.KnownIonSets.IKnownIonSet[] knowSets = Core.KnownIonSets.KnownSets.GetAll();
+        Assert.That(knowSets, Is.Not.Null);
+        Assert.That(knowSets, Is.Not.Empty);
+        Console.WriteLine($"Checking {knowSets.Length} known ion sets...");
+
+        foreach (var knownSet in knowSets)
         {
-            Console.WriteLine($"Testing known ion set: {ionSet.name}");
-            var ljp = Calculate.Ljp(ionSet.ions, ionSet.temperatureC);
-            Assert.AreEqual(ionSet.expectedLjp_mV, ljp.mV, ionSet.expectedAccuracy_mV);
+            Console.WriteLine(knownSet);
+            Ion[] ions = table.Lookup(knownSet.Ions);
+            double ljp = Calculate.Ljp(ions, knownSet.Temperature_C).mV;
+            Assert.That(ljp, Is.EqualTo(knownSet.Ljp_mV).Within(knownSet.Accuracy_mV));
         }
     }
 }

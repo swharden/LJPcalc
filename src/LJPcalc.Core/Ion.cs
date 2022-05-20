@@ -2,13 +2,13 @@
 
 public class Ion
 {
-    public string Name { get; private set; } = "?";
-    public int Charge { get; private set; } = 0;
-    public double Conductivity { get; private set; } = 0;
+    public readonly string Name;
+    public readonly int Charge;
+    public readonly double Conductivity;
     public double Mu => Conductivity / (Constants.Nav * Math.Pow(Constants.e, 2) * Math.Abs(Charge));
-    public double C0 { get; set; } = 0;
-    public double CL { get; set; } = 0;
-    public double Phi { get; set; } = 0;
+    public double C0 { get; set; }
+    public double CL { get; set; }
+    public double Phi { get; set; }
     public string NameWithCharge
     {
         get
