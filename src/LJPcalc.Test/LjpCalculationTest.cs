@@ -378,8 +378,6 @@ class LjpCalculationTest
 
         var ljp = Calculate.Ljp(ionSet, temperatureC: 33);
         Assert.AreEqual(15.1 - 3.3, ljp.mV, 0.5);
-
-        Console.WriteLine(ljp.report);
     }
 
     [Test]

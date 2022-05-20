@@ -20,7 +20,7 @@ public class Calculate
             throw new InvalidOperationException("second from last ion concentrations cannot be equal");
 
         // create this now to preserve original stats about each ion
-        LjpResult result = new LjpResult(ions, temperatureC);
+        Ion[] ionsInput = ions.ToArray();
 
         // solve for phis (if the number of ions is greater than 2)
         var phiSolution = new Solver.PhiSolver(ions, temperatureC, timeoutMilliseconds, throwIfTimeout);
@@ -48,7 +48,8 @@ public class Calculate
         LastIon.cL = -ions.Take(ions.Length - 1).Sum(x => x.cL * x.charge) / LastIon.charge;
 
         // load new details into the result
-        result.Finished(ions, ljp_V, phiSolution.SolutionM);
+        Ion[] ionsOutput = ions.ToArray();
+        LjpResult result = new(ionsInput, ionsOutput, temperatureC, ljp_V * 1000, phiSolution.SolutionM);
 
         return result;
     }
