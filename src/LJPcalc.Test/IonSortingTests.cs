@@ -19,8 +19,7 @@ class IonSortingTests
                 new Ion("Ag", 1, 1),
             };
 
-        var ionTable = new IonTable();
-        ionSet = ionTable.Lookup(ionSet);
+        ionSet = IonLibrary.Lookup(ionSet);
 
         // it does not solve in this order
         Assert.Throws<OperationCanceledException>(() => Calculate.Ljp(ionSet, autoSort: false, throwIfTimeout: true));
@@ -46,8 +45,7 @@ class IonSortingTests
                 new Ion("HEPES", 5, 5),
             };
 
-        var ionTable = new IonTable();
-        ionSet = ionTable.Lookup(ionSet);
+        ionSet = IonLibrary.Lookup(ionSet);
 
         // it does not solve in this order
         Assert.Throws<OperationCanceledException>(() => Calculate.Ljp(ionSet, autoSort: false, throwIfTimeout: true));

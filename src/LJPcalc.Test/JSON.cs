@@ -7,7 +7,7 @@ class JSON
 {
     private Ion[] GetTestSet()
     {
-        var ionSet = new List<Ion>()
+        var ionSet = new Ion[]
         {
             new Ion("K", 50, 3),
             new Ion("Gluconate", 50, 0),
@@ -27,8 +27,7 @@ class JSON
             new Ion("4-AP (4-aminopyridine)", 0, 5),
         };
 
-        var ionTable = new IonTable();
-        ionSet = ionTable.Lookup(ionSet);
+        ionSet = IonLibrary.Lookup(ionSet);
 
         return ionSet.ToArray();
     }

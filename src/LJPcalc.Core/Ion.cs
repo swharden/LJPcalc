@@ -5,6 +5,7 @@ public class Ion
     public readonly string Name;
     public readonly int Charge;
     public readonly double Conductivity;
+
     public double Mu => Conductivity / (Constants.Nav * Math.Pow(Constants.e, 2) * Math.Abs(Charge));
     public double C0 { get; set; }
     public double CL { get; set; }
@@ -44,6 +45,8 @@ public class Ion
         CL = cL;
         Phi = phi;
     }
+
+    public Ion WithConductivity(double cond) => new(Name, Charge, cond, C0, CL, Phi);
 
     public override string ToString()
     {

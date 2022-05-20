@@ -17,8 +17,7 @@ class LjpCalculationTest
             new Ion("Cl", 18, 3.0568)
         };
 
-        var ionTable = new IonTable();
-        ionSet = ionTable.Lookup(ionSet);
+        ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet, autoSort: false);
         Assert.AreEqual(-20.79558643, ljp.mV, 1e-6);
@@ -68,8 +67,7 @@ class LjpCalculationTest
         Ion Cl = new Ion("Cl", MolsPerCubicMeter(18), MolsPerCubicMeter(3.0568));
 
         var ionSet = new Ion[] { Zn, K, Cl };
-        var ionTable = new IonTable();
-        ionSet = ionTable.Lookup(ionSet);
+        ionSet = IonLibrary.Lookup(ionSet);
         var ljp = Calculate.Ljp(ionSet, autoSort: false);
 
         Assert.AreEqual(-20.79558643, ljp.mV, 1e-6);
@@ -89,8 +87,7 @@ class LjpCalculationTest
             new Ion("Cl", 50, 50)
         };
 
-        var ionTable = new IonTable();
-        ionSet = ionTable.Lookup(ionSet);
+        ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
         Assert.AreEqual(-4.3, ljp.mV, 0.5);
@@ -111,8 +108,7 @@ class LjpCalculationTest
             new Ion("Cl", 150, 150)
         };
 
-        var ionTable = new IonTable();
-        ionSet = ionTable.Lookup(ionSet);
+        ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
         Assert.AreEqual(-4.3, ljp.mV, 0.5);
@@ -133,8 +129,7 @@ class LjpCalculationTest
             new Ion("Cl", 50, 50)
         };
 
-        var ionTable = new IonTable();
-        ionSet = ionTable.Lookup(ionSet);
+        ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
         Assert.AreEqual(-4.9, ljp.mV, 0.5);
@@ -155,8 +150,7 @@ class LjpCalculationTest
             new Ion("Cl", 100, 200)
         };
 
-        var ionTable = new IonTable();
-        ionSet = ionTable.Lookup(ionSet);
+        ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
         Assert.AreEqual(+10.0, ljp.mV, 0.5);
@@ -177,8 +171,7 @@ class LjpCalculationTest
             new Ion("Cl", 200, 200)
         };
 
-        var ionTable = new IonTable();
-        ionSet = ionTable.Lookup(ionSet);
+        ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
         Assert.AreEqual(+0.6, ljp.mV, 0.5);
@@ -200,8 +193,7 @@ class LjpCalculationTest
             new Ion("Cl", 104, 104)
         };
 
-        var ionTable = new IonTable();
-        ionSet = ionTable.Lookup(ionSet);
+        ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
         Assert.AreEqual(+6.4, ljp.mV, 0.5);
@@ -223,8 +215,7 @@ class LjpCalculationTest
             new Ion("Li", 0, 100)
         };
 
-        var ionTable = new IonTable();
-        ionSet = ionTable.Lookup(ionSet);
+        ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
         Assert.AreEqual(-8.2, ljp.mV, 0.5);
@@ -244,8 +235,7 @@ class LjpCalculationTest
             new Ion("F", 135, 0)
         };
 
-        var ionTable = new IonTable();
-        ionSet = ionTable.Lookup(ionSet);
+        ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
         Assert.AreEqual(+8.74, ljp.mV, 0.5);
@@ -265,8 +255,7 @@ class LjpCalculationTest
             new Ion("Cl", 20, 145)
         };
 
-        var ionTable = new IonTable();
-        ionSet = ionTable.Lookup(ionSet);
+        ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
         Assert.AreEqual(+8.71, ljp.mV, 0.5);
@@ -284,8 +273,7 @@ class LjpCalculationTest
             new Ion("Cl", 0.0995, 0.00499)
         };
 
-        var ionTable = new IonTable();
-        ionSet = ionTable.Lookup(ionSet);
+        ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
         Assert.AreEqual(-15.6, ljp.mV, 0.5);
@@ -303,8 +291,7 @@ class LjpCalculationTest
             new Ion("Cl", .1, .00345)
         };
 
-        var ionTable = new IonTable();
-        ionSet = ionTable.Lookup(ionSet);
+        ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
         Assert.AreEqual(55.5, ljp.mV, 0.5);
@@ -322,8 +309,7 @@ class LjpCalculationTest
             new Ion("Cl", .29*2, .00545*2)
         };
 
-        var ionTable = new IonTable();
-        ionSet = ionTable.Lookup(ionSet);
+        ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
         Assert.AreEqual(-35, ljp.mV, 0.5);
@@ -341,8 +327,7 @@ class LjpCalculationTest
             new Ion("SO4", .4, .0186),
         };
 
-        var ionTable = new IonTable();
-        ionSet = ionTable.Lookup(ionSet);
+        ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet);
         Assert.AreEqual(-8.1, ljp.mV, 0.5);
@@ -373,8 +358,7 @@ class LjpCalculationTest
             new Ion("4-AP (4-aminopyridine)", 0, 5),
         };
 
-        var ionTable = new IonTable();
-        ionSet = ionTable.Lookup(ionSet);
+        ionSet = IonLibrary.Lookup(ionSet);
 
         var ljp = Calculate.Ljp(ionSet, temperatureC: 33);
         Assert.AreEqual(15.1 - 3.3, ljp.mV, 0.5);
@@ -383,8 +367,6 @@ class LjpCalculationTest
     [Test]
     public void Test_KnownIonSets_LjpWithinExpectedRange()
     {
-        var table = new IonTable();
-
         Core.KnownIonSets.IKnownIonSet[] knowSets = Core.KnownIonSets.KnownSets.GetAll();
         Assert.That(knowSets, Is.Not.Null);
         Assert.That(knowSets, Is.Not.Empty);
@@ -393,7 +375,7 @@ class LjpCalculationTest
         foreach (var knownSet in knowSets)
         {
             Console.WriteLine(knownSet);
-            Ion[] ions = table.Lookup(knownSet.Ions);
+            Ion[] ions = IonLibrary.Lookup(knownSet.Ions);
             double ljp = Calculate.Ljp(ions, knownSet.Temperature_C).mV;
             Assert.That(ljp, Is.EqualTo(knownSet.Ljp_mV).Within(knownSet.Accuracy_mV));
         }
