@@ -1,7 +1,10 @@
-﻿namespace LJPcalc.Core;
+﻿using LJPcalc.Core.Solver;
 
-public class Calculate
+namespace LJPcalc.Core;
+
+public static class Calculate
 {
+    // TODO: THIS IS NOT THREAD SAFE!
     public static LjpResult Ljp(Ion[] ions, double temperatureC = 25, bool autoSort = true, double timeoutMilliseconds = 5000, bool throwIfTimeout = false)
     {
         if (ions.Any(x => x.Charge == 0))
@@ -105,16 +108,16 @@ public class Calculate
 
         // set last ion C0 based on charges, rhos, and linear algebra
         double zCl = ionList[indexLastIon].Charge;
-        double rhoCl = -Linalg.ScalarProduct(charges, rhos) / zCl;
+        double rhoCl = -LinearAlgebra.ScalarProduct(charges, rhos) / zCl;
         lastIon.C0 = rhoCl;
 
         // cycle to determine junction voltage
         double V = 0.0;
-        double KT = Constants.boltzmann * (temperatureC + Constants.zeroCinK);
+        double KT = Constants.Boltzmann * (temperatureC + Constants.ZeroCelsiusInKelvin);
         double cdadc = 1.0; // fine for low concentrations
         for (double rhoK = KC0; ((dK > 0) ? rhoK <= KCL : rhoK >= KCL); rhoK += dK)
         {
-            rhoCl = -Linalg.ScalarProduct(rhos, charges) / zCl;
+            rhoCl = -LinearAlgebra.ScalarProduct(rhos, charges) / zCl;
 
             double DCl = lastIon.Mu * KT * cdadc;
             double vCl = zCl * Constants.e * lastIon.Mu * rhoCl;
@@ -134,29 +137,29 @@ public class Calculate
                 v[j] = charges[j] * Constants.e * mus[j] * rhos[j];
             }
 
-            if (Linalg.ScalarProduct(charges, v) + zCl * vCl == 0.0)
+            if (LinearAlgebra.ScalarProduct(charges, v) + zCl * vCl == 0.0)
             {
                 return double.NaN; // Singularity; abort calculation
             }
 
-            double[,] identity = Linalg.Identity(ionCountMinusOne);
-            double[,] linAlgSum = Linalg.Sum(1, mD, -DCl, identity);
-            double[] sumCharge = Linalg.Product(linAlgSum, charges);
-            double chargesProd = Linalg.ScalarProduct(charges, v);
+            double[,] identity = LinearAlgebra.Identity(ionCountMinusOne);
+            double[,] linAlgSum = LinearAlgebra.Sum(1, mD, -DCl, identity);
+            double[] sumCharge = LinearAlgebra.Product(linAlgSum, charges);
+            double chargesProd = LinearAlgebra.ScalarProduct(charges, v);
             double chargesProdPlusCl = chargesProd + zCl * vCl;
-            double[] delta = Linalg.ScalarMultiply(sumCharge, 1.0 / chargesProdPlusCl);
+            double[] delta = LinearAlgebra.ScalarMultiply(sumCharge, 1.0 / chargesProdPlusCl);
 
             double[,] mDyadic = new double[ionCountMinusOne, ionCountMinusOne];
             for (int j = 0; j < ionCountMinusOne; j++)
                 for (int k = 0; k < ionCountMinusOne; k++)
                     mDyadic[j, k] = v[j] * delta[k];
-            double[,] mM = Linalg.Sum(1, mDyadic, -1, mD);
+            double[,] mM = LinearAlgebra.Sum(1, mDyadic, -1, mD);
 
-            double[] rhop = Linalg.Solve(mM, phis);
+            double[] rhop = LinearAlgebra.Solve(mM, phis);
             double rhopK = rhop[indexSecondFromLastIon];
-            rhos = Linalg.Sum(1, rhos, dK / rhopK, rhop);
+            rhos = LinearAlgebra.Sum(1, rhos, dK / rhopK, rhop);
 
-            double E = Linalg.ScalarProduct(delta, rhop);
+            double E = LinearAlgebra.ScalarProduct(delta, rhop);
             V -= E * dK / rhopK;
 
         }

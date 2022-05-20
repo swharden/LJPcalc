@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using LJPcalc.Core;
+using LJPcalc.Core.Solver;
 
 namespace LJPcalc.Test;
 
@@ -11,11 +11,11 @@ class LinalgTest
         Random rand = new Random(0);
 
         int arrayLength = 10;
-        double[,] input2d = Linalg.RandomArray2d(arrayLength, arrayLength, rand);
-        double[] input1d = Linalg.RandomArray1d(arrayLength, rand);
+        double[,] input2d = LinearAlgebra.RandomArray2d(arrayLength, arrayLength, rand);
+        double[] input1d = LinearAlgebra.RandomArray1d(arrayLength, rand);
 
-        double[] solution = Linalg.Solve(input2d, input1d);
-        double[] product = Linalg.Product(input2d, solution);
+        double[] solution = LinearAlgebra.Solve(input2d, input1d);
+        double[] product = LinearAlgebra.Product(input2d, solution);
 
         for (int rowIndex = 0; rowIndex < arrayLength; rowIndex++)
         {

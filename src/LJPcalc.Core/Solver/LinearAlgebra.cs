@@ -1,12 +1,7 @@
-﻿using System.Diagnostics;
+﻿namespace LJPcalc.Core.Solver;
 
-namespace LJPcalc.Core;
-
-// Linear algebra tools by Doriano Brogioli translated from JAVA to C# by Scott Harden
-// Original source code: https://github.com/swharden/JLJP
-public class Linalg
+public static class LinearAlgebra
 {
-
     public static double[,] RandomArray2d(int arrayLength, int arrayHeight, Random rand)
     {
         double[,] M = new double[arrayLength, arrayHeight];
@@ -32,9 +27,11 @@ public class Linalg
         if (Mv.GetLength(0) != vv.Length)
             throw new ArgumentException("Mv and vv must have identical length");
 
+        double[,] M = new double[Mv.GetLength(0), Mv.GetLength(1)];
+        Array.Copy(Mv, M, Mv.Length);
 
-        double[,] M = Mv.Clone() as double[,];
-        double[] v = vv.Clone() as double[];
+        double[] v = new double[vv.Length];
+        Array.Copy(vv, v, vv.Length);
 
         int arrayLength = Mv.GetLength(0);
         int arrayWidth = Mv.GetLength(1);
@@ -42,7 +39,7 @@ public class Linalg
         // row reduce
         int row = 0;
         int column = 0;
-        while ((row < arrayLength) && (column < arrayWidth))
+        while (row < arrayLength && column < arrayWidth)
         {
             // look for the largest number in the column m
             double maxv = 0;
@@ -109,7 +106,7 @@ public class Linalg
 
         row = 0;
         column = 0;
-        while ((row < arrayLength) && (column < arrayWidth))
+        while (row < arrayLength && column < arrayWidth)
         {
 
             // look for the first 1
@@ -135,7 +132,7 @@ public class Linalg
         double[,] r = new double[num, num];
         for (int j = 0; j < num; j++)
             for (int k = 0; k < num; k++)
-                r[j, k] = (j == k) ? 1 : 0;
+                r[j, k] = j == k ? 1 : 0;
         return r;
     }
 
@@ -241,5 +238,4 @@ public class Linalg
                 R[n, m] = a * A[n, m] + b * B[n, m];
         return R;
     }
-
 }

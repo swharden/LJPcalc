@@ -26,7 +26,7 @@ class IonSortingTests
 
         // but it does solve if allowed to auto-sort
         var ljp = Calculate.Ljp(ionSet);
-        Assert.That(ljp.mV, Is.EqualTo(-13.5).Within(0.5));
+        Assert.That(ljp.LjpMillivolts, Is.EqualTo(-13.5).Within(0.5));
     }
 
     [Test]
@@ -52,6 +52,6 @@ class IonSortingTests
 
         // but it does solve if allowed to auto-sort
         var ljp = Calculate.Ljp(ionSet);
-        Assert.That(ljp.mV, Is.EqualTo(16.3).Within(0.5));
+        Assert.That(ljp.LjpMillivolts, Is.EqualTo(16.3).Within(0.5));
     }
 }

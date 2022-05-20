@@ -92,8 +92,8 @@ class EquationSolver
             for (int k = 0; k < EquationCount; k++)
                 Vm[j, k] = Points[k].X[j] - Points[EquationCount].X[j];
 
-        double[] u = Linalg.Solve(Mm, mF0);
-        double[] delta = Linalg.Product(Vm, u);
+        double[] u = LinearAlgebra.Solve(Mm, mF0);
+        double[] delta = LinearAlgebra.Product(Vm, u);
 
         for (int j = 0; j < EquationCount; j++)
             suggestedXs[j] = Points[EquationCount].X[j] + delta[j];

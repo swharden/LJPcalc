@@ -328,8 +328,5 @@ public static class IonLibrary
         return ions.OrderBy(x => x.Name).ToArray();
     }
 
-    /// <summary>
-    /// Create an ion given conductivity time E-4
-    /// </summary>
-    private static Ion MakeReferenceIon(string name, int charge, double cond) => new(name, charge, cond, 0, 0, 0);
+    private static Ion MakeReferenceIon(string name, int charge, double conductance) => new(name, charge, conductance, 0, 0, 0);
 }
