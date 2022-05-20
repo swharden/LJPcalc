@@ -40,7 +40,7 @@ public class IonSet
     public bool Contains(string name)
     {
         foreach (Ion tableIon in ions)
-            if (string.Compare(name, tableIon.name, StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(name, tableIon.Name, StringComparison.OrdinalIgnoreCase) == 0)
                 return true;
         return false;
     }
@@ -65,11 +65,11 @@ public class IonSet
 
         foreach (Ion ion in ions)
         {
-            string name = ion.name.PadRight(18);
-            string charge = (ion.charge > 0) ? ("+" + ion.charge.ToString()).PadRight(6) : ion.charge.ToString().PadRight(6);
-            string conductivity = Math.Round((ion.conductivity * 1E4), precision).ToString().PadRight(18);
-            string c0 = Math.Round(ion.c0, precision).ToString().PadRight(12);
-            string cL = Math.Round(ion.cL, precision).ToString().PadRight(12);
+            string name = ion.Name.PadRight(18);
+            string charge = (ion.Charge > 0) ? ("+" + ion.Charge.ToString()).PadRight(6) : ion.Charge.ToString().PadRight(6);
+            string conductivity = Math.Round((ion.Conductivity * 1E4), precision).ToString().PadRight(18);
+            string c0 = Math.Round(ion.C0, precision).ToString().PadRight(12);
+            string cL = Math.Round(ion.CL, precision).ToString().PadRight(12);
             txt.AppendLine($" {name} | {charge} | {conductivity} | {c0} | {cL}");
         }
 
@@ -92,7 +92,7 @@ public class IonSet
             Ion ion = IonFromMarkdownLine(line);
             if (ion != null)
             {
-                if (ignoreDuplicates && Contains(ion.name))
+                if (ignoreDuplicates && Contains(ion.Name))
                     continue;
 
                 ions.Add(ion);
@@ -101,7 +101,7 @@ public class IonSet
 
         if (sort)
         {
-            var sortedIons = ions.OrderBy(ion => ion.name).ToList();
+            var sortedIons = ions.OrderBy(ion => ion.Name).ToList();
             ions.Clear();
             ions.AddRange(sortedIons);
         }

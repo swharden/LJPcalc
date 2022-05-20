@@ -52,12 +52,12 @@ class JSON
         Assert.AreEqual(ions1.Length, ions2.Length);
         for (int i = 0; i < ions1.Length; i++)
         {
-            Assert.AreEqual(ions1[i].name, ions2[i].name);
-            Assert.AreEqual(ions1[i].charge, ions2[i].charge);
-            Assert.AreEqual(ions1[i].conductivity, ions2[i].conductivity);
-            Assert.AreEqual(ions1[i].mu, ions2[i].mu);
-            Assert.AreEqual(ions1[i].c0, ions2[i].c0);
-            Assert.AreEqual(ions1[i].cL, ions2[i].cL);
+            Assert.AreEqual(ions1[i].Name, ions2[i].Name);
+            Assert.AreEqual(ions1[i].Charge, ions2[i].Charge);
+            Assert.AreEqual(ions1[i].Conductivity, ions2[i].Conductivity);
+            Assert.AreEqual(ions1[i].Mu, ions2[i].Mu);
+            Assert.AreEqual(ions1[i].C0, ions2[i].C0);
+            Assert.AreEqual(ions1[i].CL, ions2[i].CL);
         }
 
         Assert.AreEqual(exp1.ToJson(), exp2.ToJson());

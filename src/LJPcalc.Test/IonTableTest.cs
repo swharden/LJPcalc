@@ -32,7 +32,7 @@ class IonTableTest
         var ionTable = new IonTable();
         var ion = ionTable.Lookup("glutamate");
         Console.WriteLine(ion);
-        Assert.AreEqual(-1, ion.charge);
+        Assert.AreEqual(-1, ion.Charge);
     }
 
     [Test]
@@ -41,7 +41,7 @@ class IonTableTest
         var ionTable = new IonTable();
         var ion = ionTable.Lookup("gLuTaMaTe");
         Console.WriteLine(ion);
-        Assert.AreEqual(-1, ion.charge);
+        Assert.AreEqual(-1, ion.Charge);
     }
 
     [Test]
@@ -50,7 +50,7 @@ class IonTableTest
         var ionTable = new IonTable();
         var ion = ionTable.Lookup("Glutamate");
         Console.WriteLine(ion);
-        Assert.AreEqual(-1, ion.charge);
+        Assert.AreEqual(-1, ion.Charge);
     }
 
     [Test]
@@ -59,7 +59,7 @@ class IonTableTest
         var ionTable = new IonTable();
         var ion = ionTable.Lookup("adfasdfasdfasdf");
         Console.WriteLine(ion);
-        Assert.AreEqual(0, ion.charge);
+        Assert.AreEqual(0, ion.Charge);
     }
 
     struct JljpIon
@@ -183,10 +183,10 @@ class IonTableTest
             if (ionTable.Contains(jljpIon.name))
             {
                 var ion = ionTable.Lookup(jljpIon.name);
-                Assert.That(ion.charge == jljpIon.charge);
+                Assert.That(ion.Charge == jljpIon.charge);
 
-                double muDifference = Math.Abs(ion.mu - jljpIon.mu);
-                double muDifferencePercent = Math.Round(muDifference / ion.mu * 100.0, 3);
+                double muDifference = Math.Abs(ion.Mu - jljpIon.mu);
+                double muDifferencePercent = Math.Round(muDifference / ion.Mu * 100.0, 3);
                 double allowableDifferencePercent = 10;
                 Assert.That(muDifferencePercent < allowableDifferencePercent);
             }

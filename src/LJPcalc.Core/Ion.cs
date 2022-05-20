@@ -2,92 +2,51 @@
 
 public class Ion
 {
-    public string name { get; private set; } = "?";
-    public int charge { get; private set; } = 0;
-    public bool isAnion { get { return charge < 0; } }
-    public bool isCation { get { return charge > 0; } }
-    public double conductivity { get; private set; } = 0;
-    public double mu { get; private set; } = 0;
-    public double muE11 { get { return mu / 1e11; } set { mu = value * 1e11; } }
-    public double cdadc { get; } = 1.0;
-
-    public double c0 { get; set; } = 0;
-    public double cL { get; set; } = 0;
-    public double cDiff { get { return Math.Abs(cL - c0); } }
-    public double cTotal { get { return cL + c0; } }
-
-    public double phi { get; set; } = 0;
-
-    public string chargeWithSign { get { return (charge > 0) ? "+" + charge.ToString() : charge.ToString(); } }
-    public string nameWithCharge { get { return $"{name} ({chargeWithSign})"; } }
-    public bool isValid { get { return (charge != 0 && mu >= 0 && conductivity > 0 && name != null && name != ""); } }
-
-    public Ion()
+    public string Name { get; private set; } = "?";
+    public int Charge { get; private set; } = 0;
+    public double Conductivity { get; private set; } = 0;
+    public double Mu => Conductivity / (Constants.Nav * Math.Pow(Constants.e, 2) * Math.Abs(Charge));
+    public double C0 { get; set; } = 0;
+    public double CL { get; set; } = 0;
+    public double Phi { get; set; } = 0;
+    public string NameWithCharge
     {
-
+        get
+        {
+            string chargeWithSign = (Charge > 0) ? "+" + Charge.ToString() : Charge.ToString();
+            return $"{Name} ({chargeWithSign})";
+        }
     }
 
     public Ion(Ion ion)
     {
-        this.name = ion.name;
-        this.charge = ion.charge;
-        this.conductivity = ion.conductivity;
-        this.mu = ion.mu;
-        this.c0 = ion.c0;
-        this.cL = ion.cL;
-        this.phi = ion.phi;
+        Name = ion.Name;
+        Charge = ion.Charge;
+        Conductivity = ion.Conductivity;
+        C0 = ion.C0;
+        CL = ion.CL;
+        Phi = ion.Phi;
     }
 
-    public Ion(String name)
+    public Ion(string name, double c0, double cL)
     {
-        this.name = name;
+        Name = name;
+        C0 = c0;
+        CL = cL;
     }
 
-    public Ion(String name, double c0, double cL)
+    public Ion(string name, int charge, double conductivity, double c0, double cL, double phi = 0)
     {
-        this.name = name;
-        this.c0 = c0;
-        this.cL = cL;
-    }
-
-    public Ion(Ion ion, double c0, double cL)
-    {
-        name = ion.name;
-        charge = ion.charge;
-        conductivity = ion.conductivity;
-        mu = ion.mu;
-        this.c0 = c0;
-        this.cL = cL;
-    }
-
-    public Ion(String name, int charge, double conductivity, double c0, double cL)
-    {
-        this.name = name;
-        this.charge = charge;
-        this.conductivity = conductivity;
-        mu = Mobility(conductivity, charge);
-        this.c0 = c0;
-        this.cL = cL;
+        Name = name;
+        Charge = charge;
+        Conductivity = conductivity;
+        C0 = c0;
+        CL = cL;
+        Phi = phi;
     }
 
     public override string ToString()
     {
-        return $"Ion {nameWithCharge}: mu={mu:0.000E+0}, c0={c0:0.000}, cL={cL:0.000}";
-    }
-
-    public static double Conductivity(double mobility, int charge)
-    {
-        if (charge == 0)
-            return 0;
-        double bigNumber = Constants.Nav * Math.Pow(Constants.e, 2) * Math.Abs(charge);
-        return bigNumber * mobility;
-    }
-
-    public static double Mobility(double conductivity, int charge)
-    {
-        if (charge == 0)
-            return 0;
-        double bigNumber = Constants.Nav * Math.Pow(Constants.e, 2) * Math.Abs(charge);
-        return conductivity / bigNumber;
+        return $"Ion {NameWithCharge}: mu={Mu:0.000E+0}, c0={C0:0.000}, cL={CL:0.000}";
     }
 }

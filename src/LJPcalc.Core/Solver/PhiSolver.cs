@@ -14,7 +14,7 @@ public class PhiSolver
         // phis are initialized to the difference in concentration on each side of the junction
         double[] phis = Enumerable.Range(0, ions.Length - 2)
                                   .Select(x => ions[x])
-                                  .Select(x => x.cL - x.c0)
+                                  .Select(x => x.CL - x.C0)
                                   .ToArray();
 
         if (ions.Length > 2)

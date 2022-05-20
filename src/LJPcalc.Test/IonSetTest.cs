@@ -32,17 +32,17 @@ public class IonSetTest
 
         for (int i=0; i< ions.Count; i++)
         {
-            Assert.AreEqual(ions[i].name, ionSet1.ions[i].name);
-            Assert.AreEqual(ions[i].charge, ionSet1.ions[i].charge);
-            Assert.AreEqual(ions[i].conductivity, ionSet1.ions[i].conductivity, 1e-10);
-            Assert.AreEqual(ions[i].c0, ionSet1.ions[i].c0);
-            Assert.AreEqual(ions[i].cL, ionSet1.ions[i].cL);
+            Assert.AreEqual(ions[i].Name, ionSet1.ions[i].Name);
+            Assert.AreEqual(ions[i].Charge, ionSet1.ions[i].Charge);
+            Assert.AreEqual(ions[i].Conductivity, ionSet1.ions[i].Conductivity, 1e-10);
+            Assert.AreEqual(ions[i].C0, ionSet1.ions[i].C0);
+            Assert.AreEqual(ions[i].CL, ionSet1.ions[i].CL);
 
-            Assert.AreEqual(ions[i].name, ionSet2.ions[i].name);
-            Assert.AreEqual(ions[i].charge, ionSet2.ions[i].charge);
-            Assert.AreEqual(ions[i].conductivity, ionSet2.ions[i].conductivity, 1e-10);
-            Assert.AreEqual(ions[i].c0, ionSet2.ions[i].c0);
-            Assert.AreEqual(ions[i].cL, ionSet2.ions[i].cL);
+            Assert.AreEqual(ions[i].Name, ionSet2.ions[i].Name);
+            Assert.AreEqual(ions[i].Charge, ionSet2.ions[i].Charge);
+            Assert.AreEqual(ions[i].Conductivity, ionSet2.ions[i].Conductivity, 1e-10);
+            Assert.AreEqual(ions[i].C0, ionSet2.ions[i].C0);
+            Assert.AreEqual(ions[i].CL, ionSet2.ions[i].CL);
         }
     }
 }

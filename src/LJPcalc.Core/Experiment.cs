@@ -32,7 +32,7 @@ public class Experiment
         StringBuilder sb = new StringBuilder();
         sb.Append($"{TemperatureC}C");
         foreach (var ion in Ions)
-            sb.Append($", {ion.name.Split(' ')[0]} {ion.c0:0.000}:{ion.cL:0.000}");
+            sb.Append($", {ion.Name.Split(' ')[0]} {ion.C0:0.000}:{ion.CL:0.000}");
         return sb.ToString();
     }
 
@@ -50,7 +50,7 @@ public class Experiment
         sb.AppendLine($"");
         sb.AppendLine($"Solution Ions (slightly adjusted to achieve electronegativity):");
         foreach (var ion in Ions)
-            sb.AppendLine($"  {ion.name} phi={ion.phi}, C0={ion.c0}, CL={ion.cL}");
+            sb.AppendLine($"  {ion.Name} phi={ion.Phi}, C0={ion.C0}, CL={ion.CL}");
         return sb.ToString();
     }
 
@@ -111,11 +111,11 @@ public class Experiment
                 foreach (var ion in Ions)
                 {
                     writer.WriteStartObject();
-                    writer.WriteString("name", ion.name);
-                    writer.WriteNumber("charge", ion.charge);
-                    writer.WriteNumber("conductivity", ion.conductivity);
-                    writer.WriteNumber("c0", ion.c0);
-                    writer.WriteNumber("cL", ion.cL);
+                    writer.WriteString("name", ion.Name);
+                    writer.WriteNumber("charge", ion.Charge);
+                    writer.WriteNumber("conductivity", ion.Conductivity);
+                    writer.WriteNumber("c0", ion.C0);
+                    writer.WriteNumber("cL", ion.CL);
                     writer.WriteEndObject();
                 }
                 writer.WriteEndArray();

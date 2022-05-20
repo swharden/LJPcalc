@@ -4,10 +4,10 @@ public class Calculate
 {
     public static LjpResult Ljp(Ion[] ions, double temperatureC = 25, bool autoSort = true, double timeoutMilliseconds = 5000, bool throwIfTimeout = false)
     {
-        if (ions.Any(x => x.charge == 0))
+        if (ions.Any(x => x.Charge == 0))
             throw new ArgumentException("ion charge cannot be zero");
 
-        if (ions.Any(x => x.mu == 0))
+        if (ions.Any(x => x.Mu == 0))
             throw new ArgumentException("ion mu cannot be zero");
 
         if (autoSort)
@@ -16,7 +16,7 @@ public class Calculate
         Ion secondFromLastIon = ions[ions.Length - 2];
         Ion LastIon = ions[ions.Length - 1];
 
-        if (secondFromLastIon.c0 == secondFromLastIon.cL)
+        if (secondFromLastIon.C0 == secondFromLastIon.CL)
             throw new InvalidOperationException("second from last ion concentrations cannot be equal");
 
         // create this now to preserve original stats about each ion
@@ -34,18 +34,18 @@ public class Calculate
         for (int j = 0; j < phis.Length; j++)
         {
             Ion ion = ions[j];
-            ion.phi = phis[j];
-            ion.cL = cLs[j];
+            ion.Phi = phis[j];
+            ion.CL = cLs[j];
         }
 
         // second from last ion phi is concentration difference
-        secondFromLastIon.phi = secondFromLastIon.cL - secondFromLastIon.c0;
+        secondFromLastIon.Phi = secondFromLastIon.CL - secondFromLastIon.C0;
 
         // last ion's phi is calculated from all the phis before it
-        LastIon.phi = -ions.Take(ions.Length - 1).Sum(x => x.phi * x.charge) / LastIon.charge;
+        LastIon.Phi = -ions.Take(ions.Length - 1).Sum(x => x.Phi * x.Charge) / LastIon.Charge;
 
         // last ion's cL is calculated from all the cLs before it
-        LastIon.cL = -ions.Take(ions.Length - 1).Sum(x => x.cL * x.charge) / LastIon.charge;
+        LastIon.CL = -ions.Take(ions.Length - 1).Sum(x => x.CL * x.Charge) / LastIon.Charge;
 
         // load new details into the result
         Ion[] ionsOutput = ions.ToArray();
@@ -82,9 +82,9 @@ public class Calculate
         for (int j = 0; j < ionCountMinusOne; j++)
         {
             Ion ion = ionList[j];
-            charges[j] = ion.charge;
-            mus[j] = ion.mu;
-            rhos[j] = ion.c0;
+            charges[j] = ion.Charge;
+            mus[j] = ion.Mu;
+            rhos[j] = ion.C0;
         }
 
         // populate phis from all ions except the last two
@@ -93,20 +93,20 @@ public class Calculate
             phis[j] = startingPhis[j];
 
         // second from last phi is the concentration difference
-        phis[indexSecondFromLastIon] = secondFromLastIon.cL - secondFromLastIon.c0;
+        phis[indexSecondFromLastIon] = secondFromLastIon.CL - secondFromLastIon.C0;
 
         // prepare info about second from last ion concentration difference for loop
-        if (secondFromLastIon.c0 == secondFromLastIon.cL)
+        if (secondFromLastIon.C0 == secondFromLastIon.CL)
             throw new InvalidOperationException("second from last ion concentrations cannot be equal");
 
-        double KC0 = secondFromLastIon.c0;
-        double KCL = secondFromLastIon.cL;
+        double KC0 = secondFromLastIon.C0;
+        double KCL = secondFromLastIon.CL;
         double dK = (KCL - KC0) / 1000.0;
 
         // set last ion C0 based on charges, rhos, and linear algebra
-        double zCl = ionList[indexLastIon].charge;
+        double zCl = ionList[indexLastIon].Charge;
         double rhoCl = -Linalg.ScalarProduct(charges, rhos) / zCl;
-        lastIon.c0 = rhoCl;
+        lastIon.C0 = rhoCl;
 
         // cycle to determine junction voltage
         double V = 0.0;
@@ -116,8 +116,8 @@ public class Calculate
         {
             rhoCl = -Linalg.ScalarProduct(rhos, charges) / zCl;
 
-            double DCl = lastIon.mu * KT * cdadc;
-            double vCl = zCl * Constants.e * lastIon.mu * rhoCl;
+            double DCl = lastIon.Mu * KT * cdadc;
+            double vCl = zCl * Constants.e * lastIon.Mu * rhoCl;
 
             double[] v = new double[ionCountMinusOne];
             double[,] mD = new double[ionCountMinusOne, ionCountMinusOne];
@@ -177,11 +177,11 @@ public class Calculate
         List<Ion> ionList = inputIons.ToList();
 
         // absolute largest cL should be last
-        Ion ionWithLargestCL = ionList.OrderBy(x => x.cL).Last();
+        Ion ionWithLargestCL = ionList.OrderBy(x => x.CL).Last();
         ionList.Remove(ionWithLargestCL);
 
         // largest diff should be second from last
-        Ion ionWithLargestCDiff = ionList.OrderBy(x => x.cDiff).Last();
+        Ion ionWithLargestCDiff = ionList.OrderBy(x => Math.Abs(x.CL - x.C0)).Last();
         ionList.Remove(ionWithLargestCDiff);
 
         // place the removed ions back in the proper order

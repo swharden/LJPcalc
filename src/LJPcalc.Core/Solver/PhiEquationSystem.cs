@@ -24,16 +24,16 @@ class PhiEquationSystem : Solver.IEquationSystem
 
         // Sigma is a scaling factor later used to scale the difference between 
         // the expected CL and the CL determined using the custom phis (x).
-        double smallestAbsoluteNonZeroCL = Ions.Select(ion => Math.Abs(ion.cL))
+        double smallestAbsoluteNonZeroCL = Ions.Select(ion => Math.Abs(ion.CL))
                                                .Where(c => c > 0)
                                                .Min();
 
         for (int i = 0; i < EquationCount; i++)
         {
             double newCL = f[i];
-            double originalCL = Ions[i].cL;
+            double originalCL = Ions[i].CL;
             double differenceCL = newCL - originalCL;
-            double absoluteCL = Math.Max(Math.Abs(Ions[i].cL), smallestAbsoluteNonZeroCL);
+            double absoluteCL = Math.Max(Math.Abs(Ions[i].CL), smallestAbsoluteNonZeroCL);
             f[i] = 100 * differenceCL / absoluteCL;
         }
     }

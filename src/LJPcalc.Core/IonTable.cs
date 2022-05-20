@@ -83,8 +83,8 @@ public class IonTable : IonSet
     public Ion Lookup(Ion ion)
     {
         foreach (Ion tableIon in ions)
-            if (string.Compare(ion.name, tableIon.name, StringComparison.OrdinalIgnoreCase) == 0)
-                return new Ion(tableIon.name, tableIon.charge, tableIon.conductivity, ion.c0, ion.cL);
+            if (string.Compare(ion.Name, tableIon.Name, StringComparison.OrdinalIgnoreCase) == 0)
+                return new Ion(tableIon.Name, tableIon.Charge, tableIon.Conductivity, ion.C0, ion.CL);
 
         return new Ion(ion);
     }
@@ -93,9 +93,9 @@ public class IonTable : IonSet
     {
         foreach (Ion tableIon in ions)
         {
-            if (string.Compare(name, tableIon.name, StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(name, tableIon.Name, StringComparison.OrdinalIgnoreCase) == 0)
                 return tableIon;
-            else if (string.Compare(name, tableIon.nameWithCharge, StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(name, tableIon.NameWithCharge, StringComparison.OrdinalIgnoreCase) == 0)
                 return tableIon;
         }
 
