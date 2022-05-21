@@ -4,6 +4,11 @@ namespace LJPcalc.Core;
 
 public static class Calculate
 {
+    public static async Task<LjpResult> LjpAsync(Ion[] ions, double temperatureC = 25, bool autoSort = true, double timeoutMilliseconds = 5000, bool throwIfTimeout = false)
+    {
+        return await Task.Run(() => Ljp(ions, temperatureC, autoSort, timeoutMilliseconds, throwIfTimeout));
+    }
+
     public static LjpResult Ljp(Ion[] ions, double temperatureC = 25, bool autoSort = true, double timeoutMilliseconds = 5000, bool throwIfTimeout = false)
     {
         if (ions.Any(x => x.Charge == 0))

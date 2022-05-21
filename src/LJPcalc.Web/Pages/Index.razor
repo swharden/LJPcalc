@@ -1,5 +1,145 @@
 ﻿@page "/"
+@using LJPcalc.Core;
 
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
+<header class="text-light py-3" style="background-color: #003366;">
+    <div class="container">
+        <div class="display-4 lh-1" style="font-weight: 400;">LJPCalc</div>
+        <div class="" style="color: #CCC;">
+            Liquid Junction Potential (LJP) calculator by
+            <a href="http://swharden.com/" class="text-light">Scott Harden</a> and
+            <a href="https://sites.google.com/site/dbrogioli/" class="text-light">Doriano Brogioli</a>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+
+    <table class="table table-hover mt-3">
+        <thead>
+            <tr>
+                <th>Ion</th>
+                <th>
+                    <span class="fw-strong">Mobility</span><br />
+                    <span class="fw-normal">m/s/N</span>
+                </th>
+                <th>
+                    <span class="fw-strong">Conductivity</span><br />
+                    <span class="fw-normal">S·cm<sup>2</sup>/mol</span>
+                </th>
+                <th>
+                    <span class="fw-strong">A</span><br />
+                    <span class="fw-normal">mM</span>
+                </th>
+                <th>
+                    <span class="fw-strong">B</span><br />
+                    <span class="fw-normal">mM</span>
+                </th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Ion ion in Ions)
+            {
+                <tr>
+                    <td>@ion.NameWithCharge</td>
+                    <td>@($"{ion.Mu / 1e4:#.000e0}")</td>
+                    <td>@($"{ion.Conductivity:#0.###}")</td>
+                    <td>@ion.InitialC0</td>
+                    <td>@ion.InitialCL</td>
+                    <td>✏️</td>
+                    <td>❌</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="text-end">
+
+        <div class="dropdown d-inline-block">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+                Sample Ion Sets
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                @foreach (var ionSet in LJPcalc.Core.KnownIonSets.KnownSets.GetAll())
+                {
+                    <li>
+                        <button class="dropdown-item" type="button" onclick="@(()=>LoadIonSet(ionSet.Ions))">
+                            @ionSet.Name
+                        </button>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <button class="btn btn-primary">Add Ion</button>
+    </div>
+
+    <button class="btn btn-primary" @onclick=CalculateAsync>
+        @if (Calculating)
+        {
+            <span>Calculating...</span>
+            <br />
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        }
+        else
+        {
+            <span>Calculate LJP</span>
+        }
+    </button>
+
+    @if (LjpResult is not null && !Calculating)
+    {
+        <div class="mt-4 bg-light border rounded shadow-sm p-3">
+            <h3>Calculation Results</h3>
+            <div>LJP: <code>@LjpResult.LjpMillivolts mV</code></div>
+            <div>Calculation time: <code>@(Math.Round((LjpResult.TimePhi + LjpResult.TimeLjp).TotalMilliseconds, 3)) ms</code></div>
+        </div>
+    }
+
+</div>
+
+<footer class="container mt-5">
+    <div class="text-muted">
+        LJPcalc was created by
+        <a href="http://swharden.com/">Scott Harden</a> and
+        <a href="https://sites.google.com/site/dbrogioli/">Doriano Brogioli</a>
+        and uses calculations described by
+        <a href="https://arxiv.org/abs/1403.3640">Marino et al., 2014</a>.
+    </div>
+</footer>
+
+@code {
+
+    Ion[] Ions { get; set; } = Array.Empty<Ion>();
+
+    LjpResult? LjpResult { get; set; } = null;
+
+    bool Calculating { get; set; } = false;
+
+    protected override void OnInitialized()
+    {
+        LoadIonSet(new LJPcalc.Core.KnownIonSets.Owen2013().Ions);
+    }
+
+    private async Task CalculateAsync()
+    {
+        LjpResult = null;
+        Calculating = true;
+        StateHasChanged();
+
+        LjpResult = await LJPcalc.Core.Calculate.LjpAsync(Ions);
+        Calculating = false;
+        StateHasChanged();
+    }
+
+    private void LoadIonSet(Ion[] ions)
+    {
+        Ions = IonLibrary.Lookup(ions);
+        StateHasChanged();
+    }
+}
