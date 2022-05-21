@@ -3,33 +3,22 @@
 class EquationSolver
 {
     private readonly IEquationSystem Equations;
+    private int EquationCount => Equations.EquationCount;
 
-    private List<EquationPoint> PossibleSolutions = new();
+    private EquationPoint[] PossibleSolutions = Array.Empty<EquationPoint>();
     public EquationPoint BestSolution => PossibleSolutions[0];
 
-    private readonly Random rand = new(0);
-    private readonly int EquationCount;
+    private readonly Random Rand = new(0);
 
     private int Iterations;
-    private readonly List<Action> AddPointMethods;
-    private void AddSuggestedPoint() => AddPointMethods[Iterations++ % AddPointMethods.Count].Invoke();
 
     public EquationSolver(IEquationSystem equations)
     {
         Equations = equations;
-        EquationCount = equations.EquationCount;
-
-        AddPointMethods = new List<Action>()
-        {
-            AddSuggestedPoint_ShiftedBySolutionDelta,
-            AddSuggestedPoint_NearFirstPoint,
-            AddSuggestedPoint_TotallyRandom,
-            AddSuggestedPoint_ConsideringMinMax,
-        };
     }
 
     /// <summary>
-    /// Solve the equations and reutrn the best solution
+    /// Solve the equations and return the best solution
     /// </summary>
     public double[] Solve(double[] x, double timeoutMilliseconds, bool throwIfTimeout)
     {
@@ -39,13 +28,15 @@ class EquationSolver
         System.Diagnostics.Stopwatch stopwatch = new();
         stopwatch.Start();
 
-        PossibleSolutions.Add(new EquationPoint(x, Equations));
+        PossibleSolutions = new EquationPoint[] { new EquationPoint(x, Equations) };
 
         while (BestSolution.FMax > 1.0)
         {
-            AddSuggestedPoint();
-            PossibleSolutions = PossibleSolutions.OrderBy(x => Math.Abs(x.FMax)).ToList();
-            RemovePointsAfter(EquationCount * 4);
+            PossibleSolutions = PossibleSolutions
+                .Append(GetSuggestedPoint())
+                .OrderBy(x => Math.Abs(x.FMax))
+                .Take(EquationCount * 4)
+                .ToArray();
 
             if (stopwatch.ElapsedMilliseconds > timeoutMilliseconds)
             {
@@ -60,21 +51,29 @@ class EquationSolver
         return bestSolutionXs;
     }
 
-    private void RemovePointsAfter(int maxCount)
+    private EquationPoint GetSuggestedPoint()
     {
-        while (PossibleSolutions.Count > maxCount)
-            PossibleSolutions.RemoveAt(PossibleSolutions.Count - 1);
+        Func<EquationPoint>[] methods =
+        {
+            GetPoint_ShiftedBySolutionDelta,
+            GetPoint_NearFirstPoint,
+            GetPoint_TotallyRandom,
+            GetPoint_ConsideringMinMax,
+        };
+
+        Func<EquationPoint> method = methods[Iterations++ % methods.Length];
+
+        return method.Invoke();
     }
 
     /// <summary>
     /// Add a point with Xs shifted by the delta of the solved matrix
     /// </summary>
-    private void AddSuggestedPoint_ShiftedBySolutionDelta()
+    private EquationPoint GetPoint_ShiftedBySolutionDelta()
     {
-        if (PossibleSolutions.Count < EquationCount + 1)
+        if (PossibleSolutions.Length < EquationCount + 1)
         {
-            AddSuggestedPoint_NearFirstPoint();
-            return;
+            return GetPoint_NearFirstPoint();
         }
 
         double[] suggestedXs = new double[EquationCount];
@@ -99,40 +98,40 @@ class EquationSolver
         for (int j = 0; j < EquationCount; j++)
             suggestedXs[j] = PossibleSolutions[EquationCount].X[j] + delta[j];
 
-        PossibleSolutions.Add(new EquationPoint(suggestedXs, Equations));
+        return new EquationPoint(suggestedXs, Equations);
     }
 
     /// <summary>
     /// Add a point with Xs randomly offset from the Xs of the first point
     /// </summary>
-    private void AddSuggestedPoint_NearFirstPoint()
+    private EquationPoint GetPoint_NearFirstPoint()
     {
         const double randomness = 4; // TODO: could this value be optimized?
 
-        double[] suggestedXs = BestSolution.X.Select(x => x * (rand.NextDouble() - 0.5) * randomness)
+        double[] suggestedXs = BestSolution.X.Select(x => x * (Rand.NextDouble() - 0.5) * randomness)
                                           .ToArray();
 
-        PossibleSolutions.Add(new EquationPoint(suggestedXs, Equations));
+        return new EquationPoint(suggestedXs, Equations);
     }
 
     /// <summary>
     /// Add a point with totally random Xs
     /// </summary>
-    private void AddSuggestedPoint_TotallyRandom()
+    private EquationPoint GetPoint_TotallyRandom()
     {
         const double randomness = 4; // TODO: could this value be optimized?
 
         double[] suggestedXs = Enumerable.Range(0, EquationCount)
-                                         .Select(x => (rand.NextDouble() - 0.5) * randomness)
+                                         .Select(x => (Rand.NextDouble() - 0.5) * randomness)
                                          .ToArray();
 
-        PossibleSolutions.Add(new EquationPoint(suggestedXs, Equations));
+        return new EquationPoint(suggestedXs, Equations);
     }
 
     /// <summary>
     /// Add a point with Xs randomized centered and scaled to the min/max of the existing Xs
     /// </summary>
-    private void AddSuggestedPoint_ConsideringMinMax()
+    private EquationPoint GetPoint_ConsideringMinMax()
     {
         const double randomness = 3; // TODO: could this value be optimized?
 
@@ -156,10 +155,10 @@ class EquationSolver
 
             double mean = (xMin + xMax) / 2.0;
             double span = xMax - xMin;
-            double randomOffset = span * randomness * (rand.NextDouble() - 0.5);
+            double randomOffset = span * randomness * (Rand.NextDouble() - 0.5);
             suggestedXs[equationIndex] = mean + randomOffset;
         }
 
-        PossibleSolutions.Add(new EquationPoint(suggestedXs, Equations));
+        return new EquationPoint(suggestedXs, Equations);
     }
 }
