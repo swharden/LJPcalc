@@ -19,7 +19,9 @@ class LjpCalculationTest
 
         ionSet = IonLibrary.Lookup(ionSet);
 
-        var ljp = Calculate.Ljp(ionSet, autoSort: false);
+        LjpResult ljp = Calculate.Ljp(ionSet, autoSort: false);
+        Console.WriteLine(ljp.GetSummary());
+
         Assert.That(ljp.LjpMillivolts, Is.EqualTo(-20.79558643).Within(1e-6));
     }
 
@@ -48,7 +50,9 @@ class LjpCalculationTest
             new Ion("Cl",-1, 76.31, 18, 3.0568)
         };
 
-        var ljp = Calculate.Ljp(ionSet, autoSort: false);
+        LjpResult ljp = Calculate.Ljp(ionSet, autoSort: false);
+        Console.WriteLine(ljp.GetSummary());
+
         Assert.That(ljp.LjpMillivolts, Is.EqualTo(-20.79558643).Within(1e-6));
     }
 
@@ -68,7 +72,9 @@ class LjpCalculationTest
 
         var ionSet = new Ion[] { Zn, K, Cl };
         ionSet = IonLibrary.Lookup(ionSet);
-        var ljp = Calculate.Ljp(ionSet, autoSort: false);
+
+        LjpResult ljp = Calculate.Ljp(ionSet, autoSort: false);
+        Console.WriteLine(ljp.GetSummary());
 
         Assert.That(ljp.LjpMillivolts, Is.EqualTo(-20.79558643).Within(1e-6));
     }
@@ -89,7 +95,9 @@ class LjpCalculationTest
 
         ionSet = IonLibrary.Lookup(ionSet);
 
-        var ljp = Calculate.Ljp(ionSet);
+        LjpResult ljp = Calculate.Ljp(ionSet);
+        Console.WriteLine(ljp.GetSummary());
+
         Assert.That(ljp.LjpMillivolts, Is.EqualTo(-4.3).Within(0.5));
     }
 
@@ -110,7 +118,9 @@ class LjpCalculationTest
 
         ionSet = IonLibrary.Lookup(ionSet);
 
-        var ljp = Calculate.Ljp(ionSet);
+        LjpResult ljp = Calculate.Ljp(ionSet);
+        Console.WriteLine(ljp.GetSummary());
+
         Assert.That(ljp.LjpMillivolts, Is.EqualTo(-4.3).Within(0.5));
     }
 
@@ -131,7 +141,9 @@ class LjpCalculationTest
 
         ionSet = IonLibrary.Lookup(ionSet);
 
-        var ljp = Calculate.Ljp(ionSet);
+        LjpResult ljp = Calculate.Ljp(ionSet);
+        Console.WriteLine(ljp.GetSummary());
+
         Assert.That(ljp.LjpMillivolts, Is.EqualTo(-4.9).Within(0.5));
     }
 
@@ -152,7 +164,9 @@ class LjpCalculationTest
 
         ionSet = IonLibrary.Lookup(ionSet);
 
-        var ljp = Calculate.Ljp(ionSet);
+        LjpResult ljp = Calculate.Ljp(ionSet);
+        Console.WriteLine(ljp.GetSummary());
+
         Assert.That(ljp.LjpMillivolts, Is.EqualTo(+10.0).Within(0.5));
     }
 
@@ -173,7 +187,9 @@ class LjpCalculationTest
 
         ionSet = IonLibrary.Lookup(ionSet);
 
-        var ljp = Calculate.Ljp(ionSet);
+        LjpResult ljp = Calculate.Ljp(ionSet);
+        Console.WriteLine(ljp.GetSummary());
+
         Assert.That(ljp.LjpMillivolts, Is.EqualTo(+0.6).Within(0.5));
     }
 
@@ -195,7 +211,9 @@ class LjpCalculationTest
 
         ionSet = IonLibrary.Lookup(ionSet);
 
-        var ljp = Calculate.Ljp(ionSet);
+        LjpResult ljp = Calculate.Ljp(ionSet);
+        Console.WriteLine(ljp.GetSummary());
+
         Assert.That(ljp.LjpMillivolts, Is.EqualTo(+6.4).Within(0.5));
     }
 
@@ -217,7 +235,9 @@ class LjpCalculationTest
 
         ionSet = IonLibrary.Lookup(ionSet);
 
-        var ljp = Calculate.Ljp(ionSet);
+        LjpResult ljp = Calculate.Ljp(ionSet);
+        Console.WriteLine(ljp.GetSummary());
+
         Assert.That(ljp.LjpMillivolts, Is.EqualTo(-8.2).Within(0.5));
     }
 
@@ -237,7 +257,9 @@ class LjpCalculationTest
 
         ionSet = IonLibrary.Lookup(ionSet);
 
-        var ljp = Calculate.Ljp(ionSet);
+        LjpResult ljp = Calculate.Ljp(ionSet);
+        Console.WriteLine(ljp.GetSummary());
+
         Assert.That(ljp.LjpMillivolts, Is.EqualTo(+8.74).Within(0.5));
     }
 
@@ -257,7 +279,9 @@ class LjpCalculationTest
 
         ionSet = IonLibrary.Lookup(ionSet);
 
-        var ljp = Calculate.Ljp(ionSet);
+        LjpResult ljp = Calculate.Ljp(ionSet);
+        Console.WriteLine(ljp.GetSummary());
+
         Assert.That(ljp.LjpMillivolts, Is.EqualTo(+8.71).Within(0.5));
     }
 
@@ -275,7 +299,9 @@ class LjpCalculationTest
 
         ionSet = IonLibrary.Lookup(ionSet);
 
-        var ljp = Calculate.Ljp(ionSet);
+        LjpResult ljp = Calculate.Ljp(ionSet);
+        Console.WriteLine(ljp.GetSummary());
+
         Assert.That(ljp.LjpMillivolts, Is.EqualTo(-15.6).Within(0.5));
     }
 
@@ -293,7 +319,9 @@ class LjpCalculationTest
 
         ionSet = IonLibrary.Lookup(ionSet);
 
-        var ljp = Calculate.Ljp(ionSet);
+        LjpResult ljp = Calculate.Ljp(ionSet);
+        Console.WriteLine(ljp.GetSummary());
+
         Assert.That(ljp.LjpMillivolts, Is.EqualTo(55.5).Within(0.5));
     }
 
@@ -311,7 +339,9 @@ class LjpCalculationTest
 
         ionSet = IonLibrary.Lookup(ionSet);
 
-        var ljp = Calculate.Ljp(ionSet);
+        LjpResult ljp = Calculate.Ljp(ionSet);
+        Console.WriteLine(ljp.GetSummary());
+
         Assert.That(ljp.LjpMillivolts, Is.EqualTo(-35).Within(0.5));
     }
 
@@ -329,7 +359,9 @@ class LjpCalculationTest
 
         ionSet = IonLibrary.Lookup(ionSet);
 
-        var ljp = Calculate.Ljp(ionSet);
+        LjpResult ljp = Calculate.Ljp(ionSet);
+        Console.WriteLine(ljp.GetSummary());
+
         Assert.That(ljp.LjpMillivolts, Is.EqualTo(-8.1).Within(0.5));
     }
 
@@ -360,7 +392,9 @@ class LjpCalculationTest
 
         ionSet = IonLibrary.Lookup(ionSet);
 
-        var ljp = Calculate.Ljp(ionSet, temperatureC: 33);
+        LjpResult ljp = Calculate.Ljp(ionSet, temperatureC: 33);
+        Console.WriteLine(ljp.GetSummary());
+
         Assert.That(ljp.LjpMillivolts, Is.EqualTo(15.1 - 3.3).Within(0.5));
     }
 
@@ -372,12 +406,13 @@ class LjpCalculationTest
         Assert.That(knowSets, Is.Not.Empty);
         Console.WriteLine($"Checking {knowSets.Length} known ion sets...");
 
-        foreach (var knownSet in knowSets)
+        Parallel.ForEach(knowSets, (knownSet) =>
         {
-            Console.WriteLine(knownSet);
             Ion[] ions = IonLibrary.Lookup(knownSet.Ions);
-            double ljp = Calculate.Ljp(ions, knownSet.Temperature_C).LjpMillivolts;
-            Assert.That(ljp, Is.EqualTo(knownSet.Ljp_mV).Within(knownSet.Accuracy_mV));
-        }
+            LjpResult result = Calculate.Ljp(ions, knownSet.Temperature_C);
+            Console.WriteLine(knownSet);
+            Console.WriteLine(result.GetSummary());
+            Assert.That(result.LjpMillivolts, Is.EqualTo(knownSet.Ljp_mV).Within(knownSet.Accuracy_mV));
+        });
     }
 }

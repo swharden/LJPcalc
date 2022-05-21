@@ -13,10 +13,9 @@ public static class IonLibrary
 
         for (int i = 0; i < input.Length; i++)
         {
+            Ion ion = input[i];
             Ion match = Lookup(input[i].Name);
-            match.C0 = input[i].C0;
-            match.CL = input[i].CL;
-            output[i] = match;
+            output[i] = new Ion(match.Name, match.Charge, match.Conductivity, ion.C0, ion.CL, ion.Phi);
         }
 
         return output;

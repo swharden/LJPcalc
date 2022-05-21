@@ -9,6 +9,8 @@ public class Ion
     public double Mu => Conductivity / (Constants.Nav * Math.Pow(Constants.e, 2) * Math.Abs(Charge));
     public readonly double InitialC0;
     public readonly double InitialCL;
+    public double PercentChangeC0 => 100 * Math.Abs(InitialC0 - C0) / InitialC0;
+    public double PercentChangeCL => 100 * Math.Abs(InitialCL - CL) / InitialCL;
 
     public double C0 { get; set; }
     public double CL { get; set; }

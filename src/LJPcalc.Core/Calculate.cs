@@ -4,7 +4,6 @@ namespace LJPcalc.Core;
 
 public static class Calculate
 {
-    // TODO: THIS IS NOT THREAD SAFE!
     public static LjpResult Ljp(Ion[] ions, double temperatureC = 25, bool autoSort = true, double timeoutMilliseconds = 5000, bool throwIfTimeout = false)
     {
         if (ions.Any(x => x.Charge == 0))
@@ -26,19 +25,23 @@ public static class Calculate
         Ion[] ionsInput = ions.ToArray();
 
         // solve for phis (if the number of ions is greater than 2)
-        var phiSolution = new Solver.PhiSolver(ions, temperatureC, timeoutMilliseconds, throwIfTimeout);
+        System.Diagnostics.Stopwatch sw = new();
+        sw.Restart();
+        var phiSolution = new PhiSolver(ions, temperatureC, timeoutMilliseconds, throwIfTimeout);
         double[] phis = phiSolution.SolvedPhis;
+        TimeSpan timePhi = sw.Elapsed;
 
         // calculate LJP (modifies one of the phis and all the CLs)
         double[] cLs = new double[phis.Length];
+        sw.Restart();
         double ljp_V = SolveForLJP(ions, phis, cLs, temperatureC);
+        TimeSpan timeLjp = sw.Elapsed;
 
         // update ions based on new phis and CLs (all ions except the last two)
         for (int j = 0; j < phis.Length; j++)
         {
-            Ion ion = ions[j];
-            ion.Phi = phis[j];
-            ion.CL = cLs[j];
+            ions[j].Phi = phis[j];
+            ions[j].CL = cLs[j];
         }
 
         // second from last ion phi is concentration difference
@@ -51,8 +54,7 @@ public static class Calculate
         LastIon.CL = -ions.Take(ions.Length - 1).Sum(x => x.CL * x.Charge) / LastIon.Charge;
 
         // load new details into the result
-        Ion[] ionsOutput = ions.ToArray();
-        LjpResult result = new(ionsInput, ionsOutput, temperatureC, ljp_V * 1000, phiSolution.SolutionM);
+        LjpResult result = new(ionsInput, temperatureC, ljp_V * 1000, phiSolution.SolutionM, timePhi, timeLjp);
 
         return result;
     }
