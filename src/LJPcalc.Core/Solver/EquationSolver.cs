@@ -4,8 +4,8 @@ class EquationSolver
 {
     private readonly IEquationSystem Equations;
 
-    private List<EquationPoint> Points = new();
-    private EquationPoint HighestPoint => Points[0];
+    private List<EquationPoint> PossibleSolutions = new();
+    public EquationPoint BestSolution => PossibleSolutions[0];
 
     private readonly Random rand = new(0);
     private readonly int EquationCount;
@@ -29,9 +29,9 @@ class EquationSolver
     }
 
     /// <summary>
-    /// Solve the equations and reutrn the M for the first point
+    /// Solve the equations and reutrn the best solution
     /// </summary>
-    public double Solve(double[] x, double timeoutMilliseconds, bool throwIfTimeout)
+    public double[] Solve(double[] x, double timeoutMilliseconds, bool throwIfTimeout)
     {
         if (EquationCount == 0)
             throw new Exception("equation count cannot be 0");
@@ -39,12 +39,12 @@ class EquationSolver
         System.Diagnostics.Stopwatch stopwatch = new();
         stopwatch.Start();
 
-        Points.Add(new EquationPoint(x, Equations));
+        PossibleSolutions.Add(new EquationPoint(x, Equations));
 
-        while (HighestPoint.FMax > 1.0)
+        while (BestSolution.FMax > 1.0)
         {
             AddSuggestedPoint();
-            Points = Points.OrderBy(x => Math.Abs(x.FMax)).ToList();
+            PossibleSolutions = PossibleSolutions.OrderBy(x => Math.Abs(x.FMax)).ToList();
             RemovePointsAfter(EquationCount * 4);
 
             if (stopwatch.ElapsedMilliseconds > timeoutMilliseconds)
@@ -55,16 +55,15 @@ class EquationSolver
             }
         }
 
-        for (int j = 0; j < EquationCount; j++)
-            x[j] = HighestPoint.X[j];
+        double[] bestSolutionXs = Enumerable.Range(0, EquationCount).Select(x => BestSolution.X[x]).ToArray();
 
-        return HighestPoint.FMax;
+        return bestSolutionXs;
     }
 
     private void RemovePointsAfter(int maxCount)
     {
-        while (Points.Count > maxCount)
-            Points.RemoveAt(Points.Count - 1);
+        while (PossibleSolutions.Count > maxCount)
+            PossibleSolutions.RemoveAt(PossibleSolutions.Count - 1);
     }
 
     /// <summary>
@@ -72,7 +71,7 @@ class EquationSolver
     /// </summary>
     private void AddSuggestedPoint_ShiftedBySolutionDelta()
     {
-        if (Points.Count < EquationCount + 1)
+        if (PossibleSolutions.Count < EquationCount + 1)
         {
             AddSuggestedPoint_NearFirstPoint();
             return;
@@ -83,24 +82,24 @@ class EquationSolver
         double[,] Mm = new double[EquationCount, EquationCount];
         for (int j = 0; j < EquationCount; j++)
             for (int k = 0; k < EquationCount; k++)
-                Mm[j, k] = Points[k].F[j] - Points[EquationCount].F[j];
+                Mm[j, k] = PossibleSolutions[k].F[j] - PossibleSolutions[EquationCount].F[j];
 
         double[] mF0 = new double[EquationCount];
         for (int j = 0; j < EquationCount; j++)
-            mF0[j] = -Points[EquationCount].F[j];
+            mF0[j] = -PossibleSolutions[EquationCount].F[j];
 
         double[,] Vm = new double[EquationCount, EquationCount];
         for (int j = 0; j < EquationCount; j++)
             for (int k = 0; k < EquationCount; k++)
-                Vm[j, k] = Points[k].X[j] - Points[EquationCount].X[j];
+                Vm[j, k] = PossibleSolutions[k].X[j] - PossibleSolutions[EquationCount].X[j];
 
         double[] u = LinearAlgebra.Solve(Mm, mF0);
         double[] delta = LinearAlgebra.Product(Vm, u);
 
         for (int j = 0; j < EquationCount; j++)
-            suggestedXs[j] = Points[EquationCount].X[j] + delta[j];
+            suggestedXs[j] = PossibleSolutions[EquationCount].X[j] + delta[j];
 
-        Points.Add(new EquationPoint(suggestedXs, Equations));
+        PossibleSolutions.Add(new EquationPoint(suggestedXs, Equations));
     }
 
     /// <summary>
@@ -110,10 +109,10 @@ class EquationSolver
     {
         const double randomness = 4; // TODO: could this value be optimized?
 
-        double[] suggestedXs = HighestPoint.X.Select(x => x * (rand.NextDouble() - 0.5) * randomness)
+        double[] suggestedXs = BestSolution.X.Select(x => x * (rand.NextDouble() - 0.5) * randomness)
                                           .ToArray();
 
-        Points.Add(new EquationPoint(suggestedXs, Equations));
+        PossibleSolutions.Add(new EquationPoint(suggestedXs, Equations));
     }
 
     /// <summary>
@@ -127,7 +126,7 @@ class EquationSolver
                                          .Select(x => (rand.NextDouble() - 0.5) * randomness)
                                          .ToArray();
 
-        Points.Add(new EquationPoint(suggestedXs, Equations));
+        PossibleSolutions.Add(new EquationPoint(suggestedXs, Equations));
     }
 
     /// <summary>
@@ -141,7 +140,7 @@ class EquationSolver
 
         for (int equationIndex = 0; equationIndex < EquationCount; equationIndex++)
         {
-            var equationXs = Points.Select(x => x.X[equationIndex]);
+            var equationXs = PossibleSolutions.Select(x => x.X[equationIndex]);
             double xMin = equationXs.Min();
             double xMax = equationXs.Max();
 
@@ -161,6 +160,6 @@ class EquationSolver
             suggestedXs[equationIndex] = mean + randomOffset;
         }
 
-        Points.Add(new EquationPoint(suggestedXs, Equations));
+        PossibleSolutions.Add(new EquationPoint(suggestedXs, Equations));
     }
 }

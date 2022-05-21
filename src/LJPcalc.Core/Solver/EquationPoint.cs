@@ -20,8 +20,7 @@ class EquationPoint
     public EquationPoint(double[] x, IEquationSystem equationSystem)
     {
         X = x;
-        F = new double[equationSystem.EquationCount];
-        equationSystem.Calculate(x, F);
+        F = equationSystem.Calculate(x);
         FMax = F.Select(value => Math.Abs(value)).Max();
     }
 }

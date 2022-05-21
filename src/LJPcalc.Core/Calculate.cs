@@ -27,21 +27,19 @@ public static class Calculate
         // solve for phis (if the number of ions is greater than 2)
         System.Diagnostics.Stopwatch sw = new();
         sw.Restart();
-        var phiSolution = new PhiSolver(ions, temperatureC, timeoutMilliseconds, throwIfTimeout);
-        double[] phis = phiSolution.SolvedPhis;
+        double[] phis = PhiSolver.Solve(ions, temperatureC, timeoutMilliseconds, throwIfTimeout);
         TimeSpan timePhi = sw.Elapsed;
 
         // calculate LJP (modifies one of the phis and all the CLs)
-        double[] cLs = new double[phis.Length];
         sw.Restart();
-        double ljp_V = SolveForLJP(ions, phis, cLs, temperatureC);
+        (double ljp_V, double[] solveCLs) = SolveForLJP(ions, phis, temperatureC);
         TimeSpan timeLjp = sw.Elapsed;
 
         // update ions based on new phis and CLs (all ions except the last two)
         for (int j = 0; j < phis.Length; j++)
         {
             ions[j].Phi = phis[j];
-            ions[j].CL = cLs[j];
+            ions[j].CL = solveCLs[j];
         }
 
         // second from last ion phi is concentration difference
@@ -54,7 +52,7 @@ public static class Calculate
         LastIon.CL = -ions.Take(ions.Length - 1).Sum(x => x.CL * x.Charge) / LastIon.Charge;
 
         // load new details into the result
-        LjpResult result = new(ionsInput, temperatureC, ljp_V * 1000, phiSolution.SolutionM, timePhi, timeLjp);
+        LjpResult result = new(ionsInput, temperatureC, ljp_V * 1000, timePhi, timeLjp);
 
         return result;
     }
@@ -63,22 +61,19 @@ public static class Calculate
     /// WARNING: this method modifies input arrays (the last ion's C0 and all the CLs).
     /// It is only to be called by the solver.
     /// </summary>
-    public static double SolveForLJP(Ion[] ionList, double[] startingPhis, double[] CLs, double temperatureC)
+    public static (double volts, double[] cls) SolveForLJP(Ion[] ions, double[] startingPhis, double temperatureC)
     {
-        int ionCount = ionList.Length;
+        int ionCount = ions.Length;
         int ionCountMinusOne = ionCount - 1;
         int ionCountMinusTwo = ionCount - 2;
         int indexLastIon = ionCount - 1;
         int indexSecondFromLastIon = ionCount - 2;
 
-        Ion lastIon = ionList[indexLastIon];
-        Ion secondFromLastIon = ionList[indexSecondFromLastIon];
+        Ion lastIon = ions[indexLastIon];
+        Ion secondFromLastIon = ions[indexSecondFromLastIon];
 
         if (startingPhis.Length != ionCount - 2)
-            throw new ArgumentException();
-
-        if (CLs.Length != ionCount - 2)
-            throw new ArgumentException();
+            throw new ArgumentException($"{nameof(startingPhis)} length must be two less than the length of {nameof(ions)}");
 
         // populate charges, mus, and rhos from all ions except the last one
         double[] charges = new double[ionCountMinusOne];
@@ -86,10 +81,9 @@ public static class Calculate
         double[] rhos = new double[ionCountMinusOne];
         for (int j = 0; j < ionCountMinusOne; j++)
         {
-            Ion ion = ionList[j];
-            charges[j] = ion.Charge;
-            mus[j] = ion.Mu;
-            rhos[j] = ion.C0;
+            charges[j] = ions[j].Charge;
+            mus[j] = ions[j].Mu;
+            rhos[j] = ions[j].C0;
         }
 
         // populate phis from all ions except the last two
@@ -109,7 +103,7 @@ public static class Calculate
         double dK = (KCL - KC0) / 1000.0;
 
         // set last ion C0 based on charges, rhos, and linear algebra
-        double zCl = ionList[indexLastIon].Charge;
+        double zCl = ions[indexLastIon].Charge;
         double rhoCl = -LinearAlgebra.ScalarProduct(charges, rhos) / zCl;
         lastIon.C0 = rhoCl;
 
@@ -140,9 +134,7 @@ public static class Calculate
             }
 
             if (LinearAlgebra.ScalarProduct(charges, v) + zCl * vCl == 0.0)
-            {
-                return double.NaN; // Singularity; abort calculation
-            }
+                throw new InvalidOperationException("singularity detected");
 
             double[,] identity = LinearAlgebra.Identity(ionCountMinusOne);
             double[,] linAlgSum = LinearAlgebra.Sum(1, mD, -DCl, identity);
@@ -163,14 +155,14 @@ public static class Calculate
 
             double E = LinearAlgebra.ScalarProduct(delta, rhop);
             V -= E * dK / rhopK;
-
         }
 
-        // modify the input CLs based on the rhos we calculated
+        // CLs were adjusted during the calculation
+        double[] newCLs = ions.Select(x => x.CL).ToArray();
         for (int j = 0; j < ionCountMinusTwo; j++)
-            CLs[j] = rhos[j];
+            newCLs[j] = rhos[j];
 
-        return V;
+        return (V, newCLs);
     }
 
     /// <summary>

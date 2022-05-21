@@ -16,11 +16,10 @@ class PhiEquationSystem : IEquationSystem
     /// <summary>
     /// Determine scaled CL (f) for the given phis (x).
     /// </summary>
-    /// <param name="x">phis</param>
-    /// <param name="f">scaled difference between expected CL and actual CL given phis (x)</param>
-    public void Calculate(double[] x, double[] f)
+    public double[] Calculate(double[] phis)
     {
-        LJPcalc.Core.Calculate.SolveForLJP(Ions, startingPhis: x, CLs: f, TemperatureC);
+        // solve with zero CL concentration
+        (double ljp, double[] solvedCLs) = Core.Calculate.SolveForLJP(Ions, phis, TemperatureC);
 
         // Sigma is a scaling factor later used to scale the difference between 
         // the expected CL and the CL determined using the custom phis (x).
@@ -28,13 +27,16 @@ class PhiEquationSystem : IEquationSystem
                                                .Where(c => c > 0)
                                                .Min();
 
+        // return scaled difference between expected CL and actual CL given phis (x)
+        double[] scaledDifference = new double[EquationCount];
         for (int i = 0; i < EquationCount; i++)
         {
-            double newCL = f[i];
             double originalCL = Ions[i].CL;
-            double differenceCL = newCL - originalCL;
-            double absoluteCL = Math.Max(Math.Abs(Ions[i].CL), smallestAbsoluteNonZeroCL);
-            f[i] = 100 * differenceCL / absoluteCL;
+            double differenceCL = solvedCLs[i] - originalCL;
+            double absoluteCL = Math.Max(Math.Abs(originalCL), smallestAbsoluteNonZeroCL);
+            scaledDifference[i] = 100 * differenceCL / absoluteCL;
         }
+
+        return scaledDifference;
     }
 }

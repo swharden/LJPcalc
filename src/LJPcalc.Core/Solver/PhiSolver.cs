@@ -1,29 +1,25 @@
 ﻿namespace LJPcalc.Core.Solver;
 
-public class PhiSolver
+public static class PhiSolver
 {
-    public readonly double[] SolvedPhis;
-    public readonly double SolutionM;
-
     /// <summary>
     /// Determines phi for all ions except the last two. 
     /// The solution is found when CLs are suffeciently close to those defined in the ion table.
     /// </summary>
-    public PhiSolver(Ion[] ions, double temperatureC, double timeoutMilliseconds, bool throwIfTimeout)
+    public static double[] Solve(Ion[] ions, double temperatureC, double timeoutMilliseconds, bool throwIfTimeout)
     {
-        // phis are initialized to the difference in concentration on each side of the junction
-        double[] phis = Enumerable.Range(0, ions.Length - 2)
-                                  .Select(x => ions[x])
-                                  .Select(x => x.CL - x.C0)
-                                  .ToArray();
+        double[] phis = ions.Take(ions.Length - 2).Select(x => x.CL - x.C0).ToArray();
 
-        if (ions.Length > 2)
+        if (ions.Length <= 2)
+        {
+            return phis;
+        }
+        else
         {
             IEquationSystem equationSystem = new PhiEquationSystem(ions, temperatureC);
-            var equationSolver = new EquationSolver(equationSystem);
-            SolutionM = equationSolver.Solve(phis, timeoutMilliseconds, throwIfTimeout);
+            EquationSolver equationSolver = new(equationSystem);
+            double[] solvedPhis = equationSolver.Solve(phis, timeoutMilliseconds, throwIfTimeout);
+            return solvedPhis;
         }
-
-        SolvedPhis = phis;
     }
 }
