@@ -1,6 +1,6 @@
 ﻿namespace LJPcalc.Core.KnownIonSets;
 
-internal class PatchHighCl : IKnownIonSet
+public class PatchHighCl : IKnownIonSet
 {
     /*  Start with the standard K-gluconate internal then
      *  increase KCl by 30 mM (20 -> 50) and decrease Kglu by 30 (110 -> 80)

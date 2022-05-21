@@ -1,6 +1,6 @@
 ﻿namespace LJPcalc.Core.KnownIonSets;
 
-internal class JPCalcWinPage7 : IKnownIonSet
+public class JPCalcWinPage7 : IKnownIonSet
 {
     public string Name => "JPCalcWin manual (page 7)";
 

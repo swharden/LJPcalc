@@ -1,6 +1,6 @@
 ﻿namespace LJPcalc.Core.KnownIonSets;
 
-internal class AxoBitsArticle : IKnownIonSet
+public class AxoBitsArticle : IKnownIonSet
 {
     public string Name => "AxoBits Article";
 

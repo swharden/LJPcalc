@@ -1,6 +1,6 @@
 ﻿namespace LJPcalc.Core.KnownIonSets;
 
-internal class PatchKGlu : IKnownIonSet
+public class PatchKGlu : IKnownIonSet
 {
     public string Name => "Patch Clamp (K-glu)";
 

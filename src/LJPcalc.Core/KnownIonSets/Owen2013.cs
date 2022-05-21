@@ -1,6 +1,6 @@
 ﻿namespace LJPcalc.Core.KnownIonSets;
 
-internal class Owen2013 : IKnownIonSet
+public class Owen2013 : IKnownIonSet
 {
     /* I found this set highly problematic for the electronegativity solver */
 
