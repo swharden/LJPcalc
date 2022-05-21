@@ -4,8 +4,10 @@ class EquationSolver
 {
     private readonly IEquationSystem Equations;
 
-    private readonly List<EquationPoint> Points = new List<EquationPoint>();
-    private readonly Random rand = new Random(0);
+    private List<EquationPoint> Points = new();
+    private EquationPoint HighestPoint => Points[0];
+
+    private readonly Random rand = new(0);
     private readonly int EquationCount;
 
     private int Iterations;
@@ -38,13 +40,13 @@ class EquationSolver
         stopwatch.Start();
 
         Points.Add(new EquationPoint(x, Equations));
-        while (Points[0].FMax > 1.0)
+
+        while (HighestPoint.FMax > 1.0)
         {
             AddSuggestedPoint();
-            Points.Sort();
+            Points = Points.OrderBy(x => Math.Abs(x.FMax)).ToList();
             RemovePointsAfter(EquationCount * 4);
 
-            System.Diagnostics.Debug.WriteLine(Points[0].FMax);
             if (stopwatch.ElapsedMilliseconds > timeoutMilliseconds)
             {
                 if (throwIfTimeout)
@@ -54,9 +56,9 @@ class EquationSolver
         }
 
         for (int j = 0; j < EquationCount; j++)
-            x[j] = Points[0].X[j];
+            x[j] = HighestPoint.X[j];
 
-        return Points[0].FMax;
+        return HighestPoint.FMax;
     }
 
     private void RemovePointsAfter(int maxCount)
@@ -108,7 +110,7 @@ class EquationSolver
     {
         const double randomness = 4; // TODO: could this value be optimized?
 
-        double[] suggestedXs = Points[0].X.Select(x => x * (rand.NextDouble() - 0.5) * randomness)
+        double[] suggestedXs = HighestPoint.X.Select(x => x * (rand.NextDouble() - 0.5) * randomness)
                                           .ToArray();
 
         Points.Add(new EquationPoint(suggestedXs, Equations));

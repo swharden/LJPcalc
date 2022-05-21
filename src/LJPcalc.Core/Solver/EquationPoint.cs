@@ -1,9 +1,20 @@
 ﻿namespace LJPcalc.Core.Solver;
 
-class EquationPoint : IComparable<EquationPoint>
+class EquationPoint
 {
+    /// <summary>
+    /// inputs
+    /// </summary>
     public readonly double[] X;
+
+    /// <summary>
+    /// outputs (f(x) for each input)
+    /// </summary>
     public readonly double[] F;
+
+    /// <summary>
+    /// largest absolute value of the output (F)
+    /// </summary>
     public readonly double FMax;
 
     public EquationPoint(double[] x, IEquationSystem equationSystem)
@@ -11,16 +22,6 @@ class EquationPoint : IComparable<EquationPoint>
         X = x;
         F = new double[equationSystem.EquationCount];
         equationSystem.Calculate(x, F);
-        FMax = F.Select(f => Math.Abs(f)).Max();
-    }
-
-    public int CompareTo(EquationPoint p)
-    {
-        if (FMax < p.FMax)
-            return -1;
-        else if (FMax > p.FMax)
-            return 1;
-        else
-            return 0;
+        FMax = F.Select(value => Math.Abs(value)).Max();
     }
 }

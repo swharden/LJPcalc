@@ -1,6 +1,6 @@
 ﻿namespace LJPcalc.Core.Solver;
 
-class PhiEquationSystem : Solver.IEquationSystem
+class PhiEquationSystem : IEquationSystem
 {
     public int EquationCount { get; private set; }
     private readonly double TemperatureC;
