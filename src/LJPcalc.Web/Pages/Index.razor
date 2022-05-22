@@ -132,7 +132,7 @@
         Calculating = true;
         StateHasChanged();
 
-        LjpResult = await LJPcalc.Core.Calculate.LjpAsync(Ions);
+        LjpResult = await Task.Run(() => LJPcalc.Core.Calculate.Ljp(Ions));
         Calculating = false;
         StateHasChanged();
     }

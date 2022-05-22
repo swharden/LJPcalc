@@ -19,7 +19,8 @@ class LjpCalculationTest
 
         ionSet = IonLibrary.Lookup(ionSet);
 
-        LjpResult ljp = Calculate.Ljp(ionSet, autoSort: false);
+        LjpCalculationOptions options = new() { AutoSort = false };
+        LjpResult ljp = Calculate.Ljp(ionSet, options);
         Console.WriteLine(ljp.GetSummary());
 
         Assert.That(ljp.LjpMillivolts, Is.EqualTo(-20.79558643).Within(1e-6));
@@ -50,7 +51,8 @@ class LjpCalculationTest
             new Ion("Cl",-1, 76.31, 18, 3.0568)
         };
 
-        LjpResult ljp = Calculate.Ljp(ionSet, autoSort: false);
+        LjpCalculationOptions options = new() { AutoSort = false };
+        LjpResult ljp = Calculate.Ljp(ionSet, options);
         Console.WriteLine(ljp.GetSummary());
 
         Assert.That(ljp.LjpMillivolts, Is.EqualTo(-20.79558643).Within(1e-6));
@@ -73,7 +75,8 @@ class LjpCalculationTest
         var ionSet = new Ion[] { Zn, K, Cl };
         ionSet = IonLibrary.Lookup(ionSet);
 
-        LjpResult ljp = Calculate.Ljp(ionSet, autoSort: false);
+        LjpCalculationOptions options = new() { AutoSort = false };
+        LjpResult ljp = Calculate.Ljp(ionSet, options);
         Console.WriteLine(ljp.GetSummary());
 
         Assert.That(ljp.LjpMillivolts, Is.EqualTo(-20.79558643).Within(1e-6));
