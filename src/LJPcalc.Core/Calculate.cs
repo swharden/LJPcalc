@@ -39,7 +39,7 @@ public class Calculate
         // use the fancy solver to optimize phis when there are more than 2 ions
         if (ions.Length > 2)
         {
-            IEquationSystem equations = new PhiEquationSystem(ions, options.TemperatureC);
+            IEquation equations = new PhiEquationSystem(ions, options.TemperatureC);
 
             EquationSolver solver = new(equations, phis)
             {

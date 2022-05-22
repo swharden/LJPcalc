@@ -2,7 +2,7 @@
 
 public class EquationSolver
 {
-    public readonly IEquationSystem Equation;
+    public readonly IEquation Equation;
     public readonly int EquationCount;
     private readonly Random Rand = new(0);
     private EquationSolution[] Solutions;
@@ -12,6 +12,9 @@ public class EquationSolver
     /// </summary>
     public EquationSolution BestSolution => Solutions[0];
 
+    /// <summary>
+    /// Number of times a proposed solution was tested
+    /// </summary>
     public int Iterations { get; private set; }
 
     /// <summary>
@@ -32,17 +35,14 @@ public class EquationSolver
     /// <summary>
     /// Vectorial equations in the form f(x) = 0
     /// </summary>
-    public EquationSolver(IEquationSystem equation, double[] initialXs)
+    public EquationSolver(IEquation equation, double[] initialXs)
     {
         if (initialXs.Length == 0)
             throw new Exception($"{nameof(initialXs)} cannot be empty");
 
         Equation = equation;
         EquationCount = initialXs.Length;
-
-        double[] initialErrors = Equation.Calculate(initialXs);
-
-        Solutions = new EquationSolution[] { new EquationSolution(initialXs, initialErrors) };
+        Solutions = new EquationSolution[] { Equation.Calculate(initialXs) };
     }
 
     /// <summary>
@@ -115,9 +115,7 @@ public class EquationSolver
         for (int j = 0; j < EquationCount; j++)
             suggestedXs[j] = Solutions[EquationCount].Inputs[j] + delta[j];
 
-        double[] solvedXs = Equation.Calculate(suggestedXs);
-
-        return new EquationSolution(suggestedXs, solvedXs);
+        return Equation.Calculate(suggestedXs);
     }
 
     /// <summary>
@@ -129,9 +127,7 @@ public class EquationSolver
 
         double[] suggestedXs = BestSolution.Inputs.Select(x => x * (Rand.NextDouble() - 0.5) * randomness).ToArray();
 
-        double[] solvedXs = Equation.Calculate(suggestedXs);
-
-        return new EquationSolution(suggestedXs, solvedXs);
+        return Equation.Calculate(suggestedXs);
     }
 
     /// <summary>
@@ -145,9 +141,7 @@ public class EquationSolver
                                          .Select(x => (Rand.NextDouble() - 0.5) * randomness)
                                          .ToArray();
 
-        double[] solvedXs = Equation.Calculate(suggestedXs);
-
-        return new EquationSolution(suggestedXs, solvedXs);
+        return Equation.Calculate(suggestedXs);
     }
 
     /// <summary>
@@ -181,8 +175,6 @@ public class EquationSolver
             suggestedXs[equationIndex] = mean + randomOffset;
         }
 
-        double[] solvedXs = Equation.Calculate(suggestedXs);
-
-        return new EquationSolution(suggestedXs, solvedXs);
+        return Equation.Calculate(suggestedXs);
     }
 }
