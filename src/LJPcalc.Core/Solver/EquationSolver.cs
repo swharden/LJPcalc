@@ -33,6 +33,12 @@ public class EquationSolver
     public bool ThrowIfIterationLimitExceeded;
 
     /// <summary>
+    /// Functions which can use logic and/or randomness to generate new solutions
+    /// which may be better than the existing ones.
+    /// </summary>
+    private readonly Func<EquationSolution>[] Strategies;
+
+    /// <summary>
     /// Vectorial equations in the form f(x) = 0
     /// </summary>
     public EquationSolver(IEquation equation, double[] initialXs)
@@ -43,33 +49,39 @@ public class EquationSolver
         Equation = equation;
         EquationCount = initialXs.Length;
         Solutions = new EquationSolution[] { Equation.Calculate(initialXs) };
+        Strategies = new Func<EquationSolution>[]
+        {
+            GetSolution_ShiftedBySolutionDelta,
+            GetSolution_NearFirstPoint,
+            GetSolution_TotallyRandom,
+            GetSolution_ConsideringMinMax,
+        };
+    }
+
+    public void Iterate()
+    {
+        Func<EquationSolution> strategy = Strategies[Iterations++ % Strategies.Length];
+        
+        EquationSolution newSolution = strategy.Invoke();
+
+        Solutions = Solutions
+            .Append(newSolution)
+            .OrderBy(x => x.MaxAbsoluteError)
+            .Take(EquationCount * 4)
+            .ToArray();
+
+        IterationFinished?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
     /// Find the best set of inputs where the errors are all close to zero.
     /// A valid solution is found when the error for every input is between -1 and 1 (each is < 1% error)
     /// </summary>
-    public double[] Solve()
+    public void Solve()
     {
-        Func<EquationSolution>[] solutionMethods =
-        {
-            GetPoint_ShiftedBySolutionDelta,
-            GetPoint_NearFirstPoint,
-            GetPoint_TotallyRandom,
-            GetPoint_ConsideringMinMax,
-        };
-
         while (BestSolution.MaxAbsoluteError > 1.0)
         {
-            EquationSolution newSolution = solutionMethods[Iterations++ % solutionMethods.Length].Invoke();
-
-            Solutions = Solutions
-                .Append(newSolution)
-                .OrderBy(x => x.MaxAbsoluteError)
-                .Take(EquationCount * 4)
-                .ToArray();
-
-            IterationFinished?.Invoke(this, EventArgs.Empty);
+            Iterate();
 
             if (Iterations >= MaximumIterations)
             {
@@ -79,18 +91,16 @@ public class EquationSolver
                     break;
             }
         }
-
-        return BestSolution.Inputs.ToArray();
     }
 
     /// <summary>
     /// Add a point with Xs shifted by the delta of the solved matrix
     /// </summary>
-    private EquationSolution GetPoint_ShiftedBySolutionDelta()
+    private EquationSolution GetSolution_ShiftedBySolutionDelta()
     {
         if (Solutions.Length < EquationCount + 1)
         {
-            return GetPoint_NearFirstPoint();
+            return GetSolution_NearFirstPoint();
         }
 
         double[] suggestedXs = new double[EquationCount];
@@ -121,7 +131,7 @@ public class EquationSolver
     /// <summary>
     /// Add a point with Xs randomly offset from the Xs of the first point
     /// </summary>
-    private EquationSolution GetPoint_NearFirstPoint()
+    private EquationSolution GetSolution_NearFirstPoint()
     {
         const double randomness = 4; // TODO: could this value be optimized?
 
@@ -133,7 +143,7 @@ public class EquationSolver
     /// <summary>
     /// Add a point with totally random Xs
     /// </summary>
-    private EquationSolution GetPoint_TotallyRandom()
+    private EquationSolution GetSolution_TotallyRandom()
     {
         const double randomness = 4; // TODO: could this value be optimized?
 
@@ -147,7 +157,7 @@ public class EquationSolver
     /// <summary>
     /// Add a point with Xs randomized centered and scaled to the min/max of the existing Xs
     /// </summary>
-    private EquationSolution GetPoint_ConsideringMinMax()
+    private EquationSolution GetSolution_ConsideringMinMax()
     {
         const double randomness = 3; // TODO: could this value be optimized?
 

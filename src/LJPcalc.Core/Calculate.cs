@@ -48,7 +48,8 @@ public class Calculate
             };
             solver.IterationFinished += (object? sender, EventArgs args) => options.OnIterationFinished(sender, args);
 
-            phis = solver.Solve();
+            solver.Solve();
+            phis = solver.BestSolution.Inputs;
 
             iterations = solver.Iterations;
         }
