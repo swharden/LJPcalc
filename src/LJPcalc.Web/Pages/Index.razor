@@ -7,9 +7,7 @@
     <div class="container">
         <div class="display-4 lh-1" style="font-weight: 400;">LJPCalc</div>
         <div class="" style="color: #CCC;">
-            Liquid Junction Potential (LJP) calculator by
-            <a href="http://swharden.com/" class="text-light">Scott Harden</a> and
-            <a href="https://sites.google.com/site/dbrogioli/" class="text-light">Doriano Brogioli</a>
+            Liquid Junction Potential (LJP) calculator
         </div>
     </div>
 </header>
@@ -59,7 +57,7 @@
     <div class="text-end">
 
         <div class="dropdown d-inline-block">
-            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
                 Sample Ion Sets
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
@@ -74,32 +72,51 @@
             </ul>
         </div>
 
-        <button class="btn btn-primary">Add Ion</button>
+        <button class="btn btn-outline-primary">Add Ion</button>
     </div>
 
-    <h3>@CalculationMessage</h3>
+    @if (!Calculating)
+    {
+        <button class="btn btn-primary" @onclick=CalcStart>Calculate LJP</button>
+    }
+    else
+    {
+        <button class="btn btn-primary" type="button" disabled>
+            Calculating...
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        </button>
+        <button class="btn btn-primary ms-1" @onclick=CalcStop>Stop</button>
+    }
 
-    <button class="btn btn-primary" @onclick=CalculateAsync>
-        @if (Calculating)
+    @if (Result is not null)
+    {
+        string ljpPrettyMillivolts = (Result.LjpMillivolts > 0 ? "+" : "") + $"{Result.LjpMillivolts:N3}";
+        bool solved = Result.Error < 1;
+        string color = solved ? "green" : "red";
+
+        <div class="display-5 mt-4" style="color: @color">LJP = @ljpPrettyMillivolts mV</div>
+
+        @if (!solved)
         {
-            <span>Calculating...</span>
-            <br />
-            <div class="spinner-border" role="status">
-                <span class="visually-hidden">Loading...</span>
+            <div style="color: @color">
+                <div>LJP displayed is an approximation based on an ion set with @Math.Round(Result.Error, 1)% error.</div>
+                <div>More iterations are required to minimize concentration error...</div>
             </div>
         }
         else
         {
-            <span>Calculate LJP</span>
+            <div style="color: @color">
+                <div>LJP was calculated from an ion table with maximum @Math.Round(Result.Error, 1)% concentration error.</div>
+                <div>Additional iterations are unlikely to significantly improve LJP accuracy...</div>
+            </div>
         }
-    </button>
 
-    @if (LjpResult is not null && !Calculating)
-    {
         <div class="mt-4 bg-light border rounded shadow-sm p-3">
-            <h3>Calculation Results</h3>
-            <div>LJP: <code>@LjpResult.LjpMillivolts mV</code></div>
-            <div>Calculation time: <code>@(Math.Round(LjpResult.Elapsed.TotalMilliseconds, 3)) ms</code></div>
+            <h3>Calculation Details</h3>
+            <div>LJP = @Result.LjpMillivolts mV</div>
+            <div>Error: @Result.Error %</div>
+            <div>Iterations: @Result.Iterations</div>
+            <div>Calculation time: <code>@($"{Result.Elapsed.TotalSeconds:N2}") sec</code></div>
         </div>
     }
 
@@ -119,37 +136,37 @@
 
     Ion[] Ions { get; set; } = Array.Empty<Ion>();
 
-    LjpResult? LjpResult { get; set; } = null;
-
     bool Calculating { get; set; } = false;
 
-    string CalculationMessage { get; set; } = string.Empty;
+    LjpCalculator? Calc { get; set; } = null;
+
+    LjpResult? Result { get; set; } = null;
 
     protected override void OnInitialized()
     {
         LoadIonSet(new LJPcalc.Core.KnownIonSets.Owen2013().Ions);
     }
 
-    private async Task CalculateAsync()
+    private async Task CalcStart()
     {
-        LjpResult = null;
         Calculating = true;
+        await Task.Delay(1); // helps ensure a screen refresh happens
         StateHasChanged();
-        
-        LjpCalculationOptions options = new();
-        options.IterationFinished += OnIterationFinished;
 
-        LjpResult = await Task.Run(() => LJPcalc.Core.Calculate.Ljp(Ions, options));
+        Calc = new(Ions);
+        while (Calc is not null)
+        {
+            Calc.Iterate();
+            Result = Calc.GetLJP();
+            await Task.Delay(1);
+            StateHasChanged();
+        }
         Calculating = false;
-        StateHasChanged();
     }
 
-    public void OnIterationFinished(object? sender, EventArgs e)
+    private void CalcStop()
     {
-        Core.Solver.EquationSolver solver = (Core.Solver.EquationSolver)sender!;
-        CalculationMessage = $"Iteration: {solver.Iterations} Maximum error: {solver.BestSolution.MaxAbsoluteError}%";
-        Console.WriteLine(CalculationMessage);
-        StateHasChanged();
+        Calc = null;
     }
 
     private void LoadIonSet(Ion[] ions)
