@@ -30,14 +30,14 @@ class PhiEquationSystem : IEquation
             .Select(i => ljpCLs[i] - originalCLs[i])
             .ToArray();
 
-        /* Next we must normalize differences to a base value. Typically this is the absolute value of the original CL.
-         * 
-         * However, if original CL is extremely small or zero, normalizing to it will produce a huge or undefined error.
-         * 
-         * JLJP originally solved this by instead normalizing to the smallest non-zero original CL. I found this problematic
-         * still because some original CLs may be extremely small, so calculated error remains very large.
-         * The solution to normalize to a percentage of total CL seems to work.
-         */
+        // Next we must normalize differences to a base value. Typically this is the absolute value of the original CL.
+        // However, if original CL is extremely small or zero, normalizing to it will produce a huge or undefined error. 
+
+        // JLJP originally solved this by instead normalizing to the smallest non-zero original CL. I found this problematic
+        // still because some original CLs may be extremely small, so calculated error remains very large.
+        double smallestNonZeroCl = Ions.Select(x => x.CL).Where(CL => CL > 0).Min();
+
+        // I prefer to normalize to a percentage of total CL
         double onePercentTotalCL = Ions.Select(x => x.CL).Sum() * .01;
 
         double[] divisors = Enumerable.Range(0, Ions.Length)

@@ -25,7 +25,8 @@ public class LjpCalculationOptions
     public bool ThrowIfIterationLimitExceeded { get; set; } = false;
 
     /// <summary>
-    /// This event is invoked after each iteration of the phi solver
+    /// This event is invoked after each iteration of the phi solver.
+    /// The sender is the <seealso cref="Solver.EquationSolver"/>.
     /// </summary>
     public event EventHandler? IterationFinished;
 
