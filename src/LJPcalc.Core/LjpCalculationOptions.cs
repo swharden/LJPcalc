@@ -23,4 +23,14 @@ public class LjpCalculationOptions
     /// If false, calculation of LJP will continue using the best solution that was found so far.
     /// </summary>
     public bool ThrowIfIterationLimitExceeded { get; set; } = false;
+
+    /// <summary>
+    /// This event is invoked after each iteration of the phi solver
+    /// </summary>
+    public event EventHandler? IterationFinished;
+
+    /// <summary>
+    /// This function is called by the solver when new iterations complete
+    /// </summary>
+    public void OnIterationFinished(object? sender, EventArgs e) => IterationFinished?.Invoke(sender, e);
 }

@@ -97,7 +97,7 @@
         <div class="mt-4 bg-light border rounded shadow-sm p-3">
             <h3>Calculation Results</h3>
             <div>LJP: <code>@LjpResult.LjpMillivolts mV</code></div>
-            <div>Calculation time: <code>@(Math.Round((LjpResult.TimePhi + LjpResult.TimeLjp).TotalMilliseconds, 3)) ms</code></div>
+            <div>Calculation time: <code>@(Math.Round((LjpResult.Elapsed + LjpResult.TimeLjp).TotalMilliseconds, 3)) ms</code></div>
         </div>
     }
 

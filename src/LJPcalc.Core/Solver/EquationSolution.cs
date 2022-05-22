@@ -1,6 +1,6 @@
 ﻿namespace LJPcalc.Core.Solver;
 
-class EquationSolution
+public class EquationSolution
 {
     public readonly double[] Inputs;
 

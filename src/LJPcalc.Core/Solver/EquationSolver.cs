@@ -1,22 +1,32 @@
 ﻿namespace LJPcalc.Core.Solver;
 
-class EquationSolver
+public class EquationSolver
 {
-    private readonly IEquation Equation;
-    private readonly int EquationCount;
+    public readonly IEquationSystem Equation;
+    public readonly int EquationCount;
 
     private EquationSolution[] EquationSolutions;
 
     public EquationSolution BestSolution => EquationSolutions[0];
 
+    /// <summary>
+    /// Largest scaled result absolute value for the best solution available.
+    /// The solver tries to minimize this value, considering < 1 to be a solution.
+    /// </summary>
+    public double M => EquationSolutions[0].AbsoluteLargestOutput;
+
     private readonly Random Rand = new(0);
 
     public int Iterations { get; private set; }
 
+    public event EventHandler? IterationFinished;
+    public int MaximumIterations;
+    public bool ThrowIfIterationLimitExceeded;
+
     /// <summary>
     /// Vectorial equations in the form f(x) = 0
     /// </summary>
-    public EquationSolver(IEquation equation, double[] initialXs)
+    public EquationSolver(IEquationSystem equation, double[] initialXs)
     {
         if (initialXs.Length == 0)
             throw new Exception($"{nameof(initialXs)} cannot be empty");
@@ -33,7 +43,7 @@ class EquationSolver
     /// Find the best set of inputs (xs) where the scaled outputs are all close to zero.
     /// A valid solution is a set of xs where for every x, f(x) is between -1 and 1.
     /// </summary>
-    public double[] Solve(int maxIterations, bool throwIfExceeded)
+    public double[] Solve()
     {
         Func<EquationSolution>[] solutionMethods =
         {
@@ -53,10 +63,12 @@ class EquationSolver
                 .Take(EquationCount * 4)
                 .ToArray();
 
-            if (Iterations >= maxIterations)
+            IterationFinished?.Invoke(this, EventArgs.Empty);
+
+            if (Iterations >= MaximumIterations)
             {
-                if (throwIfExceeded)
-                    throw new OperationCanceledException($"hit maximum iteration limit ({maxIterations}) while solving Phis");
+                if (ThrowIfIterationLimitExceeded)
+                    throw new OperationCanceledException($"hit maximum iteration limit ({MaximumIterations}) while solving Phis");
                 else
                     break;
             }

@@ -25,7 +25,7 @@ class IonSortingTests
         LjpCalculationOptions options = new() { AutoSort = false, MaximumIterations = 123, ThrowIfIterationLimitExceeded = false };
         LjpResult result = Calculate.Ljp(ionSet, options);
         Console.WriteLine(result.GetSummary());
-        Assert.That(result.IterationsPhi, Is.EqualTo(123));
+        Assert.That(result.Iterations, Is.EqualTo(123));
 
         // it does not solve in this order
         options.ThrowIfIterationLimitExceeded = true;
@@ -60,7 +60,7 @@ class IonSortingTests
         LjpCalculationOptions options = new() { AutoSort = false, MaximumIterations = 123, ThrowIfIterationLimitExceeded = false };
         LjpResult result = Calculate.Ljp(ionSet, options);
         Console.WriteLine(result.GetSummary());
-        Assert.That(result.IterationsPhi, Is.EqualTo(123));
+        Assert.That(result.Iterations, Is.EqualTo(123));
 
         // it does not solve in this order
         options.ThrowIfIterationLimitExceeded = true;

@@ -1,6 +1,6 @@
 ﻿namespace LJPcalc.Core.Solver;
 
-interface IEquation
+public interface IEquationSystem
 {
     double[] Calculate(double[] x);
 }
