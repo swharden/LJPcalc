@@ -77,6 +77,8 @@
         <button class="btn btn-primary">Add Ion</button>
     </div>
 
+    <h3>@CalculationMessage</h3>
+
     <button class="btn btn-primary" @onclick=CalculateAsync>
         @if (Calculating)
         {
@@ -121,6 +123,8 @@
 
     bool Calculating { get; set; } = false;
 
+    string CalculationMessage { get; set; } = string.Empty;
+
     protected override void OnInitialized()
     {
         LoadIonSet(new LJPcalc.Core.KnownIonSets.Owen2013().Ions);
@@ -131,9 +135,20 @@
         LjpResult = null;
         Calculating = true;
         StateHasChanged();
+        
+        LjpCalculationOptions options = new();
+        options.IterationFinished += OnIterationFinished;
 
-        LjpResult = await Task.Run(() => LJPcalc.Core.Calculate.Ljp(Ions));
+        LjpResult = await Task.Run(() => LJPcalc.Core.Calculate.Ljp(Ions, options));
         Calculating = false;
+        StateHasChanged();
+    }
+
+    public void OnIterationFinished(object? sender, EventArgs e)
+    {
+        Core.Solver.EquationSolver solver = (Core.Solver.EquationSolver)sender!;
+        CalculationMessage = $"Iteration: {solver.Iterations} Maximum error: {solver.BestSolution.MaxAbsoluteError}%";
+        Console.WriteLine(CalculationMessage);
         StateHasChanged();
     }
 
