@@ -28,6 +28,7 @@ public class LjpCalculationOptions
     /// This event is invoked after each iteration of the phi solver.
     /// The sender is the <seealso cref="Solver.EquationSolver"/>.
     /// </summary>
+    [Obsolete("DO NOT USE EVENT HANDLING")]
     public event EventHandler? IterationFinished;
 
     /// <summary>

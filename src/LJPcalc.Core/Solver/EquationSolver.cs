@@ -43,9 +43,6 @@ public class EquationSolver
     /// </summary>
     public EquationSolver(IEquation equation, double[] initialXs)
     {
-        if (initialXs.Length == 0)
-            throw new Exception($"{nameof(initialXs)} cannot be empty");
-
         Equation = equation;
         EquationCount = initialXs.Length;
         Solutions = new EquationSolution[] { Equation.Calculate(initialXs) };

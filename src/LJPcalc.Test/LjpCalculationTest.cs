@@ -6,6 +6,23 @@ namespace LJPcalc.Test;
 class LjpCalculationTest
 {
     [Test]
+    public void Test_Calculation_ThrowsIfIonsNull()
+    {
+        Assert.Throws<ArgumentNullException>(() => new LjpCalculator(null!));
+    }
+
+    [Test]
+    public void Test_Calculation_ThrowsIfSingleIon()
+    {
+        Ion[] ions =
+        {
+            new Ion("Na", 2, 5)
+        };
+
+        Assert.Throws<ArgumentException>(() => new LjpCalculator(ions));
+    }
+
+    [Test]
     public void Test_LjpCalculationMatches_ExampleFromScreenshot()
     {
         /* Test came from screenshot on original JLJP website */
@@ -27,14 +44,26 @@ class LjpCalculationTest
     }
 
     [Test]
-    public void Test_LjpMathThrowsExceptionIf_ChargeOrMuIsZero()
+    public void Test_LjpMathThrowsExceptionIf_ChargeIsZero()
     {
-        // here the ions aren't looked up from a table so charge and mu is 0
         var ionSet = new Ion[]
         {
-            new Ion("Zn", 9, 0.0284),
-            new Ion("K", 0, 3),
-            new Ion("Cl", 18, 3.0568)
+            new Ion("A", charge: 1, conductivity: 7, c0: 3, cL: 3, phi: 6),
+            new Ion("B", charge: 0, conductivity: 7, c0: 3, cL: 3, phi: 6),
+            new Ion("C", charge: 1, conductivity: 7, c0: 3, cL: 3, phi: 6),
+        };
+
+        Assert.Throws<ArgumentException>(() => Calculate.Ljp(ionSet));
+    }
+
+    [Test]
+    public void Test_LjpMathThrowsExceptionIf_MuIsZero()
+    {
+        var ionSet = new Ion[]
+        {
+            new Ion("A", charge: 1, conductivity: 7, c0: 3, cL: 3, phi: 6),
+            new Ion("B", charge: 1, conductivity: 0, c0: 3, cL: 3, phi: 6),
+            new Ion("C", charge: 1, conductivity: 7, c0: 3, cL: 3, phi: 6),
         };
 
         Assert.Throws<ArgumentException>(() => Calculate.Ljp(ionSet));

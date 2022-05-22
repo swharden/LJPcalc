@@ -19,7 +19,7 @@ public class EquationSolution
     /// </summary>
     public readonly double[] Errors;
 
-    public double MaxAbsoluteError => Errors.Select(value => Math.Abs(value)).Max();
+    public double MaxAbsoluteError => Errors.Any() ? Errors.Select(value => Math.Abs(value)).Max() : 0;
 
     public EquationSolution(double[] inputs, double[] outputs, double[] errors)
     {
