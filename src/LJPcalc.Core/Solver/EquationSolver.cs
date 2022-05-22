@@ -4,23 +4,29 @@ public class EquationSolver
 {
     public readonly IEquationSystem Equation;
     public readonly int EquationCount;
-
-    private EquationSolution[] EquationSolutions;
-
-    public EquationSolution BestSolution => EquationSolutions[0];
+    private readonly Random Rand = new(0);
+    private EquationSolution[] Solutions;
 
     /// <summary>
-    /// Largest scaled result absolute value for the best solution available.
-    /// The solver tries to minimize this value, considering < 1 to be a solution.
+    /// Values for the best solution found so far (the one with the smallest maximum error)
     /// </summary>
-    public double M => EquationSolutions[0].AbsoluteLargestOutput;
-
-    private readonly Random Rand = new(0);
+    public EquationSolution BestSolution => Solutions[0];
 
     public int Iterations { get; private set; }
 
+    /// <summary>
+    /// This event is invoked after each iteration
+    /// </summary>
     public event EventHandler? IterationFinished;
-    public int MaximumIterations;
+
+    /// <summary>
+    /// Abort the solving process after this number of iterations
+    /// </summary>
+    public int MaximumIterations = int.MaxValue;
+
+    /// <summary>
+    /// Controls whether a hard exception is thrown if the maximum iteration limit is hit
+    /// </summary>
     public bool ThrowIfIterationLimitExceeded;
 
     /// <summary>
@@ -34,14 +40,14 @@ public class EquationSolver
         Equation = equation;
         EquationCount = initialXs.Length;
 
-        double[] initialYs = Equation.Calculate(initialXs);
+        double[] initialErrors = Equation.Calculate(initialXs);
 
-        EquationSolutions = new EquationSolution[] { new EquationSolution(initialXs, initialYs) };
+        Solutions = new EquationSolution[] { new EquationSolution(initialXs, initialErrors) };
     }
 
     /// <summary>
-    /// Find the best set of inputs (xs) where the scaled outputs are all close to zero.
-    /// A valid solution is a set of xs where for every x, f(x) is between -1 and 1.
+    /// Find the best set of inputs where the errors are all close to zero.
+    /// A valid solution is found when the error for every input is between -1 and 1 (each is < 1% error)
     /// </summary>
     public double[] Solve()
     {
@@ -53,13 +59,13 @@ public class EquationSolver
             GetPoint_ConsideringMinMax,
         };
 
-        while (BestSolution.AbsoluteLargestOutput > 1.0)
+        while (BestSolution.MaxAbsoluteError > 1.0)
         {
             EquationSolution newSolution = solutionMethods[Iterations++ % solutionMethods.Length].Invoke();
 
-            EquationSolutions = EquationSolutions
+            Solutions = Solutions
                 .Append(newSolution)
-                .OrderBy(x => Math.Abs(x.AbsoluteLargestOutput))
+                .OrderBy(x => x.MaxAbsoluteError)
                 .Take(EquationCount * 4)
                 .ToArray();
 
@@ -82,7 +88,7 @@ public class EquationSolver
     /// </summary>
     private EquationSolution GetPoint_ShiftedBySolutionDelta()
     {
-        if (EquationSolutions.Length < EquationCount + 1)
+        if (Solutions.Length < EquationCount + 1)
         {
             return GetPoint_NearFirstPoint();
         }
@@ -92,22 +98,22 @@ public class EquationSolver
         double[,] Mm = new double[EquationCount, EquationCount];
         for (int j = 0; j < EquationCount; j++)
             for (int k = 0; k < EquationCount; k++)
-                Mm[j, k] = EquationSolutions[k].Outputs[j] - EquationSolutions[EquationCount].Outputs[j];
+                Mm[j, k] = Solutions[k].Errors[j] - Solutions[EquationCount].Errors[j];
 
         double[] mF0 = new double[EquationCount];
         for (int j = 0; j < EquationCount; j++)
-            mF0[j] = -EquationSolutions[EquationCount].Outputs[j];
+            mF0[j] = -Solutions[EquationCount].Errors[j];
 
         double[,] Vm = new double[EquationCount, EquationCount];
         for (int j = 0; j < EquationCount; j++)
             for (int k = 0; k < EquationCount; k++)
-                Vm[j, k] = EquationSolutions[k].Inputs[j] - EquationSolutions[EquationCount].Inputs[j];
+                Vm[j, k] = Solutions[k].Inputs[j] - Solutions[EquationCount].Inputs[j];
 
         double[] u = LinearAlgebra.Solve(Mm, mF0);
         double[] delta = LinearAlgebra.Product(Vm, u);
 
         for (int j = 0; j < EquationCount; j++)
-            suggestedXs[j] = EquationSolutions[EquationCount].Inputs[j] + delta[j];
+            suggestedXs[j] = Solutions[EquationCount].Inputs[j] + delta[j];
 
         double[] solvedXs = Equation.Calculate(suggestedXs);
 
@@ -155,7 +161,7 @@ public class EquationSolver
 
         for (int equationIndex = 0; equationIndex < EquationCount; equationIndex++)
         {
-            var equationXs = EquationSolutions.Select(x => x.Inputs[equationIndex]);
+            var equationXs = Solutions.Select(x => x.Inputs[equationIndex]);
             double xMin = equationXs.Min();
             double xMax = equationXs.Max();
 

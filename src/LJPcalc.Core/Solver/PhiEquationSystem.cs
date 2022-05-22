@@ -14,31 +14,40 @@ class PhiEquationSystem : IEquationSystem
     }
 
     /// <summary>
-    /// Determine scaled CL (f) for the given phis (x).
-    /// The solution is found when CLs are suffeciently close to those defined in the ion table.
-    /// A valid solution is a set of phis (xs) where for every x, f(x) is between -1 and 1.
+    /// Solves for LJP (which calculates new CLs) and returns the percent error for each of the new CLs.
+    /// A solution is found when all CLs used to calculate LJP are sufficiently close to those defined in the ion table.
+    /// Typically a solution is one where all CL errors are less than 1%.
     /// </summary>
     public double[] Calculate(double[] phis)
     {
-        // solve with zero CL concentration
-        (double ljp, double[] solvedCLs) = Core.Calculate.SolveForLJP(Ions, phis, TemperatureC);
+        double[] originalCLs = Enumerable.Range(0, Ions.Length)
+            .Select(x => Ions[x].CL)
+            .ToArray();
 
-        // Sigma is a scaling factor later used to scale the difference between 
-        // the expected CL and the CL determined using the custom phis (x).
-        double smallestAbsoluteNonZeroCL = Ions.Select(ion => Math.Abs(ion.CL))
-                                               .Where(c => c > 0)
-                                               .Min();
+        (_, double[] ljpCLs) = Core.Calculate.SolveForLJP(Ions, phis, TemperatureC);
 
-        // return scaled difference between expected CL and actual CL given phis (x)
-        double[] scaledDifference = new double[EquationCount];
-        for (int i = 0; i < EquationCount; i++)
-        {
-            double originalCL = Ions[i].CL;
-            double differenceCL = solvedCLs[i] - originalCL;
-            double absoluteCL = Math.Max(Math.Abs(originalCL), smallestAbsoluteNonZeroCL);
-            scaledDifference[i] = 100 * differenceCL / absoluteCL;
-        }
+        double[] differences = Enumerable.Range(0, Ions.Length)
+            .Select(i => ljpCLs[i] - originalCLs[i])
+            .ToArray();
 
-        return scaledDifference;
+        /* Next we must normalize differences to a base value. Typically this is the absolute value of the original CL.
+         * 
+         * However, if original CL is extremely small or zero, normalizing to it will produce a huge or undefined error.
+         * 
+         * JLJP originally solved this by instead normalizing to the smallest non-zero original CL. I found this problematic
+         * still because some original CLs may be extremely small, so calculated error remains very large.
+         * The solution to normalize to a percentage of total CL seems to work.
+         */
+        double onePercentTotalCL = Ions.Select(x => x.CL).Sum() * .01;
+
+        double[] divisors = Enumerable.Range(0, Ions.Length)
+            .Select(i => Math.Max(originalCLs[i], onePercentTotalCL))
+            .ToArray();
+
+        double[] percentErrorCL = Enumerable.Range(0, EquationCount)
+            .Select(i => 100 * differences[i] / divisors[i])
+            .ToArray();
+
+        return percentErrorCL;
     }
 }

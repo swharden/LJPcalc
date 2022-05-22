@@ -4,13 +4,13 @@ public class EquationSolution
 {
     public readonly double[] Inputs;
 
-    public readonly double[] Outputs;
+    public readonly double[] Errors;
 
-    public double AbsoluteLargestOutput => Outputs.Select(value => Math.Abs(value)).Max();
+    public double MaxAbsoluteError => Errors.Select(value => Math.Abs(value)).Max();
 
-    public EquationSolution(double[] inputs, double[] outputs)
+    public EquationSolution(double[] inputs, double[] errors)
     {
         Inputs = inputs;
-        Outputs = outputs;
+        Errors = errors;
     }
 }

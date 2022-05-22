@@ -41,6 +41,6 @@ internal class SolverProgressTests
     private void Options_IterationFinished(object? sender, EventArgs e)
     {
         EquationSolver solver = (EquationSolver)sender!;
-        Console.WriteLine($"Iteration {solver.Iterations} M={solver.M:N2}");
+        Console.WriteLine($"Iteration {solver.Iterations} M={solver.BestSolution.MaxAbsoluteError:N2}");
     }
 }

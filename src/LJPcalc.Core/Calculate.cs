@@ -4,18 +4,18 @@ namespace LJPcalc.Core;
 
 public class Calculate
 {
-    public static LjpResult Ljp(Ion[] ions2, double temperatureC = 25)
+    public static LjpResult Ljp(Ion[] ions, double temperatureC = 25)
     {
         LjpCalculationOptions defaultOptions = new() { TemperatureC = temperatureC };
-        return Ljp(ions2, defaultOptions);
+        return Ljp(ions, defaultOptions);
     }
 
-    public static LjpResult Ljp(Ion[] ions2, LjpCalculationOptions options)
+    public static LjpResult Ljp(Ion[] ions, LjpCalculationOptions options)
     {
         var sw = System.Diagnostics.Stopwatch.StartNew();
 
-        Ion[] ionsInput = ions2.Select(x => x.Clone()).ToArray();
-        Ion[] ions = ions2.Select(x => x.Clone()).ToArray();
+        Ion[] ionsInput = ions.Select(x => x.Clone()).ToArray();
+        ions = ions.Select(x => x.Clone()).ToArray();
 
         if (ions.Any(x => x.Charge == 0))
             throw new ArgumentException("ion charge cannot be zero");
@@ -53,14 +53,13 @@ public class Calculate
             iterations = solver.Iterations;
         }
 
-        // calculate LJP (modifies one of the phis and all the CLs)
-        (double ljp_V, double[] solveCLs) = SolveForLJP(ions, phis, options.TemperatureC);
+        (double ljpVolts, double[] ljpCLs) = SolveForLJP(ions, phis, options.TemperatureC);
 
         // update ions based on new phis and CLs (all ions except the last two)
         for (int j = 0; j < phis.Length; j++)
         {
             ions[j].Phi = phis[j];
-            ions[j].CL = solveCLs[j];
+            ions[j].CL = ljpCLs[j];
         }
 
         // second from last ion phi is concentration difference
@@ -73,17 +72,18 @@ public class Calculate
         LastIon.CL = -ions.Take(ions.Length - 1).Sum(x => x.CL * x.Charge) / LastIon.Charge;
 
         // load new details into the result
-        LjpResult result = new(ionsInput, options.TemperatureC, ljp_V * 1000, sw.Elapsed, iterations);
+        LjpResult result = new(ionsInput, options.TemperatureC, ljpVolts * 1000, sw.Elapsed, iterations);
 
         return result;
     }
 
     /// <summary>
-    /// WARNING: this method modifies input arrays (the last ion's C0 and all the CLs).
-    /// It is only to be called by the solver.
+    /// Solves for LJP and uses the given phis to calculate new CLs for each ion.
     /// </summary>
-    public static (double volts, double[] cls) SolveForLJP(Ion[] ions, double[] startingPhis, double temperatureC)
+    public static (double volts, double[] cls) SolveForLJP(Ion[] ions, double[] initialPhis, double temperatureC)
     {
+        ions = ions.ToArray();
+
         int ionCount = ions.Length;
         int ionCountMinusOne = ionCount - 1;
         int ionCountMinusTwo = ionCount - 2;
@@ -93,8 +93,8 @@ public class Calculate
         Ion lastIon = ions[indexLastIon];
         Ion secondFromLastIon = ions[indexSecondFromLastIon];
 
-        if (startingPhis.Length != ionCount - 2)
-            throw new ArgumentException($"{nameof(startingPhis)} length must be two less than the length of {nameof(ions)}");
+        if (initialPhis.Length != ionCount - 2)
+            throw new ArgumentException($"{nameof(initialPhis)} length must be two less than the length of {nameof(ions)}");
 
         // populate charges, mus, and rhos from all ions except the last one
         double[] charges = new double[ionCountMinusOne];
@@ -110,7 +110,7 @@ public class Calculate
         // populate phis from all ions except the last two
         double[] phis = new double[ionCountMinusOne];
         for (int j = 0; j < ionCountMinusTwo; j++)
-            phis[j] = startingPhis[j];
+            phis[j] = initialPhis[j];
 
         // second from last phi is the concentration difference
         phis[indexSecondFromLastIon] = secondFromLastIon.CL - secondFromLastIon.C0;
