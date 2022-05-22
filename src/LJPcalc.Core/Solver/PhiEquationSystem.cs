@@ -24,10 +24,11 @@ class PhiEquationSystem : IEquation
             .Select(x => Ions[x].CL)
             .ToArray();
 
-        (_, double[] ljpCLs) = Core.Calculate.SolveForLJP(Ions, phis, TemperatureC);
+        LjpSolution ljpSol = LjpSolver.CalculateLjp(Ions, phis, TemperatureC);
+        double[] solvedCLs = ljpSol.CLs;
 
         double[] differences = Enumerable.Range(0, Ions.Length)
-            .Select(i => ljpCLs[i] - originalCLs[i])
+            .Select(i => solvedCLs[i] - originalCLs[i])
             .ToArray();
 
         // Next we must normalize differences to a base value. Typically this is the absolute value of the original CL.
@@ -48,6 +49,6 @@ class PhiEquationSystem : IEquation
             .Select(i => 100 * differences[i] / divisors[i])
             .ToArray();
 
-        return new EquationSolution(phis, ljpCLs, percentErrorCL);
+        return new EquationSolution(phis, solvedCLs, percentErrorCL);
     }
 }
