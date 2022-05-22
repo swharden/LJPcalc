@@ -8,19 +8,21 @@ public class LjpResult
     public readonly double PhiSolutionM;
     public readonly TimeSpan TimePhi;
     public readonly TimeSpan TimeLjp;
+    public readonly int IterationsPhi;
 
     /// <summary>
     /// Indicates how well the solver found a solution (typically 1.0 indicates a solution was found)
     /// </summary>
     public double FMax => Ions.Select(x => Math.Abs(x.Phi)).Max();
 
-    public LjpResult(Ion[] ions, double tempC, double ljpMv, TimeSpan timePhi, TimeSpan timeLjp)
+    public LjpResult(Ion[] ions, double tempC, double ljpMv, TimeSpan timePhi, TimeSpan timeLjp, int iterationsPhi)
     {
         Ions = ions;
         LjpMillivolts = ljpMv;
         TemperatureC = tempC;
         TimePhi = timePhi;
         TimeLjp = timeLjp;
+        IterationsPhi = iterationsPhi;
     }
 
     public string GetSummary()
@@ -34,8 +36,9 @@ public class LjpResult
             if (double.IsFinite(ion.PercentChangeCL) && ion.PercentChangeCL > 2)
                 sb.AppendLine($"CL change: {ion.Name} went from {ion.InitialCL:N2} to {ion.CL:N2} ({ion.PercentChangeCL:N2}%)");
         }
-        sb.AppendLine($"Time to balance phis: {TimePhi}");
-        sb.AppendLine($"Time to solve for LJP: {TimeLjp}");
+        sb.AppendLine($"Phis balanced after {IterationsPhi} iterations ({TimePhi.TotalMilliseconds:N3} ms)");
+        sb.AppendLine($"LJP solved after: ({TimeLjp.TotalMilliseconds:N3} ms)");
+        sb.AppendLine($"LJP = {LjpMillivolts} mV");
         return sb.ToString();
     }
 }

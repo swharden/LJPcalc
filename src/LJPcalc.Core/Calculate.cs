@@ -4,13 +4,16 @@ namespace LJPcalc.Core;
 
 public static class Calculate
 {
-    public static async Task<LjpResult> LjpAsync(Ion[] ions, double temperatureC = 25, bool autoSort = true, double timeoutMilliseconds = 5000, bool throwIfTimeout = false)
+    public static async Task<LjpResult> LjpAsync(Ion[] ions, double temperatureC = 25, bool autoSort = true, int maxIterations = 3000, bool throwIfExceeded = false)
     {
-        return await Task.Run(() => Ljp(ions, temperatureC, autoSort, timeoutMilliseconds, throwIfTimeout));
+        return await Task.Run(() => Ljp(ions, temperatureC, autoSort, maxIterations));
     }
 
-    public static LjpResult Ljp(Ion[] ions, double temperatureC = 25, bool autoSort = true, double timeoutMilliseconds = 5000, bool throwIfTimeout = false)
+    public static LjpResult Ljp(Ion[] ions2, double temperatureC = 25, bool autoSort = true, int maxIterations = 3000, bool throwIfExceeded = false)
     {
+        Ion[] ionsInput = ions2.Select(x => x.Clone()).ToArray();
+        Ion[] ions = ions2.Select(x => x.Clone()).ToArray();
+
         if (ions.Any(x => x.Charge == 0))
             throw new ArgumentException("ion charge cannot be zero");
 
@@ -26,13 +29,18 @@ public static class Calculate
         if (secondFromLastIon.C0 == secondFromLastIon.CL)
             throw new InvalidOperationException("second from last ion concentrations cannot be equal");
 
-        // create this now to preserve original stats about each ion
-        Ion[] ionsInput = ions.ToArray();
-
         // solve for phis (if the number of ions is greater than 2)
         System.Diagnostics.Stopwatch sw = new();
         sw.Restart();
-        double[] phis = PhiSolver.Solve(ions, temperatureC, timeoutMilliseconds, throwIfTimeout);
+        double[] phis = ions.Take(ions.Length - 2).Select(x => x.CL - x.C0).ToArray();
+        int phiIterations = 0;
+        if (ions.Length > 2)
+        {
+            IEquation phiEquations = new PhiEquationSystem(ions, temperatureC);
+            EquationSolver equationSolver = new(phiEquations, phis);
+            phis = equationSolver.Solve(maxIterations, throwIfExceeded);
+            phiIterations = equationSolver.Iterations;
+        }
         TimeSpan timePhi = sw.Elapsed;
 
         // calculate LJP (modifies one of the phis and all the CLs)
@@ -57,7 +65,7 @@ public static class Calculate
         LastIon.CL = -ions.Take(ions.Length - 1).Sum(x => x.CL * x.Charge) / LastIon.Charge;
 
         // load new details into the result
-        LjpResult result = new(ionsInput, temperatureC, ljp_V * 1000, timePhi, timeLjp);
+        LjpResult result = new(ionsInput, temperatureC, ljp_V * 1000, timePhi, timeLjp, phiIterations);
 
         return result;
     }

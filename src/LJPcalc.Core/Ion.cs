@@ -45,6 +45,8 @@ public class Ion
         InitialCL = cL;
     }
 
+    public Ion Clone() => new(Name, Charge, Conductivity, C0, CL, Phi);
+
     public override string ToString()
     {
         return $"Ion {NameWithCharge}: mu={Mu:0.000E+0}, c0={C0:0.000}, cL={CL:0.000}";

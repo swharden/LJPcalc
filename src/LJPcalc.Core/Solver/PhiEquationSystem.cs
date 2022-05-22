@@ -1,6 +1,6 @@
 ﻿namespace LJPcalc.Core.Solver;
 
-class PhiEquationSystem : IEquationSystem
+class PhiEquationSystem : IEquation
 {
     public int EquationCount { get; private set; }
     private readonly double TemperatureC;
@@ -15,6 +15,8 @@ class PhiEquationSystem : IEquationSystem
 
     /// <summary>
     /// Determine scaled CL (f) for the given phis (x).
+    /// The solution is found when CLs are suffeciently close to those defined in the ion table.
+    /// A valid solution is a set of phis (xs) where for every x, f(x) is between -1 and 1.
     /// </summary>
     public double[] Calculate(double[] phis)
     {

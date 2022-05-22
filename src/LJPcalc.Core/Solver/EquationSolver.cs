@@ -2,58 +2,40 @@
 
 class EquationSolver
 {
-    private readonly IEquationSystem Equations;
-    private int EquationCount => Equations.EquationCount;
+    private readonly IEquation Equation;
+    private readonly int EquationCount;
 
-    private EquationPoint[] PossibleSolutions = Array.Empty<EquationPoint>();
-    public EquationPoint BestSolution => PossibleSolutions[0];
+    private EquationSolution[] EquationSolutions;
+
+    public EquationSolution BestSolution => EquationSolutions[0];
 
     private readonly Random Rand = new(0);
 
-    private int Iterations;
+    public int Iterations { get; private set; }
 
-    public EquationSolver(IEquationSystem equations)
+    /// <summary>
+    /// Vectorial equations in the form f(x) = 0
+    /// </summary>
+    public EquationSolver(IEquation equation, double[] initialXs)
     {
-        Equations = equations;
+        if (initialXs.Length == 0)
+            throw new Exception($"{nameof(initialXs)} cannot be empty");
+
+        Equation = equation;
+        EquationCount = initialXs.Length;
+
+        double[] initialYs = Equation.Calculate(initialXs);
+
+        EquationSolutions = new EquationSolution[] { new EquationSolution(initialXs, initialYs) };
     }
 
     /// <summary>
-    /// Solve the equations and return the best solution
+    /// Find the best set of inputs (xs) where the scaled outputs are all close to zero.
+    /// A valid solution is a set of xs where for every x, f(x) is between -1 and 1.
     /// </summary>
-    public double[] Solve(double[] x, double timeoutMilliseconds, bool throwIfTimeout)
+    public double[] Solve(int maxIterations, bool throwIfExceeded)
     {
-        if (EquationCount == 0)
-            throw new Exception("equation count cannot be 0");
-
-        System.Diagnostics.Stopwatch stopwatch = new();
-        stopwatch.Start();
-
-        PossibleSolutions = new EquationPoint[] { new EquationPoint(x, Equations) };
-
-        while (BestSolution.FMax > 1.0)
-        {
-            PossibleSolutions = PossibleSolutions
-                .Append(GetSuggestedPoint())
-                .OrderBy(x => Math.Abs(x.FMax))
-                .Take(EquationCount * 4)
-                .ToArray();
-
-            if (stopwatch.ElapsedMilliseconds > timeoutMilliseconds)
-            {
-                if (throwIfTimeout)
-                    throw new OperationCanceledException($"Solver timed out while calculating Phis ({timeoutMilliseconds} ms)");
-                break;
-            }
-        }
-
-        double[] bestSolutionXs = Enumerable.Range(0, EquationCount).Select(x => BestSolution.X[x]).ToArray();
-
-        return bestSolutionXs;
-    }
-
-    private EquationPoint GetSuggestedPoint()
-    {
-        Func<EquationPoint>[] methods =
+        Func<EquationSolution>[] solutionMethods =
         {
             GetPoint_ShiftedBySolutionDelta,
             GetPoint_NearFirstPoint,
@@ -61,17 +43,34 @@ class EquationSolver
             GetPoint_ConsideringMinMax,
         };
 
-        Func<EquationPoint> method = methods[Iterations++ % methods.Length];
+        while (BestSolution.AbsoluteLargestOutput > 1.0)
+        {
+            EquationSolution newSolution = solutionMethods[Iterations++ % solutionMethods.Length].Invoke();
 
-        return method.Invoke();
+            EquationSolutions = EquationSolutions
+                .Append(newSolution)
+                .OrderBy(x => Math.Abs(x.AbsoluteLargestOutput))
+                .Take(EquationCount * 4)
+                .ToArray();
+
+            if (Iterations >= maxIterations)
+            {
+                if (throwIfExceeded)
+                    throw new OperationCanceledException($"hit maximum iteration limit ({maxIterations}) while solving Phis");
+                else
+                    break;
+            }
+        }
+
+        return BestSolution.Inputs.ToArray();
     }
 
     /// <summary>
     /// Add a point with Xs shifted by the delta of the solved matrix
     /// </summary>
-    private EquationPoint GetPoint_ShiftedBySolutionDelta()
+    private EquationSolution GetPoint_ShiftedBySolutionDelta()
     {
-        if (PossibleSolutions.Length < EquationCount + 1)
+        if (EquationSolutions.Length < EquationCount + 1)
         {
             return GetPoint_NearFirstPoint();
         }
@@ -81,43 +80,46 @@ class EquationSolver
         double[,] Mm = new double[EquationCount, EquationCount];
         for (int j = 0; j < EquationCount; j++)
             for (int k = 0; k < EquationCount; k++)
-                Mm[j, k] = PossibleSolutions[k].F[j] - PossibleSolutions[EquationCount].F[j];
+                Mm[j, k] = EquationSolutions[k].Outputs[j] - EquationSolutions[EquationCount].Outputs[j];
 
         double[] mF0 = new double[EquationCount];
         for (int j = 0; j < EquationCount; j++)
-            mF0[j] = -PossibleSolutions[EquationCount].F[j];
+            mF0[j] = -EquationSolutions[EquationCount].Outputs[j];
 
         double[,] Vm = new double[EquationCount, EquationCount];
         for (int j = 0; j < EquationCount; j++)
             for (int k = 0; k < EquationCount; k++)
-                Vm[j, k] = PossibleSolutions[k].X[j] - PossibleSolutions[EquationCount].X[j];
+                Vm[j, k] = EquationSolutions[k].Inputs[j] - EquationSolutions[EquationCount].Inputs[j];
 
         double[] u = LinearAlgebra.Solve(Mm, mF0);
         double[] delta = LinearAlgebra.Product(Vm, u);
 
         for (int j = 0; j < EquationCount; j++)
-            suggestedXs[j] = PossibleSolutions[EquationCount].X[j] + delta[j];
+            suggestedXs[j] = EquationSolutions[EquationCount].Inputs[j] + delta[j];
 
-        return new EquationPoint(suggestedXs, Equations);
+        double[] solvedXs = Equation.Calculate(suggestedXs);
+
+        return new EquationSolution(suggestedXs, solvedXs);
     }
 
     /// <summary>
     /// Add a point with Xs randomly offset from the Xs of the first point
     /// </summary>
-    private EquationPoint GetPoint_NearFirstPoint()
+    private EquationSolution GetPoint_NearFirstPoint()
     {
         const double randomness = 4; // TODO: could this value be optimized?
 
-        double[] suggestedXs = BestSolution.X.Select(x => x * (Rand.NextDouble() - 0.5) * randomness)
-                                          .ToArray();
+        double[] suggestedXs = BestSolution.Inputs.Select(x => x * (Rand.NextDouble() - 0.5) * randomness).ToArray();
 
-        return new EquationPoint(suggestedXs, Equations);
+        double[] solvedXs = Equation.Calculate(suggestedXs);
+
+        return new EquationSolution(suggestedXs, solvedXs);
     }
 
     /// <summary>
     /// Add a point with totally random Xs
     /// </summary>
-    private EquationPoint GetPoint_TotallyRandom()
+    private EquationSolution GetPoint_TotallyRandom()
     {
         const double randomness = 4; // TODO: could this value be optimized?
 
@@ -125,13 +127,15 @@ class EquationSolver
                                          .Select(x => (Rand.NextDouble() - 0.5) * randomness)
                                          .ToArray();
 
-        return new EquationPoint(suggestedXs, Equations);
+        double[] solvedXs = Equation.Calculate(suggestedXs);
+
+        return new EquationSolution(suggestedXs, solvedXs);
     }
 
     /// <summary>
     /// Add a point with Xs randomized centered and scaled to the min/max of the existing Xs
     /// </summary>
-    private EquationPoint GetPoint_ConsideringMinMax()
+    private EquationSolution GetPoint_ConsideringMinMax()
     {
         const double randomness = 3; // TODO: could this value be optimized?
 
@@ -139,7 +143,7 @@ class EquationSolver
 
         for (int equationIndex = 0; equationIndex < EquationCount; equationIndex++)
         {
-            var equationXs = PossibleSolutions.Select(x => x.X[equationIndex]);
+            var equationXs = EquationSolutions.Select(x => x.Inputs[equationIndex]);
             double xMin = equationXs.Min();
             double xMax = equationXs.Max();
 
@@ -159,6 +163,8 @@ class EquationSolver
             suggestedXs[equationIndex] = mean + randomOffset;
         }
 
-        return new EquationPoint(suggestedXs, Equations);
+        double[] solvedXs = Equation.Calculate(suggestedXs);
+
+        return new EquationSolution(suggestedXs, solvedXs);
     }
 }

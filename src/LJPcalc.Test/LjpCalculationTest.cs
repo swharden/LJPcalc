@@ -410,8 +410,7 @@ class LjpCalculationTest
         {
             Ion[] ions = IonLibrary.Lookup(knownSet.Ions);
             LjpResult result = Calculate.Ljp(ions, knownSet.Temperature_C);
-            Console.WriteLine(knownSet);
-            Console.WriteLine(result.GetSummary());
+            Console.WriteLine(knownSet + Environment.NewLine + result.GetSummary());
             Assert.That(result.LjpMillivolts, Is.EqualTo(knownSet.Ljp_mV).Within(knownSet.Accuracy_mV));
         });
     }
