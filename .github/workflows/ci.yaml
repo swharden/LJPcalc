@@ -31,4 +31,4 @@ jobs:
           echo "${{ secrets.PRIVATE_SSH_KEY }}" > ~/.ssh/id_rsa
           echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
       - name: 🚀 Deploy Website
-        run: rsync --archive --stats -e 'ssh -p 18765' ./public/wwwroot/ /home/customer/www/swharden.com/public_html/software/LJPcalc/app/
+        run: rsync --archive --stats -e 'ssh -p 18765' ./public/wwwroot/ ${{ secrets.REMOTE_DEST }}
