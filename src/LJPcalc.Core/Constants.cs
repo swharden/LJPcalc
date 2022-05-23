@@ -18,4 +18,9 @@ public static class Constants
 
     // Faraday constant (C / mol)
     public const double F = e * Nav;
+
+    public static double Mobility(double conductivity, int charge)
+    {
+        return conductivity / (Nav * Math.Pow(e, 2) * Math.Abs(charge));
+    }
 }

@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LJPcalc.Core", "LJPcalc.Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LJPcalc.Test", "LJPcalc.Test\LJPcalc.Test.csproj", "{11168132-789F-4576-96F6-BC33D1C51667}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LJPcalc.Web", "LJPcalc.Web\LJPcalc.Web.csproj", "{0580E5B2-FA7E-47C6-B7AB-0897D9BC5D6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LJPcalc.Web", "LJPcalc.Web\LJPcalc.Web.csproj", "{0580E5B2-FA7E-47C6-B7AB-0897D9BC5D6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

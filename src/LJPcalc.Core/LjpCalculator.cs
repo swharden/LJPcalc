@@ -66,6 +66,12 @@ public class LjpCalculator
             return $"LJP calculator after {Iterations} iterations (max error: {BestSolutionMaxError:#.##E+0}%)";
     }
 
+    public static string GetVersion()
+    {
+        Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version!;
+        return $"{version.Major}.{version.Minor}.{version.Build}";
+    }
+
     /// <summary>
     /// Perform a single iteration
     /// </summary>
