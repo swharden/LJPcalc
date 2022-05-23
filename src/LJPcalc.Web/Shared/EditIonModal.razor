@@ -1,0 +1,92 @@
+﻿@using LJPcalc.Core;
+
+<div class="modal fade" data-bs-backdrop="static" id="editIonModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Ion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Name</span>
+                    <input type="text" class="form-control" @bind=Name>
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Charge</span>
+                    <input type="text" class="form-control" @bind=Charge>
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Conductivity (S·cm<sup>2</sup>/mol)</span>
+                    <input type="text" class="form-control" @bind=Conductivity>
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Mobility (m/s/N)</span>
+                    <input type="text" class="form-control" @bind=Mobility readonly>
+                </div>
+
+                <div class="input-group  mb-3">
+                    <span class="input-group-text">Concentration A (mM)</span>
+                    <input type="text" class="form-control" @bind=C0>
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Concentration B (mM)</span>
+                    <input type="text" class="form-control" @bind=CL>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @if (IsNewIon)
+                {
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick=SaveClicked>Add Ion</button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @onclick=DeleteIon>Delete Ion</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick=SaveClicked>Save Changes</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public EditableIon Ion { get; set; } = null!;
+
+    [Parameter]
+    [EditorRequired]
+    public EventCallback<string> OnSaveIon { get; set; }
+
+    private string Name { get => Ion.Name; set => Ion.Name = value; }
+
+    private int Charge { get => Ion.Charge; set => Ion.Charge = value; }
+
+    private double Conductivity { get => Ion.Conductivity; set => Ion.Conductivity = value; }
+
+    private string Mobility { get => $"{Ion.Mobility:0.000E+0}"; set { return; } }
+
+    private double C0 { get => Ion.C0; set => Ion.C0 = value; }
+
+    private double CL { get => Ion.CL; set => Ion.CL = value; }
+
+    private bool IsNewIon { get => Ion.IsNewIon; }
+
+    public async Task SaveClicked()
+    {
+        await OnSaveIon.InvokeAsync();
+    }
+
+    public async Task DeleteIon()
+    {
+        Ion.IsDeleted = true;
+        await OnSaveIon.InvokeAsync();
+    }
+}

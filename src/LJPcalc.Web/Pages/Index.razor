@@ -12,12 +12,15 @@
     </div>
 </header>
 
-<div class="container">
+<div class="container mb-5">
 
     <table class="table table-hover mt-3">
         <thead>
             <tr>
                 <th>Ion</th>
+                <th>
+                    <span class="fw-strong">Charge</span><br />
+                </th>
                 <th>
                     <span class="fw-strong">Mobility</span><br />
                     <span class="fw-normal">m/s/N</span>
@@ -35,30 +38,38 @@
                     <span class="fw-normal">mM</span>
                 </th>
                 <th>Edit</th>
-                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (Ion ion in Ions)
+            @for (int i = 0; i < Ions.Length; i++)
             {
+                int ionIndex = i;
+                Ion ion = Ions[ionIndex];
                 <tr>
-                    <td>@ion.NameWithCharge</td>
+                    <td>@(ion.Name.Split("(")[0])</td>
+                    <td>@ion.Charge</td>
                     <td>@($"{ion.Mu / 1e4:#.000e0}")</td>
                     <td>@($"{ion.Conductivity:#0.###}")</td>
                     <td>@ion.InitialC0</td>
                     <td>@ion.InitialCL</td>
-                    <td>✏️</td>
-                    <td>❌</td>
+                    <td>
+                        <a data-bs-toggle="modal" data-bs-target="#editIonModal" style="cursor: pointer"
+                       @onclick="@(()=>EditIon(ionIndex))">
+                            ✏️
+                        </a>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
 
+    <EditIonModal Ion="IonBeingEdited" OnSaveIon="EditedIonSave" />
+
     <div class="text-end">
 
         <div class="dropdown d-inline-block">
             <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
-                Sample Ion Sets
+                Examples
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
                 @foreach (var ionSet in LJPcalc.Core.KnownIonSets.KnownSets.GetAll())
@@ -72,7 +83,13 @@
             </ul>
         </div>
 
-        <button class="btn btn-outline-primary">Add Ion</button>
+        <button class="btn btn-outline-primary" @onclick=ClearIons>
+            Clear Ions
+        </button>
+
+        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editIonModal" @onclick=AddIon>
+            Add Ion
+        </button>
     </div>
 
     @if (!Calculating)
@@ -111,30 +128,41 @@
             </div>
         }
 
-        <div class="mt-4 bg-light border rounded shadow-sm p-3">
-            <h3>Calculation Details</h3>
-            <div>LJP = @Result.LjpMillivolts mV</div>
-            <div>Error: @Result.Error %</div>
-            <div>Iterations: @Result.Iterations</div>
-            <div>Calculation time: <code>@($"{Result.Elapsed.TotalSeconds:N2}") sec</code></div>
+        <h3 class="mt-4">Solution Details</h3>
+        <div>
+            <div>LJP of best solution: <code>@Result.LjpMillivolts mV</code></div>
+            <div>Number of attempted solutions: <code>@Result.Iterations</code></div>
+            <div>Maximum concentration error: <code>@($"{Result.Error:0.00E+0}") %</code></div>
+            <div>Total calculation time: <code>@($"{Result.Elapsed.TotalSeconds:N2}") sec</code></div>
+        </div>
+
+        <h3 class="mt-4">Cite This Result</h3>
+        <div class="fst-italic">
+            Liquid junction potential was calculated according to the Nernst–Planck equation using LJPcalc
+            (<a href="https://arxiv.org/abs/1403.3640">Marino et al., 2014</a>).
         </div>
     }
 
-</div>
-
-<footer class="container mt-5">
-    <div class="text-muted">
-        LJPcalc was created by
-        <a href="http://swharden.com/">Scott Harden</a> and
+    <h3 class="mt-4">About LJPcalc</h3>
+    <div>
+        LJPcalc was created by <a href="https://swharden.com/about/">Scott Harden</a> and
         <a href="https://sites.google.com/site/dbrogioli/">Doriano Brogioli</a>
-        and uses calculations described by
-        <a href="https://arxiv.org/abs/1403.3640">Marino et al., 2014</a>.
     </div>
-</footer>
+
+    <div>
+        This page is running LJPcalc @LjpCalculator.GetVersion() on .NET @Environment.Version
+    </div>
+
+    <div>
+        Source: <a href="https://github.com/swharden/LJPcalc">github.com/swharden/LJPcalc</a>
+    </div>
+</div>
 
 @code {
 
     Ion[] Ions { get; set; } = Array.Empty<Ion>();
+
+    readonly EditableIon IonBeingEdited = new();
 
     bool Calculating { get; set; } = false;
 
@@ -173,5 +201,43 @@
     {
         Ions = IonLibrary.Lookup(ions);
         StateHasChanged();
+    }
+
+    private void EditIon(int ionIndex)
+    {
+        IonBeingEdited.IsNewIon = false;
+        IonBeingEdited.IsDeleted = false;
+        IonBeingEdited.UpdateFromIon(Ions, ionIndex);
+    }
+
+    private void AddIon()
+    {
+        IonBeingEdited.IsNewIon = true;
+        IonBeingEdited.IsDeleted = false;
+        IonBeingEdited.Reset();
+    }
+
+    private void ClearIons()
+    {
+        Ions = Array.Empty<Ion>();
+    }
+
+    private void EditedIonSave()
+    {
+        if (IonBeingEdited.IsDeleted)
+        {
+            Ions = Enumerable.Range(0, Ions.Length)
+                .Where(i => i != IonBeingEdited.Index)
+                .Select(i => Ions[i])
+                .ToArray();
+        }
+        else if (IonBeingEdited.IsNewIon)
+        {
+            Ions = Ions.Append(IonBeingEdited.ToIon()).ToArray();
+        }
+        else
+        {
+            Ions[IonBeingEdited.Index] = IonBeingEdited.ToIon();
+        }
     }
 }
