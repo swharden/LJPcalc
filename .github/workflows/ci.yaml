@@ -9,7 +9,7 @@ on:
 jobs:
   go:
     name: Test and Deploy
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: 🛒 Checkout
         uses: actions/checkout@v2
