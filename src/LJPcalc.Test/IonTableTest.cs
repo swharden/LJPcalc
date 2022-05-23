@@ -10,7 +10,6 @@ class IonTableTest
     public void Test_Lookup_KnownIon()
     {
         Ion ion = IonLibrary.Lookup("glutamate");
-        Console.WriteLine(ion);
         Assert.That(ion.Charge, Is.EqualTo(-1));
     }
 
@@ -18,7 +17,6 @@ class IonTableTest
     public void Test_Lookup_IsCaseInsensitive()
     {
         Ion ion = IonLibrary.Lookup("gLuTaMaTe");
-        Console.WriteLine(ion);
         Assert.That(ion.Charge, Is.EqualTo(-1));
     }
 
@@ -26,7 +24,6 @@ class IonTableTest
     public void Test_Lookup_ByDescription()
     {
         Ion ion = IonLibrary.Lookup("Glutamate");
-        Console.WriteLine(ion);
         Assert.That(ion.Charge, Is.EqualTo(-1));
     }
 
@@ -34,7 +31,6 @@ class IonTableTest
     public void Test_Lookup_FailsWithoutCrashing()
     {
         Ion ion = IonLibrary.Lookup("adfasdfasdfasdf");
-        Console.WriteLine(ion);
         Assert.That(ion.Charge, Is.EqualTo(0));
     }
 

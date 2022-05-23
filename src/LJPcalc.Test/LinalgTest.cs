@@ -20,7 +20,6 @@ class LinalgTest
         for (int rowIndex = 0; rowIndex < arrayLength; rowIndex++)
         {
             double difference = Math.Abs(product[rowIndex] - input1d[rowIndex]);
-            Console.WriteLine($"row {rowIndex + 1} difference: {difference}");
             Assert.That(difference < 1E-10);
         }
     }

@@ -10,8 +10,6 @@ public class IonLibraryTests
     {
         Assert.That(IonLibrary.KnownIons, Is.Not.Null);
         Assert.That(IonLibrary.KnownIons, Is.Not.Empty);
-        foreach (var ion in Core.IonLibrary.KnownIons)
-            Console.WriteLine(ion);
     }
 
     [Test]

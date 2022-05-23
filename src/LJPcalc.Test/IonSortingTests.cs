@@ -24,7 +24,6 @@ class IonSortingTests
         // it does not solve in this order
         LjpCalculationOptions options = new() { AutoSort = false, MaximumIterations = 123, ThrowIfIterationLimitExceeded = false };
         LjpResult result = Calculate.Ljp(ionSet, options);
-        Console.WriteLine(result.GetSummary());
         Assert.That(result.Iterations, Is.EqualTo(123));
 
         // it does not solve in this order
@@ -34,7 +33,6 @@ class IonSortingTests
         // but it does solve if allowed to auto-sort
         options.AutoSort = true;
         result = Calculate.Ljp(ionSet, options);
-        Console.WriteLine(result.GetSummary());
         Assert.That(result.LjpMillivolts, Is.EqualTo(-11.9).Within(0.5));
     }
 
@@ -59,7 +57,6 @@ class IonSortingTests
         // it does not solve in this order
         LjpCalculationOptions options = new() { AutoSort = false, MaximumIterations = 123, ThrowIfIterationLimitExceeded = false };
         LjpResult result = Calculate.Ljp(ionSet, options);
-        Console.WriteLine(result.GetSummary());
         Assert.That(result.Iterations, Is.EqualTo(123));
 
         // it does not solve in this order
@@ -69,7 +66,6 @@ class IonSortingTests
         // but it does solve if allowed to auto-sort
         options.AutoSort = true;
         result = Calculate.Ljp(ionSet, options);
-        Console.WriteLine(result.GetSummary());
         Assert.That(result.LjpMillivolts, Is.EqualTo(16.3).Within(0.5));
     }
 }
