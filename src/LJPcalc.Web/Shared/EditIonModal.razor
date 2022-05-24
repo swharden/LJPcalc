@@ -21,10 +21,10 @@
                 <label class="form-label">Load properties of known ions</label>
                 <div class="input-group mb-3">
                     <label class="input-group-text" for="inputGroupSelect01">Preset</label>
-                    <select class="form-select" id="inputGroupSelect01" @onchange=PresetSelected>
+                    <select class="form-select" id="inputGroupSelect01" value="@IonSelectValue" @onchange=PresetSelected>
                         @foreach (Ion ion in IonLibrary.KnownIons)
                         {
-                            <option value="@ion.Name">@ion.Name</option>
+                            <option value="@ion.NameWithCharge">@ion.NameWithCharge</option>
                         }
                     </select>
                 </div>
@@ -103,6 +103,20 @@
 
     private bool IsNewIon { get => Ion.IsNewIon; }
 
+    private string IonSelectValue { get; set; } = string.Empty;
+
+    protected override void OnParametersSet()
+    {
+        string initialNameWithCharge = IonLibrary.KnownIons
+            .Select(x => x.NameWithCharge)
+            .Where(x => x.StartsWith("A"))
+            .First();
+
+        IonSelectValue = initialNameWithCharge;
+
+        PresetSelected(new ChangeEventArgs() { Value = initialNameWithCharge });
+    }
+
     public async Task SaveClicked()
     {
         await OnSaveIon.InvokeAsync();
@@ -116,8 +130,8 @@
 
     private void PresetSelected(ChangeEventArgs e)
     {
-        string ionName = e?.Value?.ToString() ?? string.Empty;
-        Ion[] matchingIons = IonLibrary.KnownIons.Where(x => x.Name == ionName).ToArray();
+        string ionNameWithCharge = e?.Value?.ToString() ?? string.Empty;
+        Ion[] matchingIons = IonLibrary.KnownIons.Where(x => x.NameWithCharge == ionNameWithCharge).ToArray();
         if (matchingIons.Any())
         {
             Ion ion = matchingIons.First();
