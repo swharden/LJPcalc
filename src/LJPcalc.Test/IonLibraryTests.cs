@@ -43,13 +43,71 @@ public class IonLibraryTests
 
         Ion[] LookedUpIons = IonLibrary.Lookup(KnownGoodIons);
 
-        for (int i=0; i<KnownGoodIons.Length; i++)
+        for (int i = 0; i < KnownGoodIons.Length; i++)
         {
             Assert.That(KnownGoodIons[i].ToString(), Is.EqualTo(LookedUpIons[i].ToString()));
             Assert.That(KnownGoodIons[i].Charge, Is.EqualTo(LookedUpIons[i].Charge));
             Assert.That(KnownGoodIons[i].Conductivity, Is.EqualTo(LookedUpIons[i].Conductivity));
             Assert.That(KnownGoodIons[i].CL, Is.EqualTo(LookedUpIons[i].CL));
             Assert.That(KnownGoodIons[i].C0, Is.EqualTo(LookedUpIons[i].C0));
+        }
+    }
+
+    [Test]
+    public void Test_Library_HasNoDuplicates()
+    {
+        HashSet<string> duplicatedIons = new();
+        HashSet<string> seenIons = new();
+        foreach (Ion ion in IonLibrary.KnownIons)
+        {
+            string nameWithCharge = ion.NameWithCharge;
+            if (seenIons.Contains(nameWithCharge))
+            {
+                duplicatedIons.Add(nameWithCharge);
+                Console.WriteLine($"DUPLICATE: {nameWithCharge}");
+            }
+            else
+            {
+                seenIons.Add(nameWithCharge);
+            }
+        }
+
+        Assert.That(seenIons, Is.Not.Empty);
+        Assert.That(duplicatedIons, Is.Empty);
+    }
+
+    [Test]
+    public void Test_Library_Duplicate_MobilitiesAreClose()
+    {
+        Ion[] ions = IonLibrary.GetKnownIons(removeDuplicates: false);
+
+        HashSet<string> duplicateNames = new();
+        HashSet<string> seenNames = new();
+        foreach (Ion ion in ions)
+        {
+            string name = ion.NameWithCharge;
+            if (seenNames.Contains(name))
+            {
+                duplicateNames.Add(name);
+            }
+            else
+            {
+                seenNames.Add(name);
+            }
+        }
+
+        Assert.That(seenNames, Is.Not.Empty);
+        Assert.That(duplicateNames, Is.Not.Empty);
+
+        foreach (string name in duplicateNames)
+        {
+            Ion[] duplicateIons = ions.Where(x => x.NameWithCharge == name).ToArray();
+            Assert.That(duplicateIons, Is.Not.Empty);
+
+            foreach (Ion ion in duplicateIons)
+            {
+                Assert.That(duplicateIons.First().Conductivity, Is.EqualTo(ion.Conductivity).Within(7).Percent, name);
+            }
         }
     }
 }
