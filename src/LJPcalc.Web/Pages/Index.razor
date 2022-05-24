@@ -74,36 +74,44 @@
 
     <EditIonModal Ion="IonBeingEdited" OnSaveIon="EditedIonSave" />
 
-    <div class="text-end">
+    <div class="d-flex justify-content-between">
 
-        <div class="d-inline-block me-2">
-            <input class="form-check-input" type="checkbox" @bind=ShowDetailsInTable />
-            <label class="form-check-label">Details</label>
+        <div>
+            <div class="d-inline-block">
+                <div class="input-group" style="width: 100px;">
+                    <span class="input-group-text" id="basic-addon1">ºC</span>
+                    <input type="text" class="form-control" @bind=TemperatureC>
+                </div>
+            </div>
+            <div class="d-inline-block ms-2">
+                <input class="form-check-input" type="checkbox" @bind=ShowDetailsInTable />
+                <label class="form-check-label">Details</label>
+            </div>
         </div>
 
-        <div class="dropdown d-inline-block">
-            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
-                Examples
+        <div class="mb-4">
+            <div class="dropdown d-inline-block">
+                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+                    Examples
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    @foreach (var ionSet in LJPcalc.Core.KnownIonSets.KnownSets.GetAll())
+                    {
+                        <li>
+                            <button class="dropdown-item" type="button" onclick="@(()=>LoadIonSet(ionSet.Ions))">
+                                @ionSet.Name
+                            </button>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <button class="btn btn-outline-primary" @onclick=ClearIons>
+                Clear Ions
             </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                @foreach (var ionSet in LJPcalc.Core.KnownIonSets.KnownSets.GetAll())
-                {
-                    <li>
-                        <button class="dropdown-item" type="button" onclick="@(()=>LoadIonSet(ionSet.Ions))">
-                            @ionSet.Name
-                        </button>
-                    </li>
-                }
-            </ul>
+            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editIonModal" @onclick=AddIon>
+                Add Ion
+            </button>
         </div>
-
-        <button class="btn btn-outline-primary" @onclick=ClearIons>
-            Clear Ions
-        </button>
-
-        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editIonModal" @onclick=AddIon>
-            Add Ion
-        </button>
     </div>
 
     @if (!Calculating)
@@ -186,6 +194,8 @@
 
     bool ShowDetailsInTable { get; set; } = true;
 
+    double TemperatureC { get; set; } = 25;
+
     protected override void OnInitialized()
     {
         LoadIonSet(new LJPcalc.Core.KnownIonSets.AxoBitsArticle().Ions);
@@ -197,7 +207,7 @@
         await Task.Delay(1); // helps ensure a screen refresh happens
         StateHasChanged();
 
-        Calc = new(Ions);
+        Calc = new(Ions, TemperatureC);
         while (Calc is not null)
         {
             Calc.Iterate();
