@@ -10,9 +10,9 @@
 
 ## Citing LJPcalc
 
-If you enjoy using LJPcalc, consider citing it by name so others may benefit from it as well:
+If you enjoy using LJPcalc, consider citing it by name so others may benefit from it as well
 
-> _Liquid junction potential was calculated according to the Nernst–Planck equation using LJPcalc (Marino et al., 2014)._
+> _Liquid junction potential was calculated according to the Nernst–Planck equation ([Marino et al., 2014](https://arxiv.org/abs/1403.3640)) using LJPcalc software (https://swharden.com/software/LJPcalc/)._
 
 ## Authors
 LJPcalc was created by [Scott Harden](http://swharden.com/) as a C#/.NET adaptation of the Java application [JLJP](https://github.com/swharden/JLJP) originally written by [Doriano Brogioli](https://sites.google.com/site/dbrogioli/) as described in [Marino et al., 2014](https://arxiv.org/abs/1403.3640).
