@@ -33,17 +33,17 @@
 
                 <div class="input-group mb-3">
                     <span class="input-group-text">Name</span>
-                    <input type="text" class="form-control" @bind=Name>
+                    <input type="text" class="form-control" @bind=Name @onfocusout=Validate>
                 </div>
 
                 <div class="input-group mb-3">
                     <span class="input-group-text">Charge</span>
-                    <input type="text" class="form-control" @bind=Charge>
+                    <input type="text" class="form-control" @bind=Charge @onfocusout=Validate>
                 </div>
 
                 <div class="input-group mb-3">
                     <span class="input-group-text">Conductivity (S·cm<sup>2</sup>/mol)</span>
-                    <input type="text" class="form-control" @bind=Conductivity>
+                    <input type="text" class="form-control" @bind=Conductivity @onfocusout=Validate>
                 </div>
 
                 <div class="input-group mb-3">
@@ -55,27 +55,41 @@
 
                 <div class="input-group  mb-3">
                     <span class="input-group-text">Concentration A (mM)</span>
-                    <input type="text" class="form-control" @bind=C0>
+                    <input type="text" class="form-control" @bind=ConcentrationA @onfocusout=Validate>
                 </div>
 
                 <div class="input-group mb-3">
                     <span class="input-group-text">Concentration B (mM)</span>
-                    <input type="text" class="form-control" @bind=CL>
+                    <input type="text" class="form-control" @bind=ConcentrationB @onfocusout=Validate>
                 </div>
             </div>
             <div class="modal-footer">
                 @if (IsNewIon)
                 {
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick=SaveClicked>Add Ion</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" disabled=@IsValidationError @onclick=SaveClicked>Add Ion</button>
                 }
                 else
                 {
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @onclick=DeleteIon>Delete Ion</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick=SaveClicked>Save Changes</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" disabled=@IsValidationError @onclick=SaveClicked>Save Changes</button>
                 }
             </div>
+            @if (IsValidationError)
+            {
+                <div class="px-3">
+                    <div class="alert alert-danger w-100" role="alert">
+                        <h4 class="alert-heading">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+                                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                            </svg>
+                            Error
+                        </h4>
+                        <div><strong>@ValidationError:</strong> @ValidationErrorDetails</div>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </div>
@@ -97,13 +111,19 @@
 
     private string Mobility { get => $"{Ion.Mobility:0.000E+0}"; set { return; } }
 
-    private double C0 { get => Ion.C0; set => Ion.C0 = value; }
+    private double ConcentrationA { get => Ion.C0; set => Ion.C0 = value; }
 
-    private double CL { get => Ion.CL; set => Ion.CL = value; }
+    private double ConcentrationB { get => Ion.CL; set => Ion.CL = value; }
 
     private bool IsNewIon { get => Ion.IsNewIon; }
 
     private string IonSelectValue { get; set; } = string.Empty;
+
+    private bool IsValidationError => !string.IsNullOrEmpty(ValidationError);
+
+    private string ValidationError { get; set; } = string.Empty;
+
+    private string ValidationErrorDetails { get; set; } = string.Empty;
 
     protected override void OnParametersSet()
     {
@@ -139,5 +159,51 @@
             Charge = ion.Charge;
             Conductivity = ion.Conductivity;
         }
+        Validate();
+    }
+
+    private void Validate()
+    {
+        if (ConcentrationA == ConcentrationB)
+        {
+            ValidationError = "Identical Concentrations";
+            ValidationErrorDetails = "If solutions on both sides of a liquid junction have the same " +
+                "concentration of an ion, that ion will not contribute to a junction potential. " +
+                "It can be safely omitted from this calculation.";
+            return;
+        }
+
+        if (ConcentrationA < 0 || ConcentrationB < 0)
+        {
+            ValidationError = "Concentration";
+            ValidationErrorDetails = "It is not possible to have a negative concentration of an ion in solution.";
+            return;
+        }
+
+        if (Conductivity <= 0)
+        {
+            ValidationError = "Conductivity";
+            ValidationErrorDetails = "Ions must have a positive conductivity value.";
+            return;
+        }
+
+        if (Charge == 0)
+        {
+            ValidationError = "No Charge";
+            ValidationErrorDetails = "Molecules without a charge in solution are not ions " +
+                "and do not contribute to a junction potential. While uncharged molecules may exist " +
+                "in your solutions, they do not need to be added to this calculator.";
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(Name))
+        {
+            ValidationError = "No Name";
+            ValidationErrorDetails = "Every ion must be given a meaningful name.";
+            return;
+        }
+
+        ValidationError = string.Empty;
+        ValidationErrorDetails = string.Empty;
     }
 }
