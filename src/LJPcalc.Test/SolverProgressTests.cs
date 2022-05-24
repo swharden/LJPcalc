@@ -45,9 +45,16 @@ internal class SolverProgressTests
         ions = IonLibrary.Lookup(ions);
 
         LjpCalculator calc = new(ions);
+        double error = double.PositiveInfinity;
         for (int i = 0; i < 100; i++)
         {
             calc.Iterate();
+            if (calc.BestSolutionMaxError < error)
+            {
+                error = calc.BestSolutionMaxError;
+                var result = calc.GetLJP(); // TODO: this is costly
+                Console.WriteLine(result);
+            }
         }
     }
 }

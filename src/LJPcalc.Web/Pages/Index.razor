@@ -130,23 +130,22 @@
     @if (Result is not null)
     {
         string ljpPrettyMillivolts = (Result.LjpMillivolts > 0 ? "+" : "") + $"{Result.LjpMillivolts:N3}";
-        bool solved = Result.Error < 1;
-        string color = solved ? "green" : "red";
+
+        string color = IsSolved ? "green" : "red";
 
         <div class="display-5 mt-4" style="color: @color">LJP = @ljpPrettyMillivolts mV</div>
 
-        @if (!solved)
+        @if (!IsSolved)
         {
             <div style="color: @color">
-                <div>LJP displayed is an approximation based on an ion set with @Math.Round(Result.Error, 1)% error.</div>
-                <div>More iterations are required to minimize concentration error...</div>
+                <div>This value was calculated from an ion set with @Math.Round(Result.Error, 1)% maximum concentration error.</div>
+                <div>Additional time is required to find an improved solution that further minimizes this error...</div>
             </div>
         }
         else
         {
             <div style="color: @color">
-                <div>LJP was calculated from an ion table with maximum @Math.Round(Result.Error, 1)% concentration error.</div>
-                <div>Additional iterations are unlikely to significantly improve LJP accuracy...</div>
+                <div>A solution was found after @($"{Result.Elapsed.TotalSeconds:N2}") seconds</div>
             </div>
         }
 
@@ -192,6 +191,8 @@
 
     LjpResult? Result { get; set; } = null;
 
+    bool IsSolved => Result?.Error < .01;
+
     bool ShowDetailsInTable { get; set; } = true;
 
     double TemperatureC { get; set; } = 25;
@@ -207,11 +208,17 @@
         await Task.Delay(1); // helps ensure a screen refresh happens
         StateHasChanged();
 
+        double error = double.PositiveInfinity;
         Calc = new(Ions, TemperatureC);
         while (Calc is not null)
         {
             Calc.Iterate();
-            Result = Calc.GetLJP();
+            if (Calc.BestSolutionMaxError < error)
+            {
+                Result = Calc.GetLJP();
+                if (IsSolved)
+                    CalcStop();
+            }
             await Task.Delay(1);
             StateHasChanged();
         }
