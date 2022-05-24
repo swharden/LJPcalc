@@ -15,8 +15,9 @@ public class Ion
     {
         get
         {
+            string shortName = Name.Split("(")[0].Trim();
             string chargeWithSign = (Charge > 0) ? "+" + Charge.ToString() : Charge.ToString();
-            return $"{Name} ({chargeWithSign})";
+            return $"{shortName} ({chargeWithSign})";
         }
     }
 
