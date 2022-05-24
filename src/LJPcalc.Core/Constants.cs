@@ -19,6 +19,9 @@ public static class Constants
     // Faraday constant (C / mol)
     public const double F = e * Nav;
 
+    // Conductance of potassium in water
+    public const double KConductance = 73.5;
+
     public static double Mobility(double conductivity, int charge)
     {
         return conductivity / (Nav * Math.Pow(e, 2) * Math.Abs(charge));

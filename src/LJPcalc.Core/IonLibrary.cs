@@ -35,10 +35,8 @@ public static class IonLibrary
         return new Ion(name, 0, 0);
     }
 
-    private static Ion[] GetKnownIons()
+    public static Ion[] GetKnownIons(bool removeDuplicates = true)
     {
-        const double K = 73.5;
-
         List<Ion> ions = new()
         {
             // Inorganic Cations
@@ -221,99 +219,99 @@ public static class IonLibrary
 
             // UNSW Medicine
             // https://medicalsciences.med.unsw.edu.au/research/research-services/ies/ionicmobilitytables
-            MakeReferenceIon("Choline", +1, 0.51 * K),
-            MakeReferenceIon("Cs", +1, 1.05 * K),
-            MakeReferenceIon("K", +1, 1 * K),
-            MakeReferenceIon("Li", +1, 0.526 * K),
-            MakeReferenceIon("NH4 (Ammonium)", +1, 1.001 * K),
-            MakeReferenceIon("Na", +1, 0.682 * K),
-            MakeReferenceIon("Rb", +1, 1.059 * K),
-            MakeReferenceIon("TEA (TetraethylAmmonium)", +1, 0.444 * K),
-            MakeReferenceIon("TMA (TetramethylAmmonium)", +1, 0.611 * K),
-            MakeReferenceIon("Acetate", -1, 0.556 * K),
-            MakeReferenceIon("Benzoate", -1, 0.441 * K),
-            MakeReferenceIon("Br", -1, 1.063 * K),
-            MakeReferenceIon("Cl", -1, 1.0382 * K),
-            MakeReferenceIon("ClO4 (Perchlorate)", -1, 0.916 * K),
-            MakeReferenceIon("F", -1, 0.753 * K),
-            MakeReferenceIon("H2PO", -1, 0.45 * K),
-            MakeReferenceIon("HCO3", -1, 0.605 * K),
-            MakeReferenceIon("I", -1, 1.0456 * K),
-            MakeReferenceIon("NO3 (Nitrate)", -1, 0.972 * K),
-            MakeReferenceIon("Picrate", -1, 0.411 * K),
-            MakeReferenceIon("Propionate", -1, 0.487 * K),
-            MakeReferenceIon("SCN (Thiocyanate)", -1, 0.901 * K),
-            MakeReferenceIon("Co", +2, 0.367 * K),
-            MakeReferenceIon("Mg", +2, 0.361 * K),
-            MakeReferenceIon("HPO4", -2, 0.39 * K),
-            MakeReferenceIon("SO4", -2, 0.544 * K),
-            MakeReferenceIon("NMDG", +1, 0.33 * K),
-            MakeReferenceIon("Tris", +1, 0.4 * K),
-            MakeReferenceIon("Aspartate", -1, 0.3 * K),
-            MakeReferenceIon("Gluconate", -1, 0.33 * K),
-            MakeReferenceIon("Glutamate", -1, 0.26 * K),
-            MakeReferenceIon("HEPES", -1, 0.3 * K),
-            MakeReferenceIon("Isethionate", -1, 0.52 * K),
-            MakeReferenceIon("MES", -1, 0.37 * K),
-            MakeReferenceIon("MOPS", -1, 0.35 * K),
-            MakeReferenceIon("EGTA(2-)", -2, 0.24 * K),
-            MakeReferenceIon("EGTA(3-)", -3, 0.25 * K),
-            MakeReferenceIon("Thallium", +1, 1.02 * K),
-            MakeReferenceIon("Butyrate", -1, 0.44 * K),
-            MakeReferenceIon("Citrate", -3, 0.318 * K),
-            MakeReferenceIon("2-(Methyl-Amino) Ethanol", +1, 0.49 * K),
-            MakeReferenceIon("N-Methylethanolamine", +1, 0.49 * K),
-            MakeReferenceIon("Ag", +1, 0.842 * K),
-            MakeReferenceIon("Diethylammonium", +1, 0.57 * K),
-            MakeReferenceIon("Dimethylammonium", +1, 0.705 * K),
-            MakeReferenceIon("Ethyltrimethylammonium", +1, 0.551 * K),
-            MakeReferenceIon("H", +1, 4.757 * K),
-            MakeReferenceIon("Piperidinium", +1, 0.506 * K),
-            MakeReferenceIon("Tetrabutylammonium", +1, 0.265 * K),
-            MakeReferenceIon("Tetrapropylammonium", +1, 0.318 * K),
-            MakeReferenceIon("Triethylammonium", +1, 0.467 * K),
-            MakeReferenceIon("Trimethylammonium", +1, 0.643 * K),
-            MakeReferenceIon("Bromoacetate", -1, 0.533 * K),
-            MakeReferenceIon("Bromobenzoate", -1, 0.41 * K),
-            MakeReferenceIon("Chloroacetate", -1, 0.541 * K),
-            MakeReferenceIon("CNO (Cyanate)", -1, 0.879 * K),
-            MakeReferenceIon("Cyanoacetate", -1, 0.59 * K),
-            MakeReferenceIon("Dichloroacetate", -1, 0.521 * K),
-            MakeReferenceIon("Ethylsulfate", -1, 0.539 * K),
-            MakeReferenceIon("Ethylsulfonate", -1, 0.539 * K),
-            MakeReferenceIon("Fluoroacetate", -1, 0.604 * K),
-            MakeReferenceIon("Fluorobenzoate", -1, 0.45 * K),
-            MakeReferenceIon("Formate", -1, 0.743 * K),
-            MakeReferenceIon("Iodoacetate", -1, 0.552 * K),
-            MakeReferenceIon("Lactate", -1, 0.528 * K),
-            MakeReferenceIon("Methylsulfate", -1, 0.664 * K),
-            MakeReferenceIon("methanesulfonate", -1, 0.664 * K),
-            MakeReferenceIon("Methylsulfonate", -1, 0.664 * K),
-            MakeReferenceIon("OH (hydroxide)", -1, 2.69 * K),
-            MakeReferenceIon("ReO4 (Rhenate)", -1, 0.747 * K),
-            MakeReferenceIon("Salicylate", -1, 0.49 * K),
-            MakeReferenceIon("Trichloroacetate", -1, 0.476 * K),
-            MakeReferenceIon("Cd", +2, 0.37 * K),
-            MakeReferenceIon("Cu", +2, 0.365 * K),
-            MakeReferenceIon("Fe", +2, 0.37 * K),
-            MakeReferenceIon("Hg", +2, 0.433 * K),
-            MakeReferenceIon("Mn", +2, 0.364 * K),
-            MakeReferenceIon("Ni", +2, 0.337 * K),
-            MakeReferenceIon("Pb", +2, 0.48 * K),
-            MakeReferenceIon("Malate", -2, 0.4 * K),
-            MakeReferenceIon("Maleate", -2, 0.421 * K),
-            MakeReferenceIon("Oxalate", -2, 0.504 * K),
-            MakeReferenceIon("Succinate", -2, 0.4 * K),
-            MakeReferenceIon("Gd", +3, 0.305 * K),
-            MakeReferenceIon("Fe", +3, 0.308 * K),
-            MakeReferenceIon("La", +3, 0.316 * K),
-            MakeReferenceIon("Citrate", -3, 0.318 * K),
-            MakeReferenceIon("ATP (Adenosine 5'-Triphosphate)", -2, 0.15 * K),
-            MakeReferenceIon("ATP (Adenosine 5'-Triphosphate)", -3, 0.15 * K),
-            MakeReferenceIon("ATP (Adenosine 5'-Triphosphate)", -4, 0.15 * K),
-            MakeReferenceIon("2-AP (2-aminopyridine)", +1, 0.45 * K),
-            MakeReferenceIon("3-AP (3-aminopyridine)", +1, 0.46 * K),
-            MakeReferenceIon("4-AP (4-aminopyridine)", +2, 0.29 * K),
+            MakeReferenceIonScaledToK("Choline", +1, 0.51),
+            MakeReferenceIonScaledToK("Cs", +1, 1.05),
+            MakeReferenceIonScaledToK("K", +1, 1),
+            MakeReferenceIonScaledToK("Li", +1, 0.526),
+            MakeReferenceIonScaledToK("NH4 (Ammonium)", +1, 1.001),
+            MakeReferenceIonScaledToK("Na", +1, 0.682),
+            MakeReferenceIonScaledToK("Rb", +1, 1.059),
+            MakeReferenceIonScaledToK("TEA (TetraethylAmmonium)", +1, 0.444),
+            MakeReferenceIonScaledToK("TMA (TetramethylAmmonium)", +1, 0.611),
+            MakeReferenceIonScaledToK("Acetate", -1, 0.556),
+            MakeReferenceIonScaledToK("Benzoate", -1, 0.441),
+            MakeReferenceIonScaledToK("Br", -1, 1.063),
+            MakeReferenceIonScaledToK("Cl", -1, 1.0382),
+            MakeReferenceIonScaledToK("ClO4 (Perchlorate)", -1, 0.916),
+            MakeReferenceIonScaledToK("F", -1, 0.753),
+            MakeReferenceIonScaledToK("H2PO", -1, 0.45),
+            MakeReferenceIonScaledToK("HCO3", -1, 0.605),
+            MakeReferenceIonScaledToK("I", -1, 1.0456),
+            MakeReferenceIonScaledToK("NO3 (Nitrate)", -1, 0.972),
+            MakeReferenceIonScaledToK("Picrate", -1, 0.411),
+            MakeReferenceIonScaledToK("Propionate", -1, 0.487),
+            MakeReferenceIonScaledToK("SCN (Thiocyanate)", -1, 0.901),
+            MakeReferenceIonScaledToK("Co", +2, 0.367),
+            MakeReferenceIonScaledToK("Mg", +2, 0.361),
+            MakeReferenceIonScaledToK("HPO4", -1, 0.39),
+            MakeReferenceIonScaledToK("SO4", -2, 0.544),
+            MakeReferenceIonScaledToK("NMDG", +1, 0.33),
+            MakeReferenceIonScaledToK("Tris", +1, 0.4),
+            MakeReferenceIonScaledToK("Aspartate", -1, 0.3),
+            MakeReferenceIonScaledToK("Gluconate", -1, 0.33),
+            MakeReferenceIonScaledToK("Glutamate", -1, 0.26),
+            MakeReferenceIonScaledToK("HEPES", -1, 0.3),
+            MakeReferenceIonScaledToK("Isethionate", -1, 0.52),
+            MakeReferenceIonScaledToK("MES", -1, 0.37),
+            MakeReferenceIonScaledToK("MOPS", -1, 0.35),
+            MakeReferenceIonScaledToK("EGTA(2-)", -2, 0.24),
+            MakeReferenceIonScaledToK("EGTA(3-)", -3, 0.25),
+            MakeReferenceIonScaledToK("Thallium", +1, 1.02),
+            MakeReferenceIonScaledToK("Butyrate", -1, 0.44),
+            MakeReferenceIonScaledToK("Citrate", -3, 0.318),
+            MakeReferenceIonScaledToK("2-(Methyl-Amino) Ethanol", +1, 0.49),
+            MakeReferenceIonScaledToK("N-Methylethanolamine", +1, 0.49),
+            MakeReferenceIonScaledToK("Ag", +1, 0.842),
+            MakeReferenceIonScaledToK("Diethylammonium", +1, 0.57),
+            MakeReferenceIonScaledToK("Dimethylammonium", +1, 0.705),
+            MakeReferenceIonScaledToK("Ethyltrimethylammonium", +1, 0.551),
+            MakeReferenceIonScaledToK("H", +1, 4.757),
+            MakeReferenceIonScaledToK("Piperidinium", +1, 0.506),
+            MakeReferenceIonScaledToK("Tetrabutylammonium", +1, 0.265),
+            MakeReferenceIonScaledToK("Tetrapropylammonium", +1, 0.318),
+            MakeReferenceIonScaledToK("Triethylammonium", +1, 0.467),
+            MakeReferenceIonScaledToK("Trimethylammonium", +1, 0.643),
+            MakeReferenceIonScaledToK("Bromoacetate", -1, 0.533),
+            MakeReferenceIonScaledToK("Bromobenzoate", -1, 0.41),
+            //MakeReferenceIon2("Chloroacetate", -1, 0.541), // different by 
+            MakeReferenceIonScaledToK("CNO (Cyanate)", -1, 0.879),
+            MakeReferenceIonScaledToK("Cyanoacetate", -1, 0.59),
+            MakeReferenceIonScaledToK("Dichloroacetate", -1, 0.521),
+            MakeReferenceIonScaledToK("Ethylsulfate", -1, 0.539),
+            MakeReferenceIonScaledToK("Ethylsulfonate", -1, 0.539),
+            MakeReferenceIonScaledToK("Fluoroacetate", -1, 0.604),
+            MakeReferenceIonScaledToK("Fluorobenzoate", -1, 0.45),
+            MakeReferenceIonScaledToK("Formate", -1, 0.743),
+            MakeReferenceIonScaledToK("Iodoacetate", -1, 0.552),
+            MakeReferenceIonScaledToK("Lactate", -1, 0.528),
+            MakeReferenceIonScaledToK("Methylsulfate", -1, 0.664),
+            MakeReferenceIonScaledToK("methanesulfonate", -1, 0.664),
+            MakeReferenceIonScaledToK("Methylsulfonate", -1, 0.664),
+            MakeReferenceIonScaledToK("OH (hydroxide)", -1, 2.69),
+            MakeReferenceIonScaledToK("ReO4 (Rhenate)", -1, 0.747),
+            MakeReferenceIonScaledToK("Salicylate", -1, 0.49),
+            MakeReferenceIonScaledToK("Trichloroacetate", -1, 0.476),
+            MakeReferenceIonScaledToK("Cd", +2, 0.37),
+            MakeReferenceIonScaledToK("Cu", +2, 0.365),
+            MakeReferenceIonScaledToK("Fe", +2, 0.37),
+            MakeReferenceIonScaledToK("Hg", +2, 0.433),
+            MakeReferenceIonScaledToK("Mn", +2, 0.364),
+            MakeReferenceIonScaledToK("Ni", +2, 0.337),
+            MakeReferenceIonScaledToK("Pb", +2, 0.48),
+            MakeReferenceIonScaledToK("Malate", -2, 0.4),
+            MakeReferenceIonScaledToK("Maleate", -2, 0.421),
+            MakeReferenceIonScaledToK("Oxalate", -2, 0.504),
+            MakeReferenceIonScaledToK("Succinate", -2, 0.4),
+            MakeReferenceIonScaledToK("Gd", +3, 0.305),
+            MakeReferenceIonScaledToK("Fe", +3, 0.308),
+            MakeReferenceIonScaledToK("La", +3, 0.316),
+            MakeReferenceIonScaledToK("Citrate", -3, 0.318),
+            MakeReferenceIonScaledToK("ATP (Adenosine 5'-Triphosphate)", -2, 0.15),
+            MakeReferenceIonScaledToK("ATP (Adenosine 5'-Triphosphate)", -3, 0.15),
+            MakeReferenceIonScaledToK("ATP (Adenosine 5'-Triphosphate)", -4, 0.15),
+            MakeReferenceIonScaledToK("2-AP (2-aminopyridine)", +1, 0.45),
+            MakeReferenceIonScaledToK("3-AP (3-aminopyridine)", +1, 0.46),
+            MakeReferenceIonScaledToK("4-AP (4-aminopyridine)", +2, 0.29),
 
             // By listing such molecules here we confirm we know they exist,
             // and remind users they are probably not important for caculating LJP.
@@ -324,8 +322,34 @@ public static class IonLibrary
             MakeReferenceIon("Phosphocreatine", 1, 0),
         };
 
+        if (removeDuplicates)
+        {
+            // keep the first instance of duplicated ions
+            HashSet<string> seenIons = new();
+            List<Ion> uniqueIons = new();
+            foreach (Ion ion in ions)
+            {
+                if (!seenIons.Contains(ion.NameWithCharge))
+                {
+                    seenIons.Add(ion.NameWithCharge);
+                    uniqueIons.Add(ion);
+                }
+            }
+            ions = uniqueIons;
+        }
+
         return ions.OrderBy(x => x.Name).ToArray();
     }
 
-    private static Ion MakeReferenceIon(string name, int charge, double conductance) => new(name, charge, conductance, 0, 0, 0);
+    private static Ion MakeReferenceIon(string name, int charge, double conductance)
+    {
+        return new(name, charge, conductance, 0, 0, 0);
+    }
+
+    private static Ion MakeReferenceIonScaledToK(string name, int charge, double scaledConductance)
+    {
+        double conductance = scaledConductance * Constants.KConductance * Math.Abs(charge);
+
+        return new(name, charge, conductance, 0, 0, 0);
+    }
 }
