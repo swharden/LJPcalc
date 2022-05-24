@@ -184,11 +184,11 @@
 
     LjpResult? Result { get; set; } = null;
 
-    bool ShowDetailsInTable { get; set; } = false;
+    bool ShowDetailsInTable { get; set; } = true;
 
     protected override void OnInitialized()
     {
-        LoadIonSet(new LJPcalc.Core.KnownIonSets.Owen2013().Ions);
+        LoadIonSet(new LJPcalc.Core.KnownIonSets.AxoBitsArticle().Ions);
     }
 
     private async Task CalcStart()
