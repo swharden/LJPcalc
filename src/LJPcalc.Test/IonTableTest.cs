@@ -154,7 +154,7 @@ class IonTableTest
         {
             Ion ionFromThisLibrary = IonLibrary.Lookup(ionFromJLJP.name);
 
-            Assert.That(ionFromThisLibrary.Charge, Is.EqualTo(ionFromJLJP.charge));
+            Assert.That(ionFromThisLibrary.Charge, Is.EqualTo(ionFromJLJP.charge), ionFromThisLibrary.Name);
             Assert.That(ionFromThisLibrary.Mu * 1e-4, Is.EqualTo(ionFromJLJP.mu).Within(10).Percent);
         }
     }
