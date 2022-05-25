@@ -24,7 +24,7 @@ class PhiEquationSystem : IEquation
             .Select(x => Ions[x].CL)
             .ToArray();
 
-        LjpSolution ljpSol = LjpSolver.CalculateLjp(Ions, phis, TemperatureC);
+        LjpSolution ljpSol = LjpCalculator.CalculateLjp(Ions, phis, TemperatureC);
         double[] solvedCLs = ljpSol.CLs;
 
         double[] differences = Enumerable.Range(0, Ions.Length)

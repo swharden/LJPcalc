@@ -22,18 +22,12 @@ class IonSortingTests
         ionSet = IonLibrary.Lookup(ionSet);
 
         // it does not solve in this order
-        LjpCalculationOptions options = new() { AutoSort = false, MaximumIterations = 123, ThrowIfIterationLimitExceeded = false };
-        LjpResult result = Calculate.Ljp(ionSet, options);
+        LjpResult result = LjpCalculator.BalanceAndCalculate(ionSet, autoSort: false, maxIterations: 123);
         Assert.That(result.Iterations, Is.EqualTo(123));
 
-        // it does not solve in this order
-        options.ThrowIfIterationLimitExceeded = true;
-        Assert.Throws<OperationCanceledException>(() => Calculate.Ljp(ionSet, options));
-
         // but it does solve if allowed to auto-sort
-        options.AutoSort = true;
-        result = Calculate.Ljp(ionSet, options);
-        Assert.That(result.LjpMillivolts, Is.EqualTo(-11.9).Within(0.5));
+        LjpResult result2 = LjpCalculator.BalanceAndCalculate(ionSet, autoSort: true, maxIterations: 123);
+        Assert.That(result2.LjpMillivolts, Is.EqualTo(-11.9).Within(0.5));
     }
 
     [Test]
@@ -55,17 +49,11 @@ class IonSortingTests
         ionSet = IonLibrary.Lookup(ionSet);
 
         // it does not solve in this order
-        LjpCalculationOptions options = new() { AutoSort = false, MaximumIterations = 123, ThrowIfIterationLimitExceeded = false };
-        LjpResult result = Calculate.Ljp(ionSet, options);
+        LjpResult result = LjpCalculator.BalanceAndCalculate(ionSet, autoSort: false, maxIterations: 123);
         Assert.That(result.Iterations, Is.EqualTo(123));
 
-        // it does not solve in this order
-        options.ThrowIfIterationLimitExceeded = true;
-        Assert.Throws<OperationCanceledException>(() => Calculate.Ljp(ionSet, options));
-
         // but it does solve if allowed to auto-sort
-        options.AutoSort = true;
-        result = Calculate.Ljp(ionSet, options);
-        Assert.That(result.LjpMillivolts, Is.EqualTo(16.3).Within(0.5));
+        LjpResult result2 = LjpCalculator.BalanceAndCalculate(ionSet, autoSort: true, maxIterations: 123);
+        Assert.That(result2.LjpMillivolts, Is.EqualTo(16.3).Within(0.5));
     }
 }
