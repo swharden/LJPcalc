@@ -22,11 +22,11 @@ class IonSortingTests
         ionSet = IonLibrary.Lookup(ionSet);
 
         // it does not solve in this order
-        LjpResult result = LjpCalculator.BalanceAndCalculate(ionSet, autoSort: false, maxIterations: 123);
+        LjpResult result = LjpCalculator.SolvePhisThenCalculateLjp(ionSet, autoSort: false, maxIterations: 123);
         Assert.That(result.Iterations, Is.EqualTo(123));
 
         // but it does solve if allowed to auto-sort
-        LjpResult result2 = LjpCalculator.BalanceAndCalculate(ionSet, autoSort: true, maxIterations: 123);
+        LjpResult result2 = LjpCalculator.SolvePhisThenCalculateLjp(ionSet, autoSort: true, maxIterations: 123);
         Assert.That(result2.LjpMillivolts, Is.EqualTo(-11.9).Within(0.5));
     }
 
@@ -49,11 +49,30 @@ class IonSortingTests
         ionSet = IonLibrary.Lookup(ionSet);
 
         // it does not solve in this order
-        LjpResult result = LjpCalculator.BalanceAndCalculate(ionSet, autoSort: false, maxIterations: 123);
+        LjpResult result = LjpCalculator.SolvePhisThenCalculateLjp(ionSet, autoSort: false, maxIterations: 123);
         Assert.That(result.Iterations, Is.EqualTo(123));
 
         // but it does solve if allowed to auto-sort
-        LjpResult result2 = LjpCalculator.BalanceAndCalculate(ionSet, autoSort: true, maxIterations: 123);
+        LjpResult result2 = LjpCalculator.SolvePhisThenCalculateLjp(ionSet, autoSort: true, maxIterations: 123);
         Assert.That(result2.LjpMillivolts, Is.EqualTo(16.3).Within(0.5));
+    }
+
+
+    [Test]
+    public void Test_BadOrder_SecondFromLastSameConc()
+    {
+        // second to last ion cannot have same concentration on both sides
+        var ionSet = new Ion[]
+        {
+            new Ion("Zn", 2, 2),
+            new Ion("K", 3, 3), // sort last because biggest absolute CL
+            new Ion("Cl", 4, 0) // largest diff should be second from last
+        };
+
+        ionSet = IonLibrary.Lookup(ionSet);
+
+        LjpResult ljp = LjpCalculator.SolvePhisThenCalculateLjp(ionSet, autoSort: false);
+
+        Assert.That(ljp.LjpMillivolts, Is.EqualTo(-1.78).Within(.1));
     }
 }

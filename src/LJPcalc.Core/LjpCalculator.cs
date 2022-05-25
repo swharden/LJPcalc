@@ -42,14 +42,14 @@ public class LjpCalculator
                 throw new ArgumentException($"ion mobility cannot not be zero: {ion}");
         }
 
-        if (ions[ions.Length - 2].C0 == ions[ions.Length - 2].CL)
-            throw new InvalidOperationException("second from last ion concentrations cannot be equal");
-
         // clone all ions so we don't accidentally mutate any values passed in
         ions = ions.Select(x => x.Clone()).ToArray();
 
         if (autoSort)
             ions = IonSorting.PreCalculationSort(ions);
+
+        if (ions[ions.Length - 2].C0 == ions[ions.Length - 2].CL)
+            throw new InvalidOperationException("second from last ion concentrations cannot be equal");
 
         Ions = ions;
         TemperatureC = temperature;
@@ -95,8 +95,10 @@ public class LjpCalculator
     /// <summary>
     /// Calculate LJP using the best available solution
     /// </summary>
-    public LjpResult GetLJP()
+    public LjpResult GetLjpResult()
     {
+        // TODO: consider moving this logic into the iterator???
+
         Ion[] ions = Ions.Select(x => x.Clone()).ToArray();
         Ion lastIon = ions[Ions.Length - 1];
         Ion secondFromLastIon = ions[Ions.Length - 2];
@@ -131,11 +133,11 @@ public class LjpCalculator
     /// <param name="autoSort">if true, automatically sort the ion table to improve chances a solution will be found quickly</param>
     /// <param name="error">Stop solving once CL contrations are all within this percent error of those in the given ion table.</param>
     /// <param name="maxIterations">Stop solving for CL once this number of iterations has been reached.</param>
-    public static LjpResult BalanceAndCalculate(Ion[] ions, double temperatureC = 25, bool autoSort = true, double error = 1, int maxIterations = 5000)
+    public static LjpResult SolvePhisThenCalculateLjp(Ion[] ions, double temperatureC = 25, bool autoSort = true, double error = 1, int maxIterations = 5000)
     {
         LjpCalculator calc = new(ions, temperatureC, autoSort);
         calc.IterateRepeatedly(error, maxIterations);
-        return calc.GetLJP();
+        return calc.GetLjpResult();
     }
 
     /// <summary>

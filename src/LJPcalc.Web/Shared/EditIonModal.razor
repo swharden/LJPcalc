@@ -164,25 +164,24 @@
 
     private void Validate()
     {
-        if (ConcentrationA == ConcentrationB)
+        if (ConcentrationA == 0 && ConcentrationB == 0)
         {
-            ValidationError = "Identical Concentrations";
-            ValidationErrorDetails = "If solutions on both sides of a liquid junction have the same " +
-                "concentration of an ion, that ion will not contribute to a junction potential. " +
-                "It can be safely omitted from this calculation.";
+            ValidationError = "Zero Concentration";
+            ValidationErrorDetails = "Concentration of an ion cannot be zero for both solutions. " +
+                "Please indicate a positive concentration in at least one solution.";
             return;
         }
 
         if (ConcentrationA < 0 || ConcentrationB < 0)
         {
-            ValidationError = "Concentration";
+            ValidationError = "Negative Concentration";
             ValidationErrorDetails = "It is not possible to have a negative concentration of an ion in solution.";
             return;
         }
 
         if (Conductivity <= 0)
         {
-            ValidationError = "Conductivity";
+            ValidationError = "Negative Conductivity";
             ValidationErrorDetails = "Ions must have a positive conductivity value.";
             return;
         }
