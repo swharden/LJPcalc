@@ -49,11 +49,10 @@ internal class SolverProgressTests
         for (int i = 0; i < 100; i++)
         {
             calc.Iterate();
-            if (calc.BestSolutionMaxError < error)
+            if (calc.BestSolution.MaxAbsoluteError < error)
             {
-                error = calc.BestSolutionMaxError;
-                var result = calc.GetLJP(); // TODO: this is costly
-                Console.WriteLine(result);
+                error = calc.BestSolution.MaxAbsoluteError;
+                Console.WriteLine(calc);
             }
         }
     }

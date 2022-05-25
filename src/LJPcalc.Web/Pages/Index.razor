@@ -114,7 +114,7 @@
         </div>
     </div>
 
-    @if (!Calculating)
+    @if (!ContinueCalculating)
     {
         <button class="btn btn-primary" @onclick=CalcStart>Calculate LJP</button>
     }
@@ -127,9 +127,9 @@
         <button class="btn btn-primary ms-1" @onclick=CalcStop>Stop</button>
     }
 
-    @if (Result is not null)
+    @if (Calc is not null)
     {
-        string ljpPrettyMillivolts = (Result.LjpMillivolts > 0 ? "+" : "") + $"{Result.LjpMillivolts:N3}";
+        string ljpPrettyMillivolts = (Calc.BestSolution.LjpMillivolts > 0 ? "+" : "") + $"{Calc.BestSolution.LjpMillivolts:N3}";
 
         string color = IsSolved ? "green" : "red";
 
@@ -138,29 +138,29 @@
         @if (!IsSolved)
         {
             <div style="color: @color">
-                <div>This value was calculated from an ion set with @Math.Round(Result.Error, 1)% maximum concentration error.</div>
+                <div>This value was calculated from an ion set with @Math.Round(Calc.BestSolution.MaxAbsoluteError, 1)% maximum concentration error.</div>
                 <div>Additional time is required to find an improved solution that further minimizes this error...</div>
             </div>
         }
         else
         {
             <div style="color: @color">
-                <div>A solution was found after @($"{Result.Elapsed.TotalSeconds:N2}") seconds</div>
+                <div>A solution was found after @($"{Calc.Elapsed.TotalSeconds:N2}") seconds</div>
             </div>
         }
 
         <h3 class="mt-4">Solution Details</h3>
         <div>
-            <div>LJP of best solution: <code>@Result.LjpMillivolts mV</code></div>
-            <div>Number of attempted solutions: <code>@Result.Iterations</code></div>
-            <div>Maximum concentration error: <code>@($"{Result.Error:0.00E+0}") %</code></div>
-            <div>Total calculation time: <code>@($"{Result.Elapsed.TotalSeconds:N2}") sec</code></div>
+            <div>LJP of best solution: <code>@Calc.BestSolution.LjpMillivolts mV</code></div>
+            <div>Number of attempted solutions: <code>@Calc.Iterations</code></div>
+            <div>Maximum concentration error: <code>@($"{Calc.BestSolution.MaxAbsoluteError:0.00E+0}") %</code></div>
+            <div>Total calculation time: <code>@($"{Calc.Elapsed.TotalSeconds:N2}") sec</code></div>
         </div>
 
         <h3 class="mt-4">Cite This Result</h3>
         <div class="fst-italic">
-            Liquid junction potential was calculated according to the Nernst–Planck equation 
-            (<a href="https://arxiv.org/abs/1403.3640">Marino et al., 2014</a>) 
+            Liquid junction potential was calculated according to the Nernst–Planck equation
+            (<a href="https://arxiv.org/abs/1403.3640">Marino et al., 2014</a>)
             using LJPcalc software (<a href="https://github.com/swharden/LJPcalc">https://github.com/swharden/LJPcalc</a>).
         </div>
     }
@@ -186,13 +186,11 @@
 
     readonly EditableIon IonBeingEdited = new();
 
-    bool Calculating { get; set; } = false;
+    bool ContinueCalculating { get; set; } = false;
 
     LjpCalculator? Calc { get; set; } = null;
 
-    LjpResult? Result { get; set; } = null;
-
-    bool IsSolved => Result?.Error < .01;
+    bool IsSolved => Calc is null ? false : Calc.BestSolution.MaxAbsoluteError < .01;
 
     bool ShowDetailsInTable { get; set; } = true;
 
@@ -205,30 +203,24 @@
 
     private async Task CalcStart()
     {
-        Calculating = true;
+        ContinueCalculating = true;
         await Task.Delay(1); // helps ensure a screen refresh happens
         StateHasChanged();
 
-        double error = double.PositiveInfinity;
         Calc = new(Ions, TemperatureC);
-        while (Calc is not null)
+        while (ContinueCalculating)
         {
             Calc.Iterate();
-            if (Calc.BestSolutionMaxError < error)
-            {
-                Result = Calc.GetLJP();
-                if (IsSolved)
-                    CalcStop();
-            }
+            if (IsSolved)
+                ContinueCalculating = false;
             await Task.Delay(1);
             StateHasChanged();
         }
-        Calculating = false;
     }
 
     private void CalcStop()
     {
-        Calc = null;
+        ContinueCalculating = false;
     }
 
     private void LoadIonSet(Ion[] ions)

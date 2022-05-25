@@ -2,12 +2,44 @@
 
 public class LjpResult
 {
+    /// <summary>
+    /// Ions as originally described by the user
+    /// </summary>
     public readonly Ion[] Ions;
-    public readonly double LjpMillivolts;
+
+    /// <summary>
+    /// CLs of the ions used to calculate LJP
+    /// </summary>
+    public readonly double[] NewCLs;
+
+    /// <summary>
+    /// Calculated LJP
+    /// </summary>
+    public double LjpMillivolts => LjpVolts * 1000;
+
+    /// <summary>
+    /// Calculated LJP
+    /// </summary>
+    public readonly double LjpVolts;
+
+    /// <summary>
+    /// Temperature used to calculate LJP
+    /// </summary>
     public readonly double TemperatureC;
-    public readonly double PhiSolutionM;
+
+    /// <summary>
+    /// Total duration of the calculation
+    /// </summary>
     public readonly TimeSpan Elapsed;
+
+    /// <summary>
+    /// Total number of times the equation system was adjusted and solved
+    /// </summary>
     public readonly int Iterations;
+
+    /// <summary>
+    /// Maximum percent error for CL used to calculate LJP
+    /// </summary>
     public readonly double Error;
 
     /// <summary>
@@ -15,10 +47,11 @@ public class LjpResult
     /// </summary>
     public double MaxPhi => Ions.Select(x => Math.Abs(x.Phi)).Max();
 
-    public LjpResult(Ion[] ions, double tempC, double ljpMv, TimeSpan timePhi, int iterations, double error)
+    public LjpResult(Ion[] ions, double[] newCLs, double tempC, double ljpVolts, TimeSpan timePhi, int iterations, double error)
     {
         Ions = ions;
-        LjpMillivolts = ljpMv;
+        NewCLs = newCLs;
+        LjpVolts = ljpVolts;
         TemperatureC = tempC;
         Elapsed = timePhi;
         Iterations = iterations;

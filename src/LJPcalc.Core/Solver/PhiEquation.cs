@@ -1,12 +1,12 @@
 ﻿namespace LJPcalc.Core.Solver;
 
-class PhiEquationSystem : IEquation
+public class PhiEquation
 {
     public int EquationCount { get; private set; }
     private readonly double TemperatureC;
     private readonly Ion[] Ions;
 
-    public PhiEquationSystem(Ion[] ions, double temperatureC)
+    public PhiEquation(Ion[] ions, double temperatureC)
     {
         Ions = ions;
         TemperatureC = temperatureC;
@@ -18,14 +18,13 @@ class PhiEquationSystem : IEquation
     /// A solution is found when all CLs used to calculate LJP are sufficiently close to those defined in the ion table.
     /// Typically a solution is one where all CL errors are less than 1%.
     /// </summary>
-    public EquationSolution Calculate(double[] phis)
+    public PhiEquationSolution Calculate(double[] phis)
     {
         double[] originalCLs = Enumerable.Range(0, Ions.Length)
             .Select(x => Ions[x].CL)
             .ToArray();
 
-        LjpSolution ljpSol = LjpCalculator.CalculateLjp(Ions, phis, TemperatureC);
-        double[] solvedCLs = ljpSol.CLs;
+        (double ljpVolts, double[] solvedCLs) = LjpCalculator.CalculateLjp(Ions, phis, TemperatureC);
 
         double[] differences = Enumerable.Range(0, Ions.Length)
             .Select(i => solvedCLs[i] - originalCLs[i])
@@ -49,6 +48,6 @@ class PhiEquationSystem : IEquation
             .Select(i => 100 * differences[i] / divisors[i])
             .ToArray();
 
-        return new EquationSolution(phis, solvedCLs, percentErrorCL);
+        return new PhiEquationSolution(phis, solvedCLs, percentErrorCL, ljpVolts);
     }
 }
