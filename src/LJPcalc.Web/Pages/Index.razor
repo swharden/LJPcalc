@@ -1,184 +1,166 @@
 ﻿@using LJPcalc.Core;
 
-<PageTitle>Index</PageTitle>
 
-<header class="text-light py-3" style="background-color: #003366;">
-    <div class="container">
-        <div class="display-4 lh-1" style="font-weight: 400;">LJPCalc</div>
-        <div class="" style="color: #CCC;">
-            Liquid Junction Potential (LJP) calculator
-        </div>
-    </div>
-</header>
-
-<div class="container mb-5">
-
-    <table class="table table-hover mt-3">
-        <thead>
+<table class="table table-hover mt-3">
+    <thead>
+        <tr>
+            <th>Ion</th>
+            @if (ShowDetailsInTable)
+            {
+                <th>
+                    <span class="fw-strong">Charge</span><br />
+                </th>
+                <th>
+                    <span class="fw-strong">Mobility</span><br />
+                    <span class="fw-normal">m/s/N</span>
+                </th>
+                <th>
+                    <span class="fw-strong">Conductivity</span><br />
+                    <span class="fw-normal">S·cm<sup>2</sup>/mol</span>
+                </th>
+            }
+            <th>
+                <span class="fw-strong">A</span><br />
+                <span class="fw-normal">mM</span>
+            </th>
+            <th>
+                <span class="fw-strong">B</span><br />
+                <span class="fw-normal">mM</span>
+            </th>
+            <th>Edit</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Ions.Length; i++)
+        {
+            int ionIndex = i;
+            Ion ion = Ions[ionIndex];
             <tr>
-                <th>Ion</th>
                 @if (ShowDetailsInTable)
                 {
-                    <th>
-                        <span class="fw-strong">Charge</span><br />
-                    </th>
-                    <th>
-                        <span class="fw-strong">Mobility</span><br />
-                        <span class="fw-normal">m/s/N</span>
-                    </th>
-                    <th>
-                        <span class="fw-strong">Conductivity</span><br />
-                        <span class="fw-normal">S·cm<sup>2</sup>/mol</span>
-                    </th>
+                    <td>@(ion.Name.Split("(")[0])</td>
+                    <td>@ion.Charge</td>
+                    <td>@($"{ion.Mu / 1e4:#.000e0}")</td>
+                    <td>@($"{ion.Conductivity:#0.###}")</td>
                 }
-                <th>
-                    <span class="fw-strong">A</span><br />
-                    <span class="fw-normal">mM</span>
-                </th>
-                <th>
-                    <span class="fw-strong">B</span><br />
-                    <span class="fw-normal">mM</span>
-                </th>
-                <th>Edit</th>
+                else
+                {
+                    <td>@(ion.NameWithCharge)</td>
+                }
+                <td>@ion.InitialC0</td>
+                <td>@ion.InitialCL</td>
+                <td>
+                    <a data-bs-toggle="modal" data-bs-target="#editIonModal" style="cursor: pointer"
+                   @onclick="@(()=>EditIon(ionIndex))">
+                        ✏️
+                    </a>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @for (int i = 0; i < Ions.Length; i++)
-            {
-                int ionIndex = i;
-                Ion ion = Ions[ionIndex];
-                <tr>
-                    @if (ShowDetailsInTable)
-                    {
-                        <td>@(ion.Name.Split("(")[0])</td>
-                        <td>@ion.Charge</td>
-                        <td>@($"{ion.Mu / 1e4:#.000e0}")</td>
-                        <td>@($"{ion.Conductivity:#0.###}")</td>
-                    }
-                    else
-                    {
-                        <td>@(ion.NameWithCharge)</td>
-                    }
-                    <td>@ion.InitialC0</td>
-                    <td>@ion.InitialCL</td>
-                    <td>
-                        <a data-bs-toggle="modal" data-bs-target="#editIonModal" style="cursor: pointer"
-                       @onclick="@(()=>EditIon(ionIndex))">
-                            ✏️
-                        </a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+        }
+    </tbody>
+</table>
 
-    <EditIonModal Ion="IonBeingEdited" OnSaveIon="EditedIonSave" />
+<EditIonModal Ion="IonBeingEdited" OnSaveIon="EditedIonSave" />
 
-    <div class="d-flex justify-content-between">
+<div class="d-flex justify-content-between">
 
-        <div>
-            <div class="d-inline-block">
-                <div class="input-group" style="width: 100px;">
-                    <span class="input-group-text" id="basic-addon1">ºC</span>
-                    <input type="text" class="form-control" @bind=TemperatureC>
-                </div>
-            </div>
-            <div class="d-inline-block ms-2">
-                <input class="form-check-input" type="checkbox" @bind=ShowDetailsInTable />
-                <label class="form-check-label">Details</label>
+    <div>
+        <div class="d-inline-block">
+            <div class="input-group" style="width: 100px;">
+                <span class="input-group-text" id="basic-addon1">ºC</span>
+                <input type="text" class="form-control" @bind=TemperatureC>
             </div>
         </div>
-
-        <div class="mb-4">
-            <div class="dropdown d-inline-block">
-                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
-                    Examples
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                    @foreach (var ionSet in LJPcalc.Core.KnownIonSets.KnownSets.GetAll())
-                    {
-                        <li>
-                            <button class="dropdown-item" type="button" onclick="@(()=>LoadIonSet(ionSet.Ions))">
-                                @ionSet.Name
-                            </button>
-                        </li>
-                    }
-                </ul>
-            </div>
-            <button class="btn btn-outline-primary" @onclick=ClearIons>
-                Clear Ions
-            </button>
-            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editIonModal" @onclick=AddIon>
-                Add Ion
-            </button>
+        <div class="d-inline-block ms-2">
+            <input class="form-check-input" type="checkbox" @bind=ShowDetailsInTable />
+            <label class="form-check-label">Details</label>
         </div>
     </div>
 
-    @if (!ContinueCalculating)
-    {
-        <button class="btn btn-primary" @onclick=CalcStart>Calculate LJP</button>
-    }
-    else
-    {
-        <button class="btn btn-primary" type="button" disabled>
-            Calculating...
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    <div class="mb-4">
+        <div class="dropdown d-inline-block">
+            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+                Examples
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                @foreach (var ionSet in LJPcalc.Core.KnownIonSets.KnownSets.GetAll())
+                {
+                    <li>
+                        <button class="dropdown-item" type="button" onclick="@(()=>LoadIonSet(ionSet.Ions))">
+                            @ionSet.Name
+                        </button>
+                    </li>
+                }
+            </ul>
+        </div>
+        <button class="btn btn-outline-primary" @onclick=ClearIons>
+            Clear Ions
         </button>
-        <button class="btn btn-primary ms-1" @onclick=CalcStop>Stop</button>
-    }
-
-    @if (Calc is not null)
-    {
-        string ljpPrettyMillivolts = (Calc.BestSolution.LjpMillivolts > 0 ? "+" : "") + $"{Calc.BestSolution.LjpMillivolts:N3}";
-
-        string color = IsSolved ? "green" : "red";
-
-        <div class="display-5 mt-4" style="color: @color">LJP = @ljpPrettyMillivolts mV</div>
-
-        @if (!IsSolved)
-        {
-            <div style="color: @color">
-                <div>This value was calculated from an ion set with @Math.Round(Calc.BestSolution.MaxAbsoluteError, 1)% maximum concentration error.</div>
-                <div>Additional time is required to find an improved solution that further minimizes this error...</div>
-            </div>
-        }
-        else
-        {
-            <div style="color: @color">
-                <div>A solution was found after @($"{Calc.Elapsed.TotalSeconds:N2}") seconds</div>
-            </div>
-        }
-
-        <h3 class="mt-4">Solution Details</h3>
-        <div>
-            <div>LJP of best solution: <code>@Calc.BestSolution.LjpMillivolts mV</code></div>
-            <div>Number of attempted solutions: <code>@Calc.Iterations</code></div>
-            <div>Maximum concentration error: <code>@($"{Calc.BestSolution.MaxAbsoluteError:0.00E+0}") %</code></div>
-            <div>Total calculation time: <code>@($"{Calc.Elapsed.TotalSeconds:N2}") sec</code></div>
-        </div>
-
-        <h3 class="mt-4">Cite This Result</h3>
-        <div class="fst-italic">
-            Liquid junction potential was calculated according to the Nernst–Planck equation
-            (<a href="https://arxiv.org/abs/1403.3640">Marino et al., 2014</a>)
-            using LJPcalc software (<a href="https://github.com/swharden/LJPcalc">https://github.com/swharden/LJPcalc</a>).
-        </div>
-    }
-
-    <h3 class="mt-4">About LJPcalc</h3>
-    <div>
-        LJPcalc was created by <a href="https://swharden.com/about/">Scott Harden</a> and
-        <a href="https://sites.google.com/site/dbrogioli/">Doriano Brogioli</a>
-    </div>
-
-    <div>
-        This page is running LJPcalc @LjpCalculator.GetVersion() on .NET @Environment.Version
-    </div>
-
-    <div>
-        Source: <a href="https://github.com/swharden/LJPcalc">github.com/swharden/LJPcalc</a>
+        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editIonModal" @onclick=AddIon>
+            Add Ion
+        </button>
     </div>
 </div>
+
+@if (!ContinueCalculating)
+{
+    <button class="btn btn-primary" @onclick=CalcStart>Calculate LJP</button>
+}
+else
+{
+    <button class="btn btn-primary" type="button" disabled>
+        Calculating...
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    </button>
+    <button class="btn btn-primary ms-1" @onclick=CalcStop>Stop</button>
+}
+
+@if (Calc is not null)
+{
+    string ljpPrettyMillivolts = (Calc.BestSolution.LjpMillivolts > 0 ? "+" : "") + $"{Calc.BestSolution.LjpMillivolts:N3}";
+
+    string color = IsSolved ? "green" : "red";
+
+    <div class="display-5 mt-4" style="color: @color">LJP = @ljpPrettyMillivolts mV</div>
+
+    @if (!IsSolved)
+    {
+        <div style="color: @color">
+            <div>Result is derived from an ion table with @Math.Round(Calc.BestSolution.MaxAbsoluteError, 1)% maximum concentration error.</div>
+            <div>Additional time is required to find a solution with less error...</div>
+        </div>
+    }
+
+    <div>Best Solution: <code>@Calc.BestSolution</code></div>
+    <div>Solution #@Calc.Iterations: <code>@Calc.LatestSolution</code></div>
+    <div>Calculation Time: <code>@($"{Calc.Elapsed.TotalSeconds:N2}") sec</code></div>
+}
+
+@if (IsSolved)
+{
+    <div class="mt-4">
+        <span class="fw-bold">
+            If you enjoy LJPcalc, consider citing it by name:
+        </span>
+        <span class="fst-italic">
+            Liquid junction potential was calculated according to the stationary Nernst–Planck equation
+            (<a href="https://arxiv.org/abs/1403.3640">Marino et al., 2014</a>)
+            using LJPcalc software (<a href="https://swharden.com/ljp">https://swharden.com/ljp</a>).
+        </span>
+    </div>
+}
+
+<footer class="d-flex mb-3 justify-content-evenly" style="opacity: .5; margin-top: 7em;">
+    <div>
+        LJPcalc @LjpCalculator.GetVersion()
+    </div>
+    <div>
+        .NET @Environment.Version
+    </div>
+    <div>
+        <a href="https://github.com/swharden/LJPcalc">View source</a>
+    </div>
+</footer>
 
 @code {
 
@@ -190,7 +172,7 @@
 
     LjpCalculator? Calc { get; set; } = null;
 
-    bool IsSolved => Calc is null ? false : Calc.BestSolution.MaxAbsoluteError < .01;
+    bool IsSolved => Calc is not null && Calc.BestSolution.MaxAbsoluteError < .01;
 
     bool ShowDetailsInTable { get; set; } = true;
 

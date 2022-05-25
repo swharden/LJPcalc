@@ -35,8 +35,8 @@ public class PhiEquationSolution
     public override string ToString()
     {
         if (MaxAbsoluteError > 1)
-            return $"LJP={LjpMillivolts} (max CL error: {MaxAbsoluteError:N2}%)";
+            return $"LJP = {LjpMillivolts} (max CL error: {Math.Round(MaxAbsoluteError, 1)}%)";
         else
-            return $"LJP={LjpMillivolts} (max CL error: {MaxAbsoluteError:#.##E+0}%)";
+            return $"LJP = {LjpMillivolts} (max CL error: {MaxAbsoluteError:#.##E+0}%)";
     }
 }

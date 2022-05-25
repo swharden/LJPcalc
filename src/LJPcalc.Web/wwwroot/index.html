@@ -21,13 +21,31 @@
 </head>
 
 <body>
-    <div id="app">
-        <div class="m-3">
-            <span class="fs-1">Loading LJPcalc... </span>
-            <div class="spinner-border" role="status">
-                <span class="visually-hidden">Loading...</span>
+
+    <header class="text-light py-3" style="background-color: #204066;">
+        <div class="container-fluid" style="max-width: 1000px;">
+            <div class="lh-1" style="font-weight: 400; font-size: 3em;">LJPcalc</div>
+            <div class="p-1">
+                <div style="opacity: .5; color: #CCC;">
+                    Liquid junction potential calculator
+                    by <a href="https://swharden.com/about/" class="text-light">Scott Harden</a> and
+                    <a href="https://sites.google.com/site/dbrogioli/" class="text-light">Doriano Brogioli</a>
+                </div>
             </div>
         </div>
+    </header>
+
+    <div class="container-fluid" style="max-width: 1000px;">
+        <main>
+            <div id="app">
+                <div class="py-5">
+                    <span class="fs-1">Loading... </span>
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
 
     <div id="blazor-error-ui">

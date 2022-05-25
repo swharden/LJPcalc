@@ -20,6 +20,8 @@ public class LjpCalculator
 
     public PhiEquationSolution BestSolution => Solver.BestSolution;
 
+    public PhiEquationSolution LatestSolution;
+
     public LjpCalculator(Ion[] ions, double temperature = 25, bool autoSort = true)
     {
         if (ions is null)
@@ -55,6 +57,7 @@ public class LjpCalculator
 
         double[] initialPhis = ions.Take(ions.Length - 2).Select(x => x.CL - x.C0).ToArray();
         Solver = new PhiEquationSolver(PhiEquations, initialPhis);
+        LatestSolution = Solver.BestSolution;
     }
 
     public override string ToString()
@@ -74,7 +77,7 @@ public class LjpCalculator
     public void Iterate()
     {
         Stopwatch.Start();
-        Solver.Iterate();
+        LatestSolution = Solver.Iterate();
         Stopwatch.Stop();
     }
 
