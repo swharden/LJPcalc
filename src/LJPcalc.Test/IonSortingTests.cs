@@ -65,14 +65,17 @@ class IonSortingTests
         var ionSet = new Ion[]
         {
             new Ion("Zn", 2, 2),
-            new Ion("K", 3, 3), // sort last because biggest absolute CL
-            new Ion("Cl", 4, 0) // largest diff should be second from last
+            new Ion("K", 3, 3), // after sorting this is last (biggest absolute CL)
+            new Ion("Mg", 2, 2),
+            new Ion("Cl", 4, 0), // after sorting this is second to last (largest difference between C0 and CL)
         };
-
         ionSet = IonLibrary.Lookup(ionSet);
 
-        LjpResult ljp = LjpCalculator.SolvePhisThenCalculateLjp(ionSet, autoSort: false);
+        Assert.Throws<InvalidOperationException>(() => LjpCalculator.SolvePhisThenCalculateLjp(ionSet, autoSort: false));
 
-        Assert.That(ljp.LjpMillivolts, Is.EqualTo(-1.78).Within(.1));
+        LjpResult ljp = LjpCalculator.SolvePhisThenCalculateLjp(ionSet, autoSort: true);
+
+        string ionOrder = string.Join(", ", ljp.Ions.Select(x => x.Name));
+        Assert.That(ionOrder, Is.EqualTo("Zn, Mg, Cl, K"));
     }
 }
