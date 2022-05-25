@@ -60,7 +60,7 @@
     </tbody>
 </table>
 
-<EditIonModal Ion="IonBeingEdited" OnSaveIon="EditedIonSave" />
+<EditIonModal @ref="MyEditIonModal" OnSaveIon="EditedIonSave" />
 
 <div class="d-flex justify-content-between">
 
@@ -104,7 +104,12 @@
 
 @if (!ContinueCalculating)
 {
-    <button class="btn btn-primary" @onclick=CalcStart>Calculate LJP</button>
+    @if (IsIonTableError)
+    {
+        <ErrorAlert Title="Error" Message=@IonTableErrorMessage />
+    }
+
+    <button class="btn btn-primary" @onclick=CalcStart disabled=@IsIonTableError>Calculate LJP</button>
 }
 else
 {
@@ -163,10 +168,9 @@ else
 </footer>
 
 @code {
+    EditIonModal MyEditIonModal = null!;
 
     Ion[] Ions { get; set; } = Array.Empty<Ion>();
-
-    readonly EditableIon IonBeingEdited = new();
 
     bool ContinueCalculating { get; set; } = false;
 
@@ -178,9 +182,40 @@ else
 
     double TemperatureC { get; set; } = 25;
 
+    bool IsIonTableError => !string.IsNullOrWhiteSpace(IonTableErrorMessage);
+
+    string IonTableErrorMessage { get; set; } = string.Empty;
+
     protected override void OnInitialized()
     {
         LoadIonSet(new LJPcalc.Core.KnownIonSets.AxoBitsArticle().Ions);
+    }
+
+    private void ValidateIonSet()
+    {
+        if (Ions.Length < 2)
+        {
+            IonTableErrorMessage = "At least two ions are required to calculate LJP";
+            return;
+        }
+
+        bool hasLeftCations = Ions.Where(x => x.C0 > 0).Where(x => x.Charge > 0).Any();
+        bool hasLeftAnions = Ions.Where(x => x.C0 > 0).Where(x => x.Charge < 0).Any();
+        if (!(hasLeftAnions && hasLeftAnions))
+        {
+            IonTableErrorMessage = "Solution A requires both cations and anions";
+            return;
+        }
+
+        bool hasRightCations = Ions.Where(x => x.CL > 0).Where(x => x.Charge > 0).Any();
+        bool hasRightAnions = Ions.Where(x => x.CL > 0).Where(x => x.Charge < 0).Any();
+        if (!(hasRightCations && hasRightAnions))
+        {
+            IonTableErrorMessage = "Solution B requires both cations and anions";
+            return;
+        }
+
+        IonTableErrorMessage = string.Empty;
     }
 
     private async Task CalcStart()
@@ -208,44 +243,59 @@ else
     private void LoadIonSet(Ion[] ions)
     {
         Ions = IonLibrary.Lookup(ions);
+        ValidateIonSet();
         StateHasChanged();
     }
 
     private void EditIon(int ionIndex)
     {
-        IonBeingEdited.IsNewIon = false;
-        IonBeingEdited.IsDeleted = false;
-        IonBeingEdited.UpdateFromIon(Ions, ionIndex);
+        MyEditIonModal.IsNewIon = false;
+        MyEditIonModal.IsToBeDeleted = false;
+        MyEditIonModal.IndexOfIonBeingEdited = ionIndex;
+
+        MyEditIonModal.Name = Ions[ionIndex].Name;
+        MyEditIonModal.Charge = Ions[ionIndex].Charge;
+        MyEditIonModal.Conductivity = Ions[ionIndex].Conductivity;
+        MyEditIonModal.ConcentrationA = Ions[ionIndex].C0;
+        MyEditIonModal.ConcentrationB = Ions[ionIndex].CL;
+
+        MyEditIonModal.Reset();
     }
 
     private void AddIon()
     {
-        IonBeingEdited.IsNewIon = true;
-        IonBeingEdited.IsDeleted = false;
-        IonBeingEdited.Reset();
+        MyEditIonModal.IsNewIon = true;
+        MyEditIonModal.IsToBeDeleted = false;
+
+        Ion defaultNewIon = IonLibrary.KnownIons.Where(x => x.Name.StartsWith("A")).First();
+        MyEditIonModal.PresetSelected(new ChangeEventArgs() { Value = defaultNewIon.NameWithCharge });
+        ValidateIonSet();
     }
 
     private void ClearIons()
     {
         Ions = Array.Empty<Ion>();
+        ValidateIonSet();
     }
 
     private void EditedIonSave()
     {
-        if (IonBeingEdited.IsDeleted)
+        if (MyEditIonModal.IsToBeDeleted)
         {
             Ions = Enumerable.Range(0, Ions.Length)
-                .Where(i => i != IonBeingEdited.Index)
+                .Where(i => i != MyEditIonModal.IndexOfIonBeingEdited)
                 .Select(i => Ions[i])
                 .ToArray();
         }
-        else if (IonBeingEdited.IsNewIon)
+        else if (MyEditIonModal.IsNewIon)
         {
-            Ions = Ions.Append(IonBeingEdited.ToIon()).ToArray();
+            Ions = Ions.Append(MyEditIonModal.ToIon()).ToArray();
         }
         else
         {
-            Ions[IonBeingEdited.Index] = IonBeingEdited.ToIon();
+            Ions[MyEditIonModal.IndexOfIonBeingEdited] = MyEditIonModal.ToIon();
         }
+
+        ValidateIonSet();
     }
 }
