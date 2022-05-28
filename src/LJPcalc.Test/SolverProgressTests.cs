@@ -55,5 +55,7 @@ internal class SolverProgressTests
                 Console.WriteLine(calc);
             }
         }
+
+        Console.WriteLine(calc.GetLjpResult());
     }
 }

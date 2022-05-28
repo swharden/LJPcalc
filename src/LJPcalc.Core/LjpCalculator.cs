@@ -93,7 +93,7 @@ public class LjpCalculator
     }
 
     /// <summary>
-    /// Calculate LJP using the best available solution
+    /// Get details about the best LJP solution available
     /// </summary>
     public LjpResult GetLjpResult()
     {
@@ -119,9 +119,10 @@ public class LjpCalculator
         // last ion's cL is calculated from all the cLs before it
         lastIon.CL = -ions.Take(ions.Length - 1).Sum(x => x.CL * x.Charge) / lastIon.Charge;
 
-        (double ljpVolts, double[] ljpCLs) = CalculateLjp(Ions, BestSolution.Phis, TemperatureC);
+        double ljpVolts = BestSolution.LjpVolts;
+        double[] solvedCLs = BestSolution.SolvedCLs;
 
-        return new LjpResult(Ions, ljpCLs, TemperatureC, ljpVolts, Elapsed, Iterations, BestSolution.MaxAbsoluteError);
+        return new LjpResult(Ions, solvedCLs, TemperatureC, ljpVolts, Elapsed, Iterations, BestSolution.MaxAbsoluteError);
     }
 
     /// <summary>
