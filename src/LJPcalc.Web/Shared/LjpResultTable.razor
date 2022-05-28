@@ -1,0 +1,101 @@
+﻿@using LJPcalc.Core
+
+@if (LatestResult is not null && BestResult is not null)
+{
+    string ljpPrettyMillivolts = (BestResult.LjpMillivolts > 0 ? "+" : "") + $"{BestResult.LjpMillivolts:N3}";
+
+    bool isSolved = BestResult.Error <= .1;
+
+    @if (isSolved)
+    {
+        <div style="color: green">
+            <div class="display-5 mt-4">LJP = @ljpPrettyMillivolts mV</div>
+            <div>A solution was found!</div>
+        </div>
+
+        <div class="mb-3 mt-2">
+            <span class="fw-bold">
+                If you enjoy LJPcalc, consider citing it by name:
+            </span>
+            <span class="fst-italic">
+                Liquid junction potential was calculated according to the stationary Nernst–Planck equation
+                (<a href="https://arxiv.org/abs/1403.3640">Marino et al., 2014</a>)
+                using LJPcalc software (<a href="https://swharden.com/LJPcalc">https://swharden.com/LJPcalc</a>).
+            </span>
+        </div>
+    }
+    else
+    {
+        <div style="color: red">
+            <div class="display-5 mt-4">LJP = @ljpPrettyMillivolts mV</div>
+            <div>Optimizing &Phi; to minimize solution B concentration error...</div>
+        </div>
+    }
+
+    <table class="table table-hover">
+        <thead>
+            <tr class="text-center">
+                <th></th>
+                <th colspan="2">Target</th>
+                <th colspan="3">Latest</th>
+                <th colspan="3">Best</th>
+            </tr>
+            <tr class="text-center">
+                <th class="text-start">Ion</th>
+                <th>A</th>
+                <th>B</th>
+                <th>&Phi;</th>
+                <th>B</th>
+                <th>Error</th>
+                <th>&Phi;</th>
+                <th>B</th>
+                <th>Error</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < BestResult.Ions.Length; i++)
+            {
+                double testError = LatestResult.SolvedIons[i].InitialCL == 0 ? 0 : Math.Round(LatestResult.SolvedIons[i].PercentChangeCL, 3);
+                double bestError = BestResult.SolvedIons[i].InitialCL == 0 ? 0 : Math.Round(BestResult.SolvedIons[i].PercentChangeCL, 3);
+
+                <tr class="text-center">
+                    <td class="text-start">@BestResult.SolvedIons[i].NameWithCharge</td>
+                    <td>@Math.Round(BestResult.SolvedIons[i].C0, 4)</td>
+                    <td>@Math.Round(BestResult.SolvedIons[i].InitialCL, 4)</td>
+
+                    <td>@Math.Round(LatestResult.SolvedIons[i].Phi, 4)</td>
+                    <td>@Math.Round(LatestResult.SolvedIons[i].CL, 4)</td>
+                    @if (testError < .1)
+                    {
+                        <td class="table-success">&lt;0.1%</td>
+                    }
+                    else
+                    {
+                        <td class="table-danger">@testError%</td>
+                    }
+
+                    <td>@Math.Round(BestResult.SolvedIons[i].Phi, 4)</td>
+                    <td>@Math.Round(BestResult.SolvedIons[i].CL, 4)</td>
+                    @if (bestError < .1)
+                    {
+                        <td class="table-success">&lt;0.1%</td>
+                    }
+                    else
+                    {
+                        <td class="table-danger">@bestError%</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public LjpResult? LatestResult { get; set; } = null;
+
+    [Parameter]
+    [EditorRequired]
+    public LjpResult? BestResult { get; set; } = null;
+}

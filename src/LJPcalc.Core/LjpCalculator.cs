@@ -95,7 +95,27 @@ public class LjpCalculator
     /// <summary>
     /// Get details about the best LJP solution available
     /// </summary>
-    public LjpResult GetLjpResult()
+    public LjpResult GetBestLjpResult()
+    {
+        // TODO: consider moving this logic into the iterator???
+
+        return GetLjpResult(Ions, BestSolution.Phis, BestSolution.SolvedCLs, TemperatureC, BestSolution.LjpVolts, Elapsed, Iterations, BestSolution.MaxAbsoluteError);
+    }
+
+    /// <summary>
+    /// Get details about the most recently solved LJP solution
+    /// </summary>
+    public LjpResult GetLatestLjpResult()
+    {
+        // TODO: consider moving this logic into the iterator???
+
+        return GetLjpResult(Ions, LatestSolution.Phis, LatestSolution.SolvedCLs, TemperatureC, LatestSolution.LjpVolts, Elapsed, Iterations, LatestSolution.MaxAbsoluteError);
+    }
+
+    /// <summary>
+    /// Get details about the best LJP solution available
+    /// </summary>
+    public static LjpResult GetLjpResult(Ion[] Ions, double[] phis, double[] solvedCLs, double temperatureC, double ljpVolts, TimeSpan elapsed, int iterations, double maxError)
     {
         // TODO: consider moving this logic into the iterator???
 
@@ -104,10 +124,10 @@ public class LjpCalculator
         Ion secondFromLastIon = ions[Ions.Length - 2];
 
         // update ions based on new phis and CLs (all ions except the last two)
-        for (int j = 0; j < BestSolution.Phis.Length; j++)
+        for (int j = 0; j < phis.Length; j++)
         {
-            ions[j].Phi = BestSolution.Phis[j];
-            ions[j].CL = BestSolution.SolvedCLs[j];
+            ions[j].Phi = phis[j];
+            ions[j].CL = solvedCLs[j];
         }
 
         // second from last ion phi is its concentration difference
@@ -119,10 +139,7 @@ public class LjpCalculator
         // last ion's cL is calculated from all the cLs before it
         lastIon.CL = -ions.Take(ions.Length - 1).Sum(x => x.CL * x.Charge) / lastIon.Charge;
 
-        double ljpVolts = BestSolution.LjpVolts;
-        double[] solvedCLs = BestSolution.SolvedCLs;
-
-        return new LjpResult(Ions, solvedCLs, TemperatureC, ljpVolts, Elapsed, Iterations, BestSolution.MaxAbsoluteError);
+        return new LjpResult(Ions, ions, temperatureC, ljpVolts, elapsed, iterations, maxError);
     }
 
     /// <summary>
@@ -138,7 +155,7 @@ public class LjpCalculator
     {
         LjpCalculator calc = new(ions, temperatureC, autoSort);
         calc.IterateRepeatedly(error, maxIterations);
-        return calc.GetLjpResult();
+        return calc.GetBestLjpResult();
     }
 
     /// <summary>

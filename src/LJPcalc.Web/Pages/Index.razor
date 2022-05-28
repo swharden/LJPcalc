@@ -120,39 +120,14 @@ else
     <button class="btn btn-primary ms-1" @onclick=CalcStop>Stop</button>
 }
 
+<LjpResultTable LatestResult="LatestResult" BestResult="BestResult" />
+
 @if (Calc is not null)
 {
-    string ljpPrettyMillivolts = (Calc.BestSolution.LjpMillivolts > 0 ? "+" : "") + $"{Calc.BestSolution.LjpMillivolts:N3}";
-
-    string color = IsSolved ? "green" : "red";
-
-    <div class="display-5 mt-4" style="color: @color">LJP = @ljpPrettyMillivolts mV</div>
-
-    @if (!IsSolved)
-    {
-        <div style="color: @color">
-            <div>Result is derived from an ion table with @Math.Round(Calc.BestSolution.MaxAbsoluteError, 1)% maximum concentration error.</div>
-            <div>Additional time is required to find a solution with less error...</div>
-        </div>
-    }
-
-    <div>Best Solution: <code>@Calc.BestSolution</code></div>
-    <div>Solution #@Calc.Iterations: <code>@Calc.LatestSolution</code></div>
+    <div>Latest LJP = <code>@Calc.LatestSolution.LjpMillivolts mV</code></div>
+    <div>Best LJP = <code>@Calc.BestSolution.LjpMillivolts mV</code></div>
+    <div>Solutions Tested: <code>@Calc.Iterations</code></div>
     <div>Calculation Time: <code>@($"{Calc.Elapsed.TotalSeconds:N2}") sec</code></div>
-}
-
-@if (IsSolved)
-{
-    <div class="mt-4">
-        <span class="fw-bold">
-            If you enjoy LJPcalc, consider citing it by name:
-        </span>
-        <span class="fst-italic">
-            Liquid junction potential was calculated according to the stationary Nernst–Planck equation
-            (<a href="https://arxiv.org/abs/1403.3640">Marino et al., 2014</a>)
-            using LJPcalc software (<a href="https://swharden.com/LJPcalc">https://swharden.com/LJPcalc</a>).
-        </span>
-    </div>
 }
 
 <footer class="d-flex mb-3 justify-content-evenly" style="opacity: .5; margin-top: 7em;">
@@ -176,7 +151,11 @@ else
 
     LjpCalculator? Calc { get; set; } = null;
 
-    bool IsSolved => Calc is not null && Calc.BestSolution.MaxAbsoluteError < .01;
+    LjpResult? LatestResult { get; set; } = null;
+
+    LjpResult? BestResult { get; set; } = null;
+
+    bool IsSolved => Calc is not null && Calc.BestSolution.MaxAbsoluteError < .1;
 
     bool ShowDetailsInTable { get; set; } = true;
 
@@ -228,6 +207,8 @@ else
         while (ContinueCalculating)
         {
             Calc.Iterate();
+            LatestResult = Calc.GetLatestLjpResult();
+            BestResult = Calc.GetBestLjpResult();
             if (IsSolved)
                 ContinueCalculating = false;
             await Task.Delay(1);
@@ -244,6 +225,7 @@ else
     {
         Ions = IonLibrary.Lookup(ions);
         ValidateIonSet();
+        ClearResults();
         StateHasChanged();
     }
 
@@ -269,13 +251,23 @@ else
 
         Ion defaultNewIon = IonLibrary.KnownIons.Where(x => x.Name.StartsWith("A")).First();
         MyEditIonModal.PresetSelected(new ChangeEventArgs() { Value = defaultNewIon.NameWithCharge });
+
+        ClearResults();
         ValidateIonSet();
     }
 
     private void ClearIons()
     {
         Ions = Array.Empty<Ion>();
+        ClearResults();
         ValidateIonSet();
+    }
+
+    private void ClearResults()
+    {
+        Calc = null;
+        LatestResult = null;
+        BestResult = null;
     }
 
     private void EditedIonSave()
@@ -295,7 +287,8 @@ else
         {
             Ions[MyEditIonModal.IndexOfIonBeingEdited] = MyEditIonModal.ToIon();
         }
-
+        
+        ClearResults();
         ValidateIonSet();
     }
 }
