@@ -125,11 +125,11 @@ public class IonLibraryTests
 
             double totalLeftCharge = ions.Select(x => x.C0 * x.Charge).Sum();
             double totalLeftConcenration = ions.Select(x => x.C0).Sum();
-            Assert.That(totalLeftCharge, Is.EqualTo(0).Within(.05 * totalLeftConcenration), knownSet.Name);
+            Assert.That(totalLeftCharge, Is.EqualTo(0).Within(.01 * totalLeftConcenration), knownSet.Name);
 
             double totalRightCharge = ions.Select(x => x.CL * x.Charge).Sum();
             double totalRightConcentration = ions.Select(x => x.CL).Sum();
-            Assert.That(totalRightCharge, Is.EqualTo(0).Within(.05 * totalRightConcentration), knownSet.Name);
+            Assert.That(totalRightCharge, Is.EqualTo(0).Within(.01 * totalRightConcentration), knownSet.Name);
         }
     }
 }
