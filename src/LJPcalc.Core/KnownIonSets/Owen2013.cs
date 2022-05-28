@@ -43,7 +43,7 @@ public class Owen2013 : IKnownIonSet
 
     // external
     // 122 + 26 + 2 + 3 + 1.25 = 154.25 Na
-    // 122 + 3 = 125 Cl
+    // 122 + 3 + 4 + 2.6 = 131.6 Cl
     // 3 K
     // 10 D-glucose
     // 1.25 H2PO4
@@ -68,8 +68,8 @@ public class Owen2013 : IKnownIonSet
         new Ion("HEPES", 10, 0),
         new Ion("EGTA(2-)", .3, 0),
         new Ion("Tris", 10, 0),
-        new Ion("ATP (Adenosine 5'-Triphosphate)", 4 + 0.3, 0),
-        new Ion("Na", 0.3, 154.25),
+        new Ion("ATP (Adenosine 5'-Triphosphate)", 4, 0),
+        new Ion("Na", 0.3, 154.25 - 5), // omit Na pyruvate and Na ascorbate
         new Ion("HCO3", 0, 26),
         new Ion("H2PO4", 0, 1.25),
         new Ion("Ca", 0, 2),
