@@ -4,7 +4,7 @@
 {
     string ljpPrettyMillivolts = (BestResult.LjpMillivolts > 0 ? "+" : "") + $"{BestResult.LjpMillivolts:N3}";
 
-    bool isSolved = BestResult.Error <= .1;
+    bool isSolved = BestResult.Error <= 1;
 
     @if (isSolved)
     {
@@ -65,9 +65,9 @@
 
                     <td>@Math.Round(LatestResult.SolvedIons[i].Phi, 4)</td>
                     <td>@Math.Round(LatestResult.SolvedIons[i].CL, 4)</td>
-                    @if (testError < .1)
+                    @if (testError < 1)
                     {
-                        <td class="table-success">&lt;0.1%</td>
+                        <td class="table-success">&lt;1%</td>
                     }
                     else
                     {
@@ -76,9 +76,9 @@
 
                     <td>@Math.Round(BestResult.SolvedIons[i].Phi, 4)</td>
                     <td>@Math.Round(BestResult.SolvedIons[i].CL, 4)</td>
-                    @if (bestError < .1)
+                    @if (bestError < 1)
                     {
-                        <td class="table-success">&lt;0.1%</td>
+                        <td class="table-success">&lt;1%</td>
                     }
                     else
                     {
@@ -88,6 +88,12 @@
             }
         </tbody>
     </table>
+
+    @if (BestResult.SolvedIons.Last().PercentChangeCL > 1)
+    {
+        <ErrorAlert Title="Concentration Adjusted"
+            Message="Solution B concentration of the last ion in the list was adjusted by >1% to achieve electroneutrality" />
+    }
 }
 
 @code {

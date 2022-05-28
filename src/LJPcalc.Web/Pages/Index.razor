@@ -155,7 +155,7 @@ else
 
     LjpResult? BestResult { get; set; } = null;
 
-    bool IsSolved => Calc is not null && Calc.BestSolution.MaxAbsoluteError < .1;
+    bool IsSolved => Calc is not null && Calc.BestSolution.MaxAbsoluteError <= 1;
 
     bool ShowDetailsInTable { get; set; } = true;
 
