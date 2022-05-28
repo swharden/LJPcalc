@@ -110,4 +110,26 @@ public class IonLibraryTests
             }
         }
     }
+
+    [Test]
+    public void Test_KnownIonSets_AreBalanced()
+    {
+        Core.KnownIonSets.IKnownIonSet[] knowSets = Core.KnownIonSets.KnownSets.GetAll();
+        Assert.That(knowSets, Is.Not.Null);
+        Assert.That(knowSets, Is.Not.Empty);
+
+        foreach (var knownSet in knowSets)
+        {
+            Ion[] ions = IonLibrary.Lookup(knownSet.Ions);
+            Assert.That(ions.Where(x => x.Charge == 0), Is.Empty);
+
+            double totalLeftCharge = ions.Select(x => x.C0 * x.Charge).Sum();
+            double totalLeftConcenration = ions.Select(x => x.C0).Sum();
+            Assert.That(totalLeftCharge, Is.EqualTo(0).Within(.05 * totalLeftConcenration), knownSet.Name);
+
+            double totalRightCharge = ions.Select(x => x.CL * x.Charge).Sum();
+            double totalRightConcentration = ions.Select(x => x.CL).Sum();
+            Assert.That(totalRightCharge, Is.EqualTo(0).Within(.05 * totalRightConcentration), knownSet.Name);
+        }
+    }
 }
