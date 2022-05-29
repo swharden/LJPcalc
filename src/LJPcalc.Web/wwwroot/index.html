@@ -161,7 +161,7 @@
 
     <script>
         function StartBlazor() {
-            let numberOfResourcesLoaded = 0;
+            let loadedCount = 0;
             const resourcesToLoad = [];
             Blazor.start({
                 loadBootResource:
@@ -178,15 +178,15 @@
                         resourcesToLoad.push(fetchResources);
 
                         fetchResources.then((r) => {
-                            numberOfResourcesLoaded += 1;
+                            loadedCount += 1;
                             if (filename == "blazor.boot.json")
                                 return;
-                            const resourceCount = resourcesToLoad.length;
-                            const percentLoaded = parseInt((numberOfResourcesLoaded * 100.0) / resourceCount);
+                            const totalCount = resourcesToLoad.length;
+                            const percentLoaded = 10 + parseInt((loadedCount * 90.0) / totalCount);
                             const progressbar = document.getElementById('progressbar');
                             progressbar.style.width = percentLoaded + '%';
                             const progressLabel = document.getElementById('progressLabel');
-                            progressLabel.innerText = `Downloading ${numberOfResourcesLoaded}/${resourceCount}: ${filename}`;
+                            progressLabel.innerText = `Downloading ${loadedCount}/${totalCount}: ${filename}`;
                         });
 
                         return fetchResources;
