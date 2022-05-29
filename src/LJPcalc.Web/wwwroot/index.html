@@ -180,6 +180,8 @@
 
                         fetchResources.then((r) => {
                             numberOfResourcesLoaded += 1;
+                            if (filename == "blazor.boot.json")
+                                return;
                             const resourceCount = resourcesToLoad.length;
                             const percentLoaded = parseInt((numberOfResourcesLoaded * 100.0) / resourceCount);
                             const progressbar = document.getElementById('progressbar');
