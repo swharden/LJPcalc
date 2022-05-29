@@ -62,8 +62,7 @@ public class LjpCalculator
         TemperatureC = temperature;
         PhiEquations = new PhiEquation(ions, temperature);
 
-        double[] initialPhis = ions.Take(ions.Length - 2).Select(x => x.CL - x.C0).ToArray();
-        Solver = new PhiEquationSolver(PhiEquations, initialPhis);
+        Solver = new PhiEquationSolver(PhiEquations);
         LatestSolution = Solver.BestSolution;
     }
 

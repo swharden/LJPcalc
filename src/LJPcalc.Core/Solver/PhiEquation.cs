@@ -3,8 +3,8 @@
 public class PhiEquation
 {
     public int EquationCount { get; private set; }
-    private readonly double TemperatureC;
-    private readonly Ion[] Ions;
+    public readonly double TemperatureC;
+    public readonly Ion[] Ions;
 
     public PhiEquation(Ion[] ions, double temperatureC)
     {

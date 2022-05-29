@@ -18,35 +18,28 @@ public class PhiEquationSolver
     public int Iterations { get; private set; }
 
     /// <summary>
-    /// Abort the solving process after this number of iterations
-    /// </summary>
-    public int MaximumIterations = int.MaxValue;
-
-    /// <summary>
-    /// Controls whether a hard exception is thrown if the maximum iteration limit is hit
-    /// </summary>
-    public bool ThrowIfIterationLimitExceeded;
-
-    /// <summary>
     /// Functions which can use logic and/or randomness to generate new solutions
-    /// which may be better than the existing ones.
+    /// which may be better than the existing ones using information about the solutions found so far.
     /// </summary>
-    private readonly Func<PhiEquationSolution>[] Strategies;
+    private readonly IStrategy[] Strategies;
 
     /// <summary>
     /// Vectorial equations in the form f(x) = 0
     /// </summary>
-    public PhiEquationSolver(PhiEquation equation, double[] initialXs)
+    public PhiEquationSolver(PhiEquation equation)
     {
+        double[] initialPhis = equation.Ions.Take(equation.Ions.Length - 2).Select(x => x.CL - x.C0).ToArray();
+        PhiEquationSolution initialSolution = equation.Calculate(initialPhis);
+
         Equation = equation;
-        EquationCount = initialXs.Length;
-        Solutions = new PhiEquationSolution[] { Equation.Calculate(initialXs) };
-        Strategies = new Func<PhiEquationSolution>[]
+        EquationCount = initialPhis.Length;
+        Solutions = new PhiEquationSolution[] { initialSolution };
+        Strategies = new IStrategy[]
         {
-            GetSolution_ShiftedBySolutionDelta,
-            GetSolution_NearFirstPoint,
-            GetSolution_TotallyRandom,
-            GetSolution_ConsideringMinMax,
+            new Strategies.ShiftByDelta(),
+            new Strategies.NearBestSolution(),
+            new Strategies.TotallyRandom(),
+            new Strategies.ConsideringMinMax(),
         };
     }
 
@@ -57,9 +50,11 @@ public class PhiEquationSolver
     /// </summary>
     public PhiEquationSolution Iterate()
     {
-        Func<PhiEquationSolution> strategy = Strategies[Iterations++ % Strategies.Length];
-        
-        PhiEquationSolution newSolution = strategy.Invoke();
+        IStrategy strategy = Strategies[Iterations++ % Strategies.Length];
+
+        double[] suggestedXs = strategy.SuggestXs(EquationCount, Solutions, Rand);
+
+        PhiEquationSolution newSolution = Equation.Calculate(suggestedXs);
 
         Solutions = Solutions
             .Append(newSolution)
@@ -68,120 +63,5 @@ public class PhiEquationSolver
             .ToArray();
 
         return newSolution;
-    }
-
-    /// <summary>
-    /// Find the best set of inputs where the errors are all close to zero.
-    /// A valid solution is found when the error for every input is between -1 and 1 (each is < 1% error)
-    /// </summary>
-    public void Solve()
-    {
-        while (BestSolution.MaxAbsoluteError > 1.0)
-        {
-            Iterate();
-
-            if (Iterations >= MaximumIterations)
-            {
-                if (ThrowIfIterationLimitExceeded)
-                    throw new OperationCanceledException($"hit maximum iteration limit ({MaximumIterations}) while solving Phis");
-                else
-                    break;
-            }
-        }
-    }
-
-    /// <summary>
-    /// Add a point with Xs shifted by the delta of the solved matrix
-    /// </summary>
-    private PhiEquationSolution GetSolution_ShiftedBySolutionDelta()
-    {
-        if (Solutions.Length < EquationCount + 1)
-        {
-            return GetSolution_NearFirstPoint();
-        }
-
-        double[] suggestedXs = new double[EquationCount];
-
-        double[,] Mm = new double[EquationCount, EquationCount];
-        for (int j = 0; j < EquationCount; j++)
-            for (int k = 0; k < EquationCount; k++)
-                Mm[j, k] = Solutions[k].Errors[j] - Solutions[EquationCount].Errors[j];
-
-        double[] mF0 = new double[EquationCount];
-        for (int j = 0; j < EquationCount; j++)
-            mF0[j] = -Solutions[EquationCount].Errors[j];
-
-        double[,] Vm = new double[EquationCount, EquationCount];
-        for (int j = 0; j < EquationCount; j++)
-            for (int k = 0; k < EquationCount; k++)
-                Vm[j, k] = Solutions[k].Phis[j] - Solutions[EquationCount].Phis[j];
-
-        double[] u = LinearAlgebra.Solve(Mm, mF0);
-        double[] delta = LinearAlgebra.Product(Vm, u);
-
-        for (int j = 0; j < EquationCount; j++)
-            suggestedXs[j] = Solutions[EquationCount].Phis[j] + delta[j];
-
-        return Equation.Calculate(suggestedXs);
-    }
-
-    /// <summary>
-    /// Add a point with Xs randomly offset from the Xs of the first point
-    /// </summary>
-    private PhiEquationSolution GetSolution_NearFirstPoint()
-    {
-        const double randomness = 4; // TODO: could this value be optimized?
-
-        double[] suggestedXs = BestSolution.Phis.Select(x => x * (Rand.NextDouble() - 0.5) * randomness).ToArray();
-
-        return Equation.Calculate(suggestedXs);
-    }
-
-    /// <summary>
-    /// Add a point with totally random Xs
-    /// </summary>
-    private PhiEquationSolution GetSolution_TotallyRandom()
-    {
-        const double randomness = 4; // TODO: could this value be optimized?
-
-        double[] suggestedXs = Enumerable.Range(0, EquationCount)
-                                         .Select(x => (Rand.NextDouble() - 0.5) * randomness)
-                                         .ToArray();
-
-        return Equation.Calculate(suggestedXs);
-    }
-
-    /// <summary>
-    /// Add a point with Xs randomized centered and scaled to the min/max of the existing Xs
-    /// </summary>
-    private PhiEquationSolution GetSolution_ConsideringMinMax()
-    {
-        const double randomness = 3; // TODO: could this value be optimized?
-
-        double[] suggestedXs = new double[EquationCount];
-
-        for (int equationIndex = 0; equationIndex < EquationCount; equationIndex++)
-        {
-            var equationXs = Solutions.Select(x => x.Phis[equationIndex]);
-            double xMin = equationXs.Min();
-            double xMax = equationXs.Max();
-
-            if (xMin == xMax)
-            {
-                if (xMin > 0)
-                    (xMin, xMax) = (xMin * .8, xMin * 1.2);
-                else if (xMin > 0)
-                    (xMin, xMax) = (xMin * 1.2, xMin * 0.8);
-                else
-                    (xMin, xMax) = (-1, 1);
-            }
-
-            double mean = (xMin + xMax) / 2.0;
-            double span = xMax - xMin;
-            double randomOffset = span * randomness * (Rand.NextDouble() - 0.5);
-            suggestedXs[equationIndex] = mean + randomOffset;
-        }
-
-        return Equation.Calculate(suggestedXs);
     }
 }

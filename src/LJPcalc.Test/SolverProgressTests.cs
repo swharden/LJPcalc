@@ -58,4 +58,25 @@ internal class SolverProgressTests
 
         Console.WriteLine(calc.GetBestLjpResult());
     }
+
+    [Test]
+    public void Test_Calculator_ManualIterationsOwen()
+    {
+        Core.KnownIonSets.Owen2013 set = new();
+        Ion[] ions = IonLibrary.Lookup(set.Ions);
+
+        LjpCalculator calc = new(ions);
+        double error = double.PositiveInfinity;
+        while(error > .01)
+        {
+            calc.Iterate();
+            if (calc.BestSolution.MaxAbsoluteError < error)
+            {
+                error = calc.BestSolution.MaxAbsoluteError;
+                Console.WriteLine(calc);
+            }
+        }
+
+        Console.WriteLine(calc.GetBestLjpResult());
+    }
 }
