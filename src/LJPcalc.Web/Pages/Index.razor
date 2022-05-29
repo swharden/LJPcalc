@@ -1,4 +1,5 @@
 ﻿@using LJPcalc.Core;
+@inject IJSRuntime JSRuntime
 
 <table class="table table-hover mt-3">
     <thead>
@@ -152,18 +153,6 @@ else
     <div>Calculation Time: <code>@($"{Calc.Elapsed.TotalSeconds:N2}") sec</code></div>
 }
 
-<footer class="d-flex mb-3 justify-content-evenly" style="opacity: .5; margin-top: 7em;">
-    <div>
-        LJPcalc @LjpCalculator.GetVersion()
-    </div>
-    <div>
-        .NET @Environment.Version
-    </div>
-    <div>
-        <a href="https://github.com/swharden/LJPcalc">View source</a>
-    </div>
-</footer>
-
 @code {
     EditIonModal? MyEditIonModal = null;
 
@@ -195,6 +184,7 @@ else
 
     protected override void OnInitialized()
     {
+        JSRuntime.InvokeVoidAsync("updateFooterMessage", $"LJPcalc {LjpCalculator.GetVersion()} running on .NET {Environment.Version}");
         LoadIonSet(new LJPcalc.Core.KnownIonSets.AxoBitsArticle().Ions);
     }
 

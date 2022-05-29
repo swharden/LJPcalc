@@ -18,6 +18,12 @@
         gtag('js', new Date());
         gtag('config', 'UA-560719-1');
     </script>
+
+    <script>
+        function updateFooterMessage(text) {
+            document.getElementById("footerMessage").innerText = text;
+        }
+    </script>
 </head>
 
 <body>
@@ -129,6 +135,19 @@
 
     </main>
 
+    <footer class="p-3" style="opacity: .5;">
+        <div class="container-fluid" style="max-width: 1000px; font-size: .9em;">
+            <div class="text-center">
+                <div id="footerMessage">
+                    LJPcalc running on .NET
+                </div>
+                <div>
+                    <a href="https://github.com/swharden/LJPcalc"
+                        class="text-dark">https://github.com/swharden/LJPcalc</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <script src="js/bootstrap.bundle.min.js"></script>
 
