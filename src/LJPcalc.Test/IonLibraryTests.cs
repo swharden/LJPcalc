@@ -114,7 +114,7 @@ public class IonLibraryTests
     [Test]
     public void Test_KnownIonSets_AreBalanced()
     {
-        Core.KnownIonSets.IKnownIonSet[] knowSets = Core.KnownIonSets.KnownSets.GetAll();
+        IKnownIonSet[] knowSets = Core.KnownIonSets.KnownSets.GetAll();
         Assert.That(knowSets, Is.Not.Null);
         Assert.That(knowSets, Is.Not.Empty);
 

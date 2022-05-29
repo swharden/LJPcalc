@@ -1,4 +1,4 @@
-﻿namespace LJPcalc.Core.KnownIonSets;
+﻿namespace LJPcalc.Core;
 
 public interface IKnownIonSet
 {
