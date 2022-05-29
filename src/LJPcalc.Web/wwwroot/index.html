@@ -26,33 +26,109 @@
         <div class="container-fluid" style="max-width: 1000px;">
             <div class="lh-1" style="font-weight: 400; font-size: 3em;">LJPcalc</div>
             <div class="p-1">
-                <div style="opacity: .5; color: #CCC;">
-                    Liquid junction potential calculator
-                    by <a href="https://swharden.com/about/" class="text-light">Scott Harden</a> and
-                    <a href="https://sites.google.com/site/dbrogioli/" class="text-light">Doriano Brogioli</a>
+                <div style="opacity: .5; color: #CCC;" class="d-flex flex-wrap">
+                    <div>
+                        Liquid junction potential calculator&nbsp;
+                    </div>
+                    <div>
+                        by <a href="https://swharden.com/about/" class="text-light">Scott Harden</a> and
+                        <a href="https://sites.google.com/site/dbrogioli/" class="text-light">Doriano Brogioli</a>
+                    </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <div class="container-fluid" style="max-width: 1000px;">
-        <main>
+    <main class="" style="padding-bottom: 5em;">
+
+        <div class="container-fluid" style="max-width: 1000px;">
+
             <div id="app">
-                <div class="py-5">
-                    <span class="fs-1">Loading... </span>
-                    <div class="spinner-border" role="status">
+                <h2 class="py-5">
+                    <span>Loading... </span>
+                    <div class="spinner-border fs-6" role="status" style="width: 1.5rem; height: 1.5rem;">
                         <span class="visually-hidden">Loading...</span>
                     </div>
-                </div>
+                </h2>
             </div>
-        </main>
-    </div>
 
-    <div id="blazor-error-ui">
-        An unhandled error has occurred.
-        <a href="" class="reload">Reload</a>
-        <a class="dismiss">🗙</a>
-    </div>
+            <section class="my-5">
+                <h2>Calculation Method</h2>
+                <p>
+                    <strong>
+                        LJPcalc calculates the liquid junction potential
+                        according to the stationary Nernst-Planck equation
+                    </strong>
+
+                    which is typically regarded as superior to the simpler Henderson equation used by most commercial
+                    LJP calculators (<a href="https://arxiv.org/abs/1403.3640">Marino et al., 2014</a>).
+                    Both equations produce similar values, but the Henderson equation under-estimates
+                    the junction potential as ion concentrations increase (especially when solutions contain polyvalent
+                    ions).
+                    For these reasons the LJP reported by LJPcalc may be slightly greater in magnitude
+                    than that reported by other LJP calculators.
+                </p>
+            </section>
+
+            <section class="my-5">
+                <h2>Final Concentrations</h2>
+
+                <p>
+                    <strong>
+                        LJPcalc slightly adjusts ion concentrations as it calculates LJP.
+                    </strong>
+                    LJPcalc works to identify a solution that minimizes the difference between the
+                    adjusted concentrations and the user-provided concentrations. Except for the penultimate ion,
+                    only concentrations on side B are adjusted while calculating LJP.
+
+                    A solution is considered
+                    found when all adjusted side B concentrations are so close to the user-provided concentrations
+                    that the difference no longer has a significant influence on LJP.
+
+                    Note that the side A or side B concentration for the final and penultimate ions (respectively)
+                    may be adjusted to achieve electroneutrality.
+                </p>
+            </section>
+
+            <section class="my-5">
+                <h2>Ion Order</h2>
+                <p>
+                    <strong>
+                        LJPcalc automatically sorts the ions into an ideal order before calculating LJP.
+                    </strong>
+                    This is why the ions listed in the results table may appear
+                    in a different order than originally provided.
+
+                    The ion with the largest concentration difference is moved to the final position,
+                    and its side A concentration may be adjusted as needed to achieve electroneutrality.
+
+                    The remaining ion with the largest side B concentration is moved to the penultimate position,
+                    and its side B concentration is be adjusted as needed to achieve electroneutrality.
+                </p>
+            </section>
+
+            <section class="my-5">
+                <h2 id="citing">Citing LJPcalc</h2>
+                <p>
+                    <strong>If you enjoy LJPcalc, consider citing it by name:</strong>
+                    <span class="fst-italic">
+                        Liquid junction potential was calculated according to the stationary Nernst–Planck equation
+                        (<a href="https://arxiv.org/abs/1403.3640">Marino et al., 2014</a>)
+                        using LJPcalc software (<a
+                            href="https://swharden.com/LJPcalc">https://swharden.com/LJPcalc</a>).
+                    </span>
+                </p>
+            </section>
+        </div>
+
+        <div id="blazor-error-ui">
+            An unhandled error has occurred.
+            <a href="" class="reload">Reload</a>
+            <a class="dismiss">🗙</a>
+        </div>
+
+    </main>
+
 
     <script src="js/bootstrap.bundle.min.js"></script>
 
