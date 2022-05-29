@@ -116,6 +116,30 @@
 
                     The remaining ion with the largest side B concentration is moved to the penultimate position,
                     and its side B concentration is be adjusted as needed to achieve electroneutrality.
+
+                    Taken together, the ion-order-specific adjustments made to side B concentrations during the
+                    solving process is why the calculated LJP often differs by a few microvolts when the original 
+                    list of ions is arranged in a different order.
+                </p>
+            </section>
+
+            <section class="my-5">
+                <h2>Calculation Time</h2>
+                <p>
+                    <strong>
+                        Some ion sets are more difficult to analyze than others and may take longer to arrive at a solution.
+                    </strong>
+
+                    Users experiencing long calculation times are encouraged to re-sort the ion list randomly and try again. 
+                    If the calculation runs
+                    for a very long time without producing a solution, consider omitting ions with the smallest concentrations 
+                    since they do not contribute greatly to LJP anyway. 
+                    
+                    Although I am not aware of any ion sets that LJPcalc cannot solve, if you think you have found one 
+                    you are invited to share via email 
+                    <a href="mailto:swharden@gmail.com">swharden@gmail.com</a> or by creating a  
+                    <a href="https://github.com/swharden/LJPcalc/issues">GitHub issue</a> and include a copy of
+                    the ion table you are trying to solve including the temperature.
                 </p>
             </section>
 

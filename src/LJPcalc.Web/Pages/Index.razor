@@ -1,4 +1,5 @@
 ﻿@using LJPcalc.Core;
+
 @inject IJSRuntime JSRuntime
 
 <table class="table table-hover mt-3">
@@ -60,6 +61,27 @@
     </tbody>
 </table>
 
+@if (KnownIonSet is not null && ShowIonSetDetails)
+{
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
+        </symbol>
+    </svg>
+
+    <div class="alert alert-primary" role="alert">
+        <h4 class="alert-heading">
+            Loaded Example Ion Set
+        </h4>
+        <hr />
+        <div>
+            <p>
+                <strong>@KnownIonSet.Name:</strong> @KnownIonSet.Details
+            </p>
+        </div>
+    </div>
+}
+
 @if (ShowBalanceWarning)
 {
     <div class="px-3">
@@ -106,19 +128,69 @@
                 Examples
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                @foreach (var ionSet in LJPcalc.Core.KnownIonSets.KnownSets.GetAll())
+                @foreach (IKnownIonSet ionSet in LJPcalc.Core.KnownIonSets.KnownSets.GetAll())
                 {
                     <li>
-                        <button class="dropdown-item" type="button" onclick="@(()=>LoadIonSet(ionSet.Ions))">
+                        <button class="dropdown-item" type="button" onclick="@(()=>LoadIonSet(ionSet))">
                             @ionSet.Name
                         </button>
                     </li>
                 }
             </ul>
         </div>
+
+        <div class="dropdown d-inline-block">
+            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+                Sort Ions
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <li>
+                    <button class="dropdown-item" type="button" onclick="@(()=>{Ions = Ions.OrderBy(x=>x.Name).ToArray();})">
+                        Alphabetical
+                    </button>
+                </li>
+                <li>
+                    <button class="dropdown-item" type="button" onclick="@(()=>{Ions = Ions.OrderBy(x=>x.C0 + x.CL).ToArray();})">
+                        Increasing Total Concentration
+                    </button>
+                </li>
+                <li>
+                    <button class="dropdown-item" type="button" onclick="@(()=>{Ions = Ions.OrderBy(x=>x.C0 + x.CL).Reverse().ToArray();})">
+                        Decreasing Total Concentration
+                    </button>
+                </li>
+                <li>
+                    <button class="dropdown-item" type="button" onclick="@(()=>{Ions = Ions.OrderBy(x=> x.C0).ToArray();})">
+                        Increasing Side A Concentration
+                    </button>
+                </li>
+                <li>
+                    <button class="dropdown-item" type="button" onclick="@(()=>{Ions = Ions.OrderBy(x=> x.C0).Reverse().ToArray();})">
+                        Decreasing Side A Concentration
+                    </button>
+                </li>
+                <li>
+                    <button class="dropdown-item" type="button" onclick="@(()=>{Ions = Ions.OrderBy(x=> x.CL).ToArray();})">
+                        Increasing Side B Concentration
+                    </button>
+                </li>
+                <li>
+                    <button class="dropdown-item" type="button" onclick="@(()=>{Ions = Ions.OrderBy(x=> x.CL).Reverse().ToArray();})">
+                        Decreasing Side B Concentration
+                    </button>
+                </li>
+                <li>
+                    <button class="dropdown-item" type="button" onclick="@(()=>{Ions = Ions.OrderBy(x=>Random.Shared.NextDouble()).ToArray();})">
+                        Randomize
+                    </button>
+                </li>
+            </ul>
+        </div>
+
         <button class="btn btn-outline-primary" @onclick=ClearIons>
             Clear Ions
         </button>
+
         <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editIonModal" @onclick=AddIon>
             Add Ion
         </button>
@@ -182,10 +254,14 @@ else
 
     string IonTableErrorMessage { get; set; } = string.Empty;
 
+    IKnownIonSet? KnownIonSet { get; set; } = null;
+
+    bool ShowIonSetDetails = false;
+
     protected override void OnInitialized()
     {
         JSRuntime.InvokeVoidAsync("updateFooterMessage", $"LJPcalc {LjpCalculator.GetVersion()} running on .NET {Environment.Version}");
-        LoadIonSet(new LJPcalc.Core.KnownIonSets.AxoBitsArticle().Ions);
+        LoadIonSet(new LJPcalc.Core.KnownIonSets.AxoBitsArticle());
     }
 
     private void ValidateIonSet()
@@ -245,12 +321,13 @@ else
         ContinueCalculating = false;
     }
 
-    private void LoadIonSet(Ion[] ions)
+    private void LoadIonSet(IKnownIonSet knownIonSet)
     {
-        Ions = IonLibrary.Lookup(ions);
+        Ions = IonLibrary.Lookup(knownIonSet.Ions);
         ValidateIonSet();
         ClearResults();
         StateHasChanged();
+        KnownIonSet = knownIonSet;
     }
 
     private void EditIon(int ionIndex)
@@ -269,6 +346,8 @@ else
         MyEditIonModal.ConcentrationB = Ions[ionIndex].CL;
 
         MyEditIonModal.Reset();
+
+        KnownIonSet = null;
     }
 
     private void AddIon()
@@ -284,6 +363,7 @@ else
 
         ClearResults();
         ValidateIonSet();
+        KnownIonSet = null;
     }
 
     private void ClearIons()
@@ -291,6 +371,7 @@ else
         Ions = Array.Empty<Ion>();
         ClearResults();
         ValidateIonSet();
+        KnownIonSet = null;
     }
 
     private void ClearResults()
@@ -298,6 +379,7 @@ else
         Calc = null;
         LatestResult = null;
         BestResult = null;
+        KnownIonSet = null;
     }
 
     private void EditedIonSave()
@@ -323,5 +405,6 @@ else
 
         ClearResults();
         ValidateIonSet();
+        KnownIonSet = null;
     }
 }
