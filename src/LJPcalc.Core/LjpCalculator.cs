@@ -42,6 +42,13 @@ public class LjpCalculator
                 throw new ArgumentException($"ion mobility cannot not be zero: {ion}");
         }
 
+        if (ions.Select(x => x.C0).Sum() == 0)
+            throw new InvalidOperationException("Left side of the junction contains no ions");
+
+        if (ions.Select(x => x.CL).Sum() == 0)
+            throw new InvalidOperationException("Right side of the junction contains no ions");
+
+
         // clone all ions so we don't accidentally mutate any values passed in
         ions = ions.Select(x => x.Clone()).ToArray();
 
