@@ -52,18 +52,16 @@
         <div class="container-fluid" style="max-width: 1000px;">
 
             <div id="app">
-                <h2 class="py-5">
-                    <span>Loading... </span>
-                    <div class="spinner-border fs-6" role="status" style="width: 1.5rem; height: 1.5rem;">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
+                <div class="my-5">
+                    <h2>Loading...</h2>
                     <div class="progress mt-2" style="height: 2em;">
-                        <div id="progressbar" class="progress-bar text-start px-2" role="progressbar"
-                            style="width: 10%; background-color: #204066;">
-                        </div>
+                        <div id="progressbar" class="progress-bar progress-bar-striped progress-bar-animated"
+                            style="width: 10%; background-color: #204066;"></div>
                     </div>
-                </h2>
-
+                    <div>
+                        <span id="progressLabel" class="text-muted">Downloading file list</span>
+                    </div>
+                </div>
             </div>
 
             <section class="my-5">
@@ -187,7 +185,8 @@
                             const percentLoaded = parseInt((numberOfResourcesLoaded * 100.0) / resourceCount);
                             const progressbar = document.getElementById('progressbar');
                             progressbar.style.width = percentLoaded + '%';
-                            //progressbar.innerText = `${numberOfResourcesLoaded}/${resourceCount} (${percentLoaded}%) ${filename}`;
+                            const progressLabel = document.getElementById('progressLabel');
+                            progressLabel.innerText = `Downloading ${numberOfResourcesLoaded}/${resourceCount}: ${filename}`;
                         });
 
                         return fetchResources;
