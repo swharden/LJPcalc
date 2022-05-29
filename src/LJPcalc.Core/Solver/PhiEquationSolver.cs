@@ -36,10 +36,12 @@ public class PhiEquationSolver
         Solutions = new PhiEquationSolution[] { initialSolution };
         Strategies = new IStrategy[]
         {
-            new Strategies.ShiftByDelta(),
+            new Strategies.ShiftByDelta(), // best strategy so use it most often
             new Strategies.NearBestSolution(),
-            new Strategies.TotallyRandom(),
+            new Strategies.ShiftByDelta(),
             new Strategies.ConsideringMinMax(),
+            new Strategies.ShiftByDelta(),
+            new Strategies.TotallyRandom(),
         };
     }
 
