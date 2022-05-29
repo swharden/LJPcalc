@@ -57,10 +57,10 @@
                     <div class="spinner-border fs-6" role="status" style="width: 1.5rem; height: 1.5rem;">
                         <span class="visually-hidden">Loading...</span>
                     </div>
-
-                    <div class="progress my-2" style="height: 2em;">
-                        <div id="progressbar" class="progress-bar" role="progressbar"
-                            style="width: 10%; background-color: #204066;"></div>
+                    <div class="progress mt-2" style="height: 2em;">
+                        <div id="progressbar" class="progress-bar text-start px-2" role="progressbar" style="width: 10%; background-color: #204066;">
+                            Loading...
+                        </div>
                     </div>
                 </h2>
 
@@ -128,8 +128,7 @@
                     <span class="fst-italic">
                         Liquid junction potential was calculated according to the stationary Nernst–Planck equation
                         (<a href="https://arxiv.org/abs/1403.3640">Marino et al., 2014</a>)
-                        using LJPcalc software (<a
-                            href="https://swharden.com/LJPcalc">https://swharden.com/LJPcalc</a>).
+                        using LJPcalc software (<a href="https://swharden.com/LJPcalc">https://swharden.com/LJPcalc</a>).
                     </span>
                 </p>
             </section>
@@ -151,7 +150,7 @@
                 </div>
                 <div>
                     <a href="https://github.com/swharden/LJPcalc"
-                        class="text-dark">https://github.com/swharden/LJPcalc</a>
+                       class="text-dark">https://github.com/swharden/LJPcalc</a>
                 </div>
             </div>
         </div>
@@ -162,32 +161,38 @@
     <script src="_framework/blazor.webassembly.js?version=net6.0" autostart="false"></script>
 
     <script>
-        var i = 0;
-        var allResourcesBeingLoaded = [];
-        Blazor.start({ // start manually with loadBootResource
-            loadBootResource: function (type, name, defaultUri, integrity) {
-                if (type == "dotnetjs")
-                    return defaultUri;
+        function StartBlazor() {
+            let numberOfResourcesLoaded = 0;
+            const resourcesToLoad = [];
+            Blazor.start({
+                loadBootResource:
+                    function (type, filename, defaultUri, integrity) {
+                        if (type == "dotnetjs")
+                            return defaultUri;
 
-                var fetchResources = fetch(defaultUri, {
-                    cache: 'no-cache',
-                    integrity: integrity,
-                    headers: { 'MyCustomHeader': 'My custom value' }
-                });
+                        const fetchResources = fetch(defaultUri, {
+                            cache: 'no-cache',
+                            integrity: integrity,
+                            headers: { 'MyCustomHeader': 'My custom value' }
+                        });
 
-                allResourcesBeingLoaded.push(fetchResources);
-                fetchResources.then((r) => {
-                    i++;
-                    var total = allResourcesBeingLoaded.length;
-                    var progressbar = document.getElementById('progressbar');
-                    var value = parseInt((i * 100.0) / total);
-                    var pct = value + '%';
-                    progressbar.style.width = pct;
-                    console.info(i + '/' + total + ' (' + pct + ') ' + name);
-                });
-                return fetchResources;
-            }
-        });
+                        resourcesToLoad.push(fetchResources);
+
+                        fetchResources.then((r) => {
+                            numberOfResourcesLoaded += 1;
+                            const resourceCount = resourcesToLoad.length;
+                            const percentLoaded = parseInt((numberOfResourcesLoaded * 100.0) / resourceCount);
+                            const progressbar = document.getElementById('progressbar');
+                            progressbar.style.width = percentLoaded + '%';
+                            progressbar.innerText = `${numberOfResourcesLoaded}/${resourceCount} (${percentLoaded}%) ${filename}`;
+                        });
+
+                        return fetchResources;
+                    }
+            });
+        }
+
+        StartBlazor();
     </script>
 </body>
 
