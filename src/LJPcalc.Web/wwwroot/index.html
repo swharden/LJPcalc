@@ -58,8 +58,8 @@
                         <span class="visually-hidden">Loading...</span>
                     </div>
                     <div class="progress mt-2" style="height: 2em;">
-                        <div id="progressbar" class="progress-bar text-start px-2" role="progressbar" style="width: 10%; background-color: #204066;">
-                            Loading...
+                        <div id="progressbar" class="progress-bar text-start px-2" role="progressbar"
+                            style="width: 10%; background-color: #204066;">
                         </div>
                     </div>
                 </h2>
@@ -128,7 +128,8 @@
                     <span class="fst-italic">
                         Liquid junction potential was calculated according to the stationary Nernst–Planck equation
                         (<a href="https://arxiv.org/abs/1403.3640">Marino et al., 2014</a>)
-                        using LJPcalc software (<a href="https://swharden.com/LJPcalc">https://swharden.com/LJPcalc</a>).
+                        using LJPcalc software (<a
+                            href="https://swharden.com/LJPcalc">https://swharden.com/LJPcalc</a>).
                     </span>
                 </p>
             </section>
@@ -150,7 +151,7 @@
                 </div>
                 <div>
                     <a href="https://github.com/swharden/LJPcalc"
-                       class="text-dark">https://github.com/swharden/LJPcalc</a>
+                        class="text-dark">https://github.com/swharden/LJPcalc</a>
                 </div>
             </div>
         </div>
@@ -186,7 +187,7 @@
                             const percentLoaded = parseInt((numberOfResourcesLoaded * 100.0) / resourceCount);
                             const progressbar = document.getElementById('progressbar');
                             progressbar.style.width = percentLoaded + '%';
-                            progressbar.innerText = `${numberOfResourcesLoaded}/${resourceCount} (${percentLoaded}%) ${filename}`;
+                            //progressbar.innerText = `${numberOfResourcesLoaded}/${resourceCount} (${percentLoaded}%) ${filename}`;
                         });
 
                         return fetchResources;
