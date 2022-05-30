@@ -2,64 +2,66 @@
 
 @inject IJSRuntime JSRuntime
 
-<table class="table table-hover mt-3">
-    <thead>
-        <tr>
-            <th>Ion</th>
-            @if (ShowDetailsInTable)
-            {
-                <th>
-                    <span class="fw-strong">Valence</span><br />
-                </th>
-                <th>
-                    <span class="fw-strong">Mobility</span><br />
-                    <span class="fw-normal">m/s/N</span>
-                </th>
-                <th>
-                    <span class="fw-strong">Conductivity</span><br />
-                    <span class="fw-normal">S·cm<sup>2</sup>/mol</span>
-                </th>
-            }
-            <th>
-                <span class="fw-strong">A</span><br />
-                <span class="fw-normal">mM</span>
-            </th>
-            <th>
-                <span class="fw-strong">B</span><br />
-                <span class="fw-normal">mM</span>
-            </th>
-            <th>Edit</th>
-        </tr>
-    </thead>
-    <tbody>
-        @for (int i = 0; i < Ions.Length; i++)
-        {
-            int ionIndex = i;
-            Ion ion = Ions[ionIndex];
+<div class="table-responsive">
+    <table class="table table-hover mt-3">
+        <thead>
             <tr>
+                <th>Ion</th>
                 @if (ShowDetailsInTable)
                 {
-                    <td>@(ion.Name.Split("(")[0])</td>
-                    <td>@ion.Charge</td>
-                    <td>@($"{ion.Mu / 1e4:#.000e0}")</td>
-                    <td>@($"{ion.Conductivity:#0.###}")</td>
+                    <th>
+                        <span class="fw-strong">Valence</span><br />
+                    </th>
+                    <th>
+                        <span class="fw-strong">Mobility</span><br />
+                        <span class="fw-normal">m/s/N</span>
+                    </th>
+                    <th>
+                        <span class="fw-strong">Conductivity</span><br />
+                        <span class="fw-normal">S·cm<sup>2</sup>/mol</span>
+                    </th>
                 }
-                else
-                {
-                    <td>@(ion.NameWithCharge)</td>
-                }
-                <td>@ion.InitialC0</td>
-                <td>@ion.InitialCL</td>
-                <td>
-                    <a data-bs-toggle="modal" data-bs-target="#editIonModal" style="cursor: pointer"
-                   @onclick="@(()=>EditIon(ionIndex))">
-                        ✏️
-                    </a>
-                </td>
+                <th>
+                    <span class="fw-strong">A</span><br />
+                    <span class="fw-normal">mM</span>
+                </th>
+                <th>
+                    <span class="fw-strong">B</span><br />
+                    <span class="fw-normal">mM</span>
+                </th>
+                <th>Edit</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Ions.Length; i++)
+            {
+                int ionIndex = i;
+                Ion ion = Ions[ionIndex];
+                <tr>
+                    @if (ShowDetailsInTable)
+                    {
+                        <td>@(ion.Name.Split("(")[0])</td>
+                        <td>@ion.Charge</td>
+                        <td>@($"{ion.Mu / 1e4:#.000e0}")</td>
+                        <td>@($"{ion.Conductivity:#0.###}")</td>
+                    }
+                    else
+                    {
+                        <td>@(ion.NameWithCharge)</td>
+                    }
+                    <td>@ion.InitialC0</td>
+                    <td>@ion.InitialCL</td>
+                    <td>
+                        <a data-bs-toggle="modal" data-bs-target="#editIonModal" style="cursor: pointer"
+                       @onclick="@(()=>EditIon(ionIndex))">
+                            ✏️
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 @if (KnownIonSet is not null && ShowIonSetDetails)
 {
@@ -107,6 +109,8 @@
 
 <EditIonModal @ref="MyEditIonModal" OnSaveIon="EditedIonSave" />
 
+<EditTextModal @ref="MyEditTextModal" OnSave="@EditedTextSave" />
+
 <div class="d-flex justify-content-between">
 
     <div>
@@ -124,7 +128,7 @@
 
     <div class="mb-4">
         <div class="dropdown d-inline-block">
-            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="btn btn-outline-primary dropdown-toggle m-1" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
                 Examples
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
@@ -140,79 +144,67 @@
         </div>
 
         <div class="dropdown d-inline-block">
-            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
-                Sort Ions
+            <button class="btn btn-outline-primary dropdown-toggle m-1" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+                Ion Set
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
                 <li>
+                    <button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#editIonModal" @onclick=AddIon>
+                        Add Ion
+                    </button>
+                </li>
+                <li>
+                    <button class="dropdown-item" type="button" @onclick=ClearIons>
+                        Clear Ions
+                    </button>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li>
+                    <button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#editTextModal" @onclick=EditedTextClicked>
+                        Edit as Text
+                    </button>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li>
                     <button class="dropdown-item" type="button" onclick="@(()=>{Ions = Ions.OrderBy(x=>x.Name).ToArray();})">
-                        Alphabetical
+                        Sort Alphabetically
                     </button>
                 </li>
                 <li>
                     <button class="dropdown-item" type="button" onclick="@(()=>{Ions = Ions.OrderBy(x=>x.C0 + x.CL).ToArray();})">
-                        Increasing Total Concentration
-                    </button>
-                </li>
-                <li>
-                    <button class="dropdown-item" type="button" onclick="@(()=>{Ions = Ions.OrderBy(x=>x.C0 + x.CL).Reverse().ToArray();})">
-                        Decreasing Total Concentration
-                    </button>
-                </li>
-                <li>
-                    <button class="dropdown-item" type="button" onclick="@(()=>{Ions = Ions.OrderBy(x=> x.C0).ToArray();})">
-                        Increasing Side A Concentration
-                    </button>
-                </li>
-                <li>
-                    <button class="dropdown-item" type="button" onclick="@(()=>{Ions = Ions.OrderBy(x=> x.C0).Reverse().ToArray();})">
-                        Decreasing Side A Concentration
-                    </button>
-                </li>
-                <li>
-                    <button class="dropdown-item" type="button" onclick="@(()=>{Ions = Ions.OrderBy(x=> x.CL).ToArray();})">
-                        Increasing Side B Concentration
-                    </button>
-                </li>
-                <li>
-                    <button class="dropdown-item" type="button" onclick="@(()=>{Ions = Ions.OrderBy(x=> x.CL).Reverse().ToArray();})">
-                        Decreasing Side B Concentration
+                        Sort by Concentration
                     </button>
                 </li>
                 <li>
                     <button class="dropdown-item" type="button" onclick="@(()=>{Ions = Ions.OrderBy(x=>Random.Shared.NextDouble()).ToArray();})">
-                        Randomize
+                        Sort Randomly
                     </button>
                 </li>
             </ul>
         </div>
-
-        <button class="btn btn-outline-primary" @onclick=ClearIons>
-            Clear Ions
-        </button>
-
-        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editIonModal" @onclick=AddIon>
-            Add Ion
-        </button>
     </div>
 </div>
 
-@if (!ContinueCalculating)
+@if (IsIonTableError)
 {
-    @if (IsIonTableError)
-    {
-        <ErrorAlert Title="Error" Message=@IonTableErrorMessage />
-    }
-
-    <button class="btn btn-primary" @onclick=CalcStart disabled=@IsIonTableError>Calculate LJP</button>
+    <ErrorAlert Title="Error" Message=@IonTableErrorMessage />
 }
-else
+
+@if (ContinueCalculating)
 {
     <button class="btn btn-primary" type="button" disabled>
         Calculating...
         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
     </button>
     <button class="btn btn-primary ms-1" @onclick=CalcStop>Stop</button>
+}
+else
+{
+    <button class="btn btn-primary" @onclick=CalcStart disabled=@IsIonTableError>Calculate LJP</button>
 }
 
 <LjpResultTable LatestResult="LatestResult" BestResult="BestResult" />
@@ -227,6 +219,8 @@ else
 
 @code {
     EditIonModal? MyEditIonModal = null;
+
+    EditTextModal? MyEditTextModal = null;
 
     Ion[] Ions { get; set; } = Array.Empty<Ion>();
 
@@ -370,6 +364,26 @@ else
     private void ClearIons()
     {
         Ions = Array.Empty<Ion>();
+        ClearResults();
+        ValidateIonSet();
+        KnownIonSet = null;
+    }
+
+    private void EditedTextClicked()
+    {
+        if (MyEditTextModal is null)
+            return;
+
+        MyEditTextModal.Text = IonSet.ToText(Ions, TemperatureC);
+    }
+
+    private void EditedTextSave()
+    {
+        if (MyEditTextModal is null)
+            return;
+
+        (Ions, TemperatureC) = IonSet.FromText(MyEditTextModal.Text);
+
         ClearResults();
         ValidateIonSet();
         KnownIonSet = null;
