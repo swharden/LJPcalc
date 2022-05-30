@@ -88,12 +88,6 @@
             }
         </tbody>
     </table>
-
-    @if (BestResult.SolvedIons.Last().PercentChangeCL > 1)
-    {
-        <ErrorAlert Title="Concentration Adjusted"
-            Message="Solution B concentration of the last ion in the list was adjusted by >1% to achieve electroneutrality" />
-    }
 }
 
 @code {
