@@ -4,14 +4,28 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>LJPcalc</title>
-    <link rel="icon" href="favicon.ico" sizes="any">
+    <title>LJPcalc - Liquid Junction Potential (LJP) Calculator</title>
+    <link rel="icon" href="favicon.ico?v2" sizes="any">
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/app.css" rel="stylesheet" />
     <link href="css/blazor.css" rel="stylesheet" />
     <link href="LJPcalc.Web.styles.css" rel="stylesheet" />
     <meta name="theme-color" content="#204066">
-    <meta name="description" content="Liquid Junction Potential (LJP) calculator" />
+    <meta name="description"
+        content="LJPcalc is a free and open-source Liquid Junction Potential (LJP) calculator that runs in the browser" />
+
+    <meta property="og:url" content="https://swharden.com/LJPcalc/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="LJPcalc">
+    <meta property="og:description" content="Liquid Junction Potential (LJP) calculator">
+    <meta property="og:image" content="https://swharden.com/LJPcalc/img/og-image.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="swharden.com">
+    <meta property="twitter:url" content="https://swharden.com/LJPcalc/">
+    <meta name="twitter:title" content="LJPcalc">
+    <meta name="twitter:description" content="Liquid Junction Potential (LJP) calculator">
+    <meta name="twitter:image" content="https://swharden.com/LJPcalc/img/og-image.png">
 
     <script async src='https://www.googletagmanager.com/gtag/js?id=UA-560719-1'></script>
     <script>
@@ -32,15 +46,23 @@
 
     <header class="text-light py-3" style="background-color: #204066;">
         <div class="container-fluid" style="max-width: 1000px;">
-            <div class="lh-1" style="font-weight: 400; font-size: 3em;">LJPcalc</div>
-            <div class="p-1">
-                <div style="opacity: .5; color: #CCC;" class="d-flex flex-wrap">
-                    <div>
-                        Liquid junction potential calculator&nbsp;
-                    </div>
-                    <div>
-                        by <a href="https://swharden.com/about/" class="text-light">Scott Harden</a> and
-                        <a href="https://sites.google.com/site/dbrogioli/" class="text-light">Doriano Brogioli</a>
+            <div class="d-flex align-items-center">
+                <!--
+                    <img class="me-3" src="img/logo.png" width="70" height="70" style="" />
+                -->
+                <div>
+                    <h1 class="mb-0" style="font-weight: 400; font-size: 3em;">
+                        <a href="./" class="text-light">
+                            LJPcalc
+                        </a>
+                    </h1>
+                    <div class="d-flex flex-wrap" style="opacity: .5; color: #CCC;">
+                        <div>Liquid Junction Potential Calculator&nbsp;</div>
+                        <div>
+                            by
+                            <a href="https://swharden.com/about/" class="text-light">Scott Harden</a> and
+                            <a href="https://sites.google.com/site/dbrogioli/" class="text-light">Doriano Brogioli</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -118,7 +140,7 @@
                     and its side B concentration is be adjusted as needed to achieve electroneutrality.
 
                     Taken together, the ion-order-specific adjustments made to side B concentrations during the
-                    solving process is why the calculated LJP often differs by a few microvolts when the original 
+                    solving process is why the calculated LJP often differs by a few microvolts when the original
                     list of ions is arranged in a different order.
                 </p>
             </section>
@@ -127,17 +149,20 @@
                 <h2>Calculation Time</h2>
                 <p>
                     <strong>
-                        Some ion sets are more difficult to analyze than others and may take longer to arrive at a solution.
+                        Some ion sets are more difficult to analyze than others and may take longer to arrive at a
+                        solution.
                     </strong>
 
-                    Users experiencing long calculation times are encouraged to re-sort the ion list randomly and try again. 
+                    Users experiencing long calculation times are encouraged to re-sort the ion list randomly and try
+                    again.
                     If the calculation runs
-                    for a very long time without producing a solution, consider omitting ions with the smallest concentrations 
-                    since they do not contribute greatly to LJP anyway. 
-                    
-                    Although I am not aware of any ion sets that LJPcalc cannot solve, if you think you have found one 
-                    you are invited to share via email 
-                    <a href="mailto:swharden@gmail.com">swharden@gmail.com</a> or by creating a  
+                    for a very long time without producing a solution, consider omitting ions with the smallest
+                    concentrations
+                    since they do not contribute greatly to LJP anyway.
+
+                    Although I am not aware of any ion sets that LJPcalc cannot solve, if you think you have found one
+                    you are invited to share via email
+                    <a href="mailto:swharden@gmail.com">swharden@gmail.com</a> or by creating a
                     <a href="https://github.com/swharden/LJPcalc/issues">GitHub issue</a> and include a copy of
                     the ion table you are trying to solve including the temperature.
                 </p>
@@ -168,6 +193,11 @@
     <footer class="p-3" style="opacity: .5;">
         <div class="container-fluid" style="max-width: 1000px; font-size: .9em;">
             <div class="text-center">
+                <div>
+                    <a href="./">
+                        <img class="m-2" src="img/logo.png" width="100" height="100" />
+                    </a>
+                </div>
                 <div id="footerMessage">
                     LJPcalc running on .NET
                 </div>
