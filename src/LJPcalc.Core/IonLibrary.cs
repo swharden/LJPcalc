@@ -350,6 +350,6 @@ public static class IonLibrary
     {
         double conductance = scaledConductance * Constants.KConductance * Math.Abs(charge);
 
-        return new(name, charge, conductance, 0, 0, 0);
+        return new(name, charge, Math.Round(conductance, 6), 0, 0, 0);
     }
 }

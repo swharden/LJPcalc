@@ -11,15 +11,8 @@ public class Ion
     public readonly double InitialCL;
     public double PercentChangeC0 => 100 * Math.Abs(InitialC0 - C0) / InitialC0;
     public double PercentChangeCL => 100 * Math.Abs(InitialCL - CL) / InitialCL;
-    public string NameWithCharge
-    {
-        get
-        {
-            string shortName = Name.Split(" (")[0];
-            string chargeWithSign = (Charge > 0) ? "+" + Charge.ToString() : Charge.ToString();
-            return $"{shortName} ({chargeWithSign})";
-        }
-    }
+    public string ChargeWithSign => (Charge > 0) ? "+" + Charge.ToString() : Charge.ToString();
+    public string NameWithCharge => $"{Name.Split(" (")[0]} ({ChargeWithSign})";
 
     public double C0 { get; set; }
     public double CL { get; set; }
@@ -50,6 +43,6 @@ public class Ion
 
     public override string ToString()
     {
-        return $"Ion {NameWithCharge}: mu={Mu:0.000E+0}, c0={C0:0.000}, cL={CL:0.000}";
+        return $"Ion {NameWithCharge}: mu={Mu:0.000E+0}, conductivity={Conductivity}, c0={C0:0.000}, cL={CL:0.000}";
     }
 }
