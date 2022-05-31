@@ -40,6 +40,35 @@
             document.getElementById("footerMessage").innerText = text;
         }
     </script>
+
+    <style>
+        .btn-primary {
+            --bs-btn-bg: #204066;
+            --bs-btn-border-color: #204066;
+            --bs-btn-hover-bg: #4f7aaf;
+            --bs-btn-hover-border-color: #4f7aaf;
+            --bs-btn-active-bg: #4f7aaf;
+            --bs-btn-active-border-color: #FFFFFFCC;
+        }
+
+        .btn-primary:focus {
+            box-shadow: none;
+        }
+
+        .btn-outline-primary {
+            --bs-btn-color: #204066;
+            --bs-btn-bg: transparent;
+            --bs-btn-border-color: #204066;
+            --bs-btn-hover-bg: #4f7aaf;
+            --bs-btn-hover-border-color: #4f7aaf;
+            --bs-btn-active-bg: #4f7aaf;
+            --bs-btn-active-border-color: #FFFFFFCC;
+        }
+
+        .btn-outline-primary:focus {
+            box-shadow: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -72,7 +101,6 @@
     <main class="" style="padding-bottom: 5em;">
 
         <div class="container-fluid" style="max-width: 1000px;">
-
             <div id="app">
                 <div class="my-5">
                     <h2>Loading...</h2>
