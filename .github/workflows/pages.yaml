@@ -8,6 +8,11 @@ on:
     paths:
       - "dev/www/**"
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   go:
     name: Deploy
