@@ -1,0 +1,26 @@
+name: Website
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "dev/www/**"
+
+jobs:
+  go:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛒 Checkout
+        uses: actions/checkout@v2
+      - name: 🛠️ Configure Pages
+        uses: actions/configure-pages@v2
+      - name: 📦 Upload Artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: "./dev/www"
+      - name: 🚀 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
