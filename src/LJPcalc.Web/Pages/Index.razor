@@ -150,30 +150,9 @@
 
         <div class="dropdown d-inline-block">
             <button class="btn btn-outline-primary dropdown-toggle m-1" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
-                Ion Set
+                Order
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                <li>
-                    <button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#editIonModal" @onclick=AddIon>
-                        Add Ion
-                    </button>
-                </li>
-                <li>
-                    <button class="dropdown-item" type="button" @onclick=ClearIons>
-                        Clear Ions
-                    </button>
-                </li>
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-                <li>
-                    <button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#editTextModal" @onclick=EditedTextClicked>
-                        Edit as Text
-                    </button>
-                </li>
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
                 <li>
                     <button class="dropdown-item" type="button" onclick="@(()=>{Ions = Ions.OrderBy(x=>x.Name).ToArray();})">
                         Sort Alphabetically
@@ -187,6 +166,29 @@
                 <li>
                     <button class="dropdown-item" type="button" onclick="@(()=>{Ions = Ions.OrderBy(x=>Random.Shared.NextDouble()).ToArray();})">
                         Sort Randomly
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <div class="dropdown d-inline-block">
+            <button class="btn btn-primary dropdown-toggle m-1" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+                Ions
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <li>
+                    <button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#editIonModal" @onclick=AddIon>
+                        ➕ Add Ion
+                    </button>
+                </li>
+                <li>
+                    <button class="dropdown-item" type="button" @onclick=ClearIons>
+                        🧹 Clear Ions
+                    </button>
+                </li>
+                <li>
+                    <button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#editTextModal" @onclick=EditedTextClicked>
+                        📄 Edit as Text
                     </button>
                 </li>
             </ul>
