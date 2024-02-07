@@ -12,20 +12,17 @@
         <thead>
             <tr>
                 <th>Ion</th>
-                @if (ShowDetailsInTable)
-                {
-                    <th>
-                        <span class="fw-strong">Valence</span><br />
-                    </th>
-                    <th>
-                        <span class="fw-strong">Mobility</span><br />
-                        <span class="fw-normal">m/s/N</span>
-                    </th>
-                    <th>
-                        <span class="fw-strong">Conductivity</span><br />
-                        <span class="fw-normal">S·cm<sup>2</sup>/mol</span>
-                    </th>
-                }
+                <th>
+                    <span class="fw-strong">Valence</span><br />
+                </th>
+                <th>
+                    <span class="fw-strong">Mobility</span><br />
+                    <span class="fw-normal">m/s/N</span>
+                </th>
+                <th>
+                    <span class="fw-strong">Conductivity</span><br />
+                    <span class="fw-normal">S·cm<sup>2</sup>/mol</span>
+                </th>
                 <th>
                     <span class="fw-strong">A</span><br />
                     <span class="fw-normal">mM</span>
@@ -43,17 +40,10 @@
                 int ionIndex = i;
                 Ion ion = Ions[ionIndex];
                 <tr>
-                    @if (ShowDetailsInTable)
-                    {
-                        <td>@(ion.Name.Split("(")[0])</td>
-                        <td>@ion.Charge</td>
-                        <td>@($"{ion.Mu / 1e4:#.000e0}")</td>
-                        <td>@($"{ion.Conductivity:#0.###}")</td>
-                    }
-                    else
-                    {
-                        <td>@(ion.NameWithCharge)</td>
-                    }
+                    <td>@(ion.Name.Split("(")[0])</td>
+                    <td>@ion.Charge</td>
+                    <td>@($"{ion.Mu / 1e4:#.000e0}")</td>
+                    <td>@($"{ion.Conductivity:#0.###}")</td>
                     <td>@ion.InitialC0</td>
                     <td>@ion.InitialCL</td>
                     <td>
@@ -68,7 +58,7 @@
     </table>
 </div>
 
-@if (KnownIonSet is not null && ShowIonSetDetails)
+@if (KnownIonSet is not null)
 {
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
         <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
@@ -77,15 +67,8 @@
     </svg>
 
     <div class="alert alert-primary" role="alert">
-        <h4 class="alert-heading">
-            Loaded Example Ion Set
-        </h4>
-        <hr />
-        <div>
-            <p>
-                <strong>@KnownIonSet.Name:</strong> @KnownIonSet.Details
-            </p>
-        </div>
+        <strong>The "@KnownIonSet.Name" ion set has been loaded.</strong>
+        @KnownIonSet.Details
     </div>
 }
 
@@ -124,10 +107,6 @@
                 <span class="input-group-text" id="basic-addon1">ºC</span>
                 <input type="text" class="form-control" @bind=TemperatureC>
             </div>
-        </div>
-        <div class="d-inline-block ms-2">
-            <input class="form-check-input" type="checkbox" @bind=ShowDetailsInTable />
-            <label class="form-check-label">Details</label>
         </div>
     </div>
 
@@ -247,8 +226,6 @@ else
 
     bool IsSolved => Calc is not null && Calc.BestSolution.MaxAbsoluteError <= 1;
 
-    bool ShowDetailsInTable { get; set; } = true;
-
     double TemperatureC { get; set; } = 25;
 
     bool IsIonTableError => !string.IsNullOrWhiteSpace(IonTableErrorMessage);
@@ -257,12 +234,12 @@ else
 
     IKnownIonSet? KnownIonSet { get; set; } = null;
 
-    bool ShowIonSetDetails = false;
-
     protected override void OnInitialized()
     {
         JSRuntime.InvokeVoidAsync("updateFooterMessage", $"LJPcalc {LjpCalculator.GetVersion()} running on .NET {Environment.Version}");
         LoadIonSet(new LJPcalc.Core.KnownIonSets.AxoBitsArticle());
+        KnownIonSet = null; // make it null so the message is not initially displayed
+
     }
 
     private void ValidateIonSet()
