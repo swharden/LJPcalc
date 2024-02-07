@@ -3,34 +3,27 @@
 
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>LJPcalc - Liquid Junction Potential (LJP) Calculator</title>
-    <link rel="icon" href="favicon.ico?v3" sizes="any">
-    <link href="css/bootstrap.min.css" rel="stylesheet" />
-    <link href="css/app.css" rel="stylesheet" />
-    <link href="css/blazor.css" rel="stylesheet" />
-    <link href="LJPcalc.Web.styles.css" rel="stylesheet" />
+    <link rel="icon" href="https://swharden.com/LJPcalc/favicon.ico" sizes="any">
     <meta name="theme-color" content="#204066">
     <meta name="description"
-        content="LJPcalc is a free and open-source Liquid Junction Potential (LJP) calculator that runs in the browser" />
+          content="LJPcalc is a free and open-source Liquid Junction Potential (LJP) calculator that runs in the browser" />
 
     <meta property="og:url" content="https://swharden.com/LJPcalc/">
     <meta property="og:type" content="website">
     <meta property="og:title" content="LJPcalc">
     <meta property="og:description" content="Liquid Junction Potential (LJP) calculator">
-    <meta property="og:image" content="https://swharden.com/LJPcalc/img/og-image.png">
+    <meta property="og:image" content="https://swharden.com/LJPcalc/og.png">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta property="twitter:domain" content="swharden.com">
     <meta property="twitter:url" content="https://swharden.com/LJPcalc/">
     <meta name="twitter:title" content="LJPcalc">
     <meta name="twitter:description" content="Liquid Junction Potential (LJP) calculator">
-    <meta name="twitter:image" content="https://swharden.com/LJPcalc/img/og-image.png">
+    <meta name="twitter:image" content="https://swharden.com/LJPcalc/og.png">
 
-    <!-- Clean Analytics -->
-    <script src="https://swharden.com/analytics/log.js" defer></script>
-    
-    <!-- Google analytics -->
     <script async src='https://www.googletagmanager.com/gtag/js?id=UA-560719-1'></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -39,182 +32,111 @@
         gtag('config', 'UA-560719-1');
     </script>
 
-    <script>
-        function updateFooterMessage(text) {
-            document.getElementById("footerMessage").innerText = text;
-        }
-    </script>
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <style>
-        .btn-primary {
-            --bs-btn-bg: #204066;
-            --bs-btn-border-color: #204066;
-            --bs-btn-hover-bg: #4f7aaf;
-            --bs-btn-hover-border-color: #4f7aaf;
-            --bs-btn-active-bg: #4f7aaf;
-            --bs-btn-active-border-color: #FFFFFFCC;
-            --bs-btn-disabled-bg: #4f7aaf;
-            --bs-btn-disabled-border-color: #4f7aaf;
-            --bs-btn-disabled-color: #FFFFFF99;
+
+        limited-width {
+            max-width: 800px;
         }
 
-        .btn-primary:focus {
-            box-shadow: none;
+        a {
+            text-decoration: none;
         }
 
-        .btn-outline-primary {
-            --bs-btn-color: #204066;
-            --bs-btn-bg: transparent;
-            --bs-btn-border-color: #204066;
-            --bs-btn-hover-bg: #4f7aaf;
-            --bs-btn-hover-border-color: #4f7aaf;
-            --bs-btn-active-bg: #4f7aaf;
-            --bs-btn-active-border-color: #FFFFFFCC;
+            a:hover {
+                text-decoration: underline;
+            }
+
+        .valid.modified:not([type=checkbox]) {
+            outline: 1px solid #26b050;
         }
 
-        .btn-outline-primary:focus {
-            box-shadow: none;
+        .invalid {
+            outline: 1px solid red;
+        }
+
+        .validation-message {
+            color: red;
+        }
+
+        #blazor-error-ui {
+            background: lightyellow;
+            bottom: 0;
+            box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+            display: none;
+            left: 0;
+            padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+
+            #blazor-error-ui .dismiss {
+                cursor: pointer;
+                position: absolute;
+                right: 0.75rem;
+                top: 0.5rem;
+            }
+
+        .blazor-error-boundary {
+            background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTYiIGhlaWdodD0iNDkiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIG92ZXJmbG93PSJoaWRkZW4iPjxkZWZzPjxjbGlwUGF0aCBpZD0iY2xpcDAiPjxyZWN0IHg9IjIzNSIgeT0iNTEiIHdpZHRoPSI1NiIgaGVpZ2h0PSI0OSIvPjwvY2xpcFBhdGg+PC9kZWZzPjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMCkiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzUgLTUxKSI+PHBhdGggZD0iTTI2My41MDYgNTFDMjY0LjcxNyA1MSAyNjUuODEzIDUxLjQ4MzcgMjY2LjYwNiA1Mi4yNjU4TDI2Ny4wNTIgNTIuNzk4NyAyNjcuNTM5IDUzLjYyODMgMjkwLjE4NSA5Mi4xODMxIDI5MC41NDUgOTIuNzk1IDI5MC42NTYgOTIuOTk2QzI5MC44NzcgOTMuNTEzIDI5MSA5NC4wODE1IDI5MSA5NC42NzgyIDI5MSA5Ny4wNjUxIDI4OS4wMzggOTkgMjg2LjYxNyA5OUwyNDAuMzgzIDk5QzIzNy45NjMgOTkgMjM2IDk3LjA2NTEgMjM2IDk0LjY3ODIgMjM2IDk0LjM3OTkgMjM2LjAzMSA5NC4wODg2IDIzNi4wODkgOTMuODA3MkwyMzYuMzM4IDkzLjAxNjIgMjM2Ljg1OCA5Mi4xMzE0IDI1OS40NzMgNTMuNjI5NCAyNTkuOTYxIDUyLjc5ODUgMjYwLjQwNyA1Mi4yNjU4QzI2MS4yIDUxLjQ4MzcgMjYyLjI5NiA1MSAyNjMuNTA2IDUxWk0yNjMuNTg2IDY2LjAxODNDMjYwLjczNyA2Ni4wMTgzIDI1OS4zMTMgNjcuMTI0NSAyNTkuMzEzIDY5LjMzNyAyNTkuMzEzIDY5LjYxMDIgMjU5LjMzMiA2OS44NjA4IDI1OS4zNzEgNzAuMDg4N0wyNjEuNzk1IDg0LjAxNjEgMjY1LjM4IDg0LjAxNjEgMjY3LjgyMSA2OS43NDc1QzI2Ny44NiA2OS43MzA5IDI2Ny44NzkgNjkuNTg3NyAyNjcuODc5IDY5LjMxNzkgMjY3Ljg3OSA2Ny4xMTgyIDI2Ni40NDggNjYuMDE4MyAyNjMuNTg2IDY2LjAxODNaTTI2My41NzYgODYuMDU0N0MyNjEuMDQ5IDg2LjA1NDcgMjU5Ljc4NiA4Ny4zMDA1IDI1OS43ODYgODkuNzkyMSAyNTkuNzg2IDkyLjI4MzcgMjYxLjA0OSA5My41Mjk1IDI2My41NzYgOTMuNTI5NSAyNjYuMTE2IDkzLjUyOTUgMjY3LjM4NyA5Mi4yODM3IDI2Ny4zODcgODkuNzkyMSAyNjcuMzg3IDg3LjMwMDUgMjY2LjExNiA4Ni4wNTQ3IDI2My41NzYgODYuMDU0N1oiIGZpbGw9IiNGRkU1MDAiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvZz48L3N2Zz4=) no-repeat 1rem/1.8rem, #b32121;
+            padding: 1rem 1rem 1rem 3.7rem;
+            color: white;
+        }
+
+            .blazor-error-boundary::after {
+                content: "An error has occurred."
+            }
+
+        .loading-progress-text {
+            font-size: 2em;
+            color: #204066;
+            font-weight: 600;
+        }
+
+            .loading-progress-text:after {
+                content: var(--blazor-load-percentage-text, "Loading");
+            }
+
+        code {
+            color: #c02d76;
         }
     </style>
 </head>
 
 <body>
 
-    <header class="text-light py-3" style="background-color: #204066;">
-        <div class="container-fluid" style="max-width: 1000px;">
-            <div class="d-flex align-items-center">
-                <!--
-                    <img class="me-3" src="img/logo.png" width="70" height="70" style="" />
-                -->
+    <header style="background-color: #204066;" class="py-3">
+        <div class="container limited-width">
+            <h1 class="mb-0" style="font-weight: 400; font-size: 3em;">
+                <a href="https://swharden.com/LJPcalc/" class="text-light">
+                    LJPcalc
+                </a>
+            </h1>
+            <div class="d-flex flex-wrap" style="opacity: .5; color: #CCC;">
+                <div>Liquid Junction Potential Calculator&nbsp;</div>
                 <div>
-                    <h1 class="mb-0" style="font-weight: 400; font-size: 3em;">
-                        <a href="./" class="text-light">
-                            LJPcalc
-                        </a>
-                    </h1>
-                    <div class="d-flex flex-wrap" style="opacity: .5; color: #CCC;">
-                        <div>Liquid Junction Potential Calculator&nbsp;</div>
-                        <div>
-                            by
-                            <a href="https://swharden.com/about/" class="text-light">Scott Harden</a> and
-                            <a href="https://sites.google.com/site/dbrogioli/" class="text-light">Doriano Brogioli</a>
-                        </div>
-                    </div>
+                    by
+                    <a href="https://swharden.com/about/" class="text-light">Scott Harden</a> and
+                    <a href="https://scholar.google.it/citations?user=z6YK4YoAAAAJ" class="text-light">Doriano Brogioli</a>
                 </div>
             </div>
         </div>
     </header>
 
-    <main class="" style="padding-bottom: 5em;">
+    <main class="container limited-width">
+        <div id="app">
 
-        <div class="container-fluid" style="max-width: 1000px;">
-            <div id="app">
-                <div class="my-5">
-                    <h2>Loading...</h2>
-                    <div class="progress mt-2" style="height: 2em;">
-                        <div id="progressbar" class="progress-bar progress-bar-striped progress-bar-animated"
-                            style="width: 10%; background-color: #204066;"></div>
-                    </div>
-                    <div>
-                        <span id="progressLabel" class="text-muted">Downloading file list</span>
+            <!-- loading spinner -->
+            <div class="my-5 text-center" style="height: 300px;">
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border" style="width: 3rem; height: 3rem; color: #204066;" role="status">
+                        <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>
+                <div class="loading-progress-text"></div>
             </div>
 
-            <section class="my-5">
-                <h2>Calculation Method</h2>
-                <p>
-                    <strong>
-                        LJPcalc calculates the liquid junction potential
-                        according to the stationary Nernst-Planck equation
-                    </strong>
-
-                    which is typically regarded as superior to the simpler Henderson equation used by most commercial
-                    LJP calculators (<a href="https://arxiv.org/abs/1403.3640">Marino et al., 2014</a>).
-                    Both equations produce similar values, but the Henderson equation under-estimates
-                    the junction potential as ion concentrations increase (especially when solutions contain polyvalent
-                    ions).
-                    For these reasons the LJP reported by LJPcalc may be slightly greater in magnitude
-                    than that reported by other LJP calculators.
-                </p>
-            </section>
-
-            <section class="my-5">
-                <h2>Final Concentrations</h2>
-
-                <p>
-                    <strong>
-                        LJPcalc slightly adjusts ion concentrations as it calculates LJP.
-                    </strong>
-                    LJPcalc works to identify a solution that minimizes the difference between the
-                    adjusted concentrations and the user-provided concentrations. Except for the penultimate ion,
-                    only concentrations on side B are adjusted while calculating LJP.
-
-                    A solution is considered
-                    found when all adjusted side B concentrations are so close to the user-provided concentrations
-                    that the difference no longer has a significant influence on LJP.
-
-                    Note that the side A or side B concentration for the final and penultimate ions (respectively)
-                    may be adjusted to achieve electroneutrality.
-                </p>
-            </section>
-
-            <section class="my-5">
-                <h2>Ion Order</h2>
-                <p>
-                    <strong>
-                        LJPcalc automatically sorts the ions into an ideal order before calculating LJP.
-                    </strong>
-                    This is why the ions listed in the results table may appear
-                    in a different order than originally provided.
-
-                    The ion with the largest concentration difference is moved to the final position,
-                    and its side A concentration may be adjusted as needed to achieve electroneutrality.
-
-                    The remaining ion with the largest side B concentration is moved to the penultimate position,
-                    and its side B concentration is be adjusted as needed to achieve electroneutrality.
-
-                    Taken together, the ion-order-specific adjustments made to side B concentrations during the
-                    solving process is why the calculated LJP often differs by a few microvolts when the original
-                    list of ions is arranged in a different order.
-                </p>
-            </section>
-
-            <section class="my-5">
-                <h2>Calculation Time</h2>
-                <p>
-                    <strong>
-                        Some ion sets are more difficult to analyze than others and may take longer to arrive at a
-                        solution.
-                    </strong>
-
-                    Users experiencing long calculation times are encouraged to re-sort the ion list randomly and try
-                    again.
-                    If the calculation runs
-                    for a very long time without producing a solution, consider omitting ions with the smallest
-                    concentrations
-                    since they do not contribute greatly to LJP anyway.
-
-                    Although I am not aware of any ion sets that LJPcalc cannot solve, if you think you have found one
-                    you are invited to share via email
-                    <a href="mailto:swharden@gmail.com">swharden@gmail.com</a> or by creating a
-                    <a href="https://github.com/swharden/LJPcalc/issues">GitHub issue</a> and include a copy of
-                    the ion table you are trying to solve including the temperature.
-                </p>
-            </section>
-
-            <section class="my-5">
-                <h2 id="citing">Citing LJPcalc</h2>
-                <p>
-                    <strong>If you enjoy LJPcalc, consider citing it by name:</strong>
-                    <span class="fst-italic">
-                        Liquid junction potential was calculated according to the stationary Nernst–Planck equation
-                        (<a href="https://arxiv.org/abs/1403.3640">Marino et al., 2014</a>)
-                        using LJPcalc software (<a
-                            href="https://swharden.com/LJPcalc">https://swharden.com/LJPcalc</a>).
-                    </span>
-                </p>
-            </section>
         </div>
 
         <div id="blazor-error-ui">
@@ -223,63 +145,112 @@
             <a class="dismiss">🗙</a>
         </div>
 
+        <section class="my-5">
+            <h2 id="citing">Citing LJPcalc</h2>
+            <p>
+                <strong>If you enjoy LJPcalc, consider citing it by name:</strong>
+                <span class="fst-italic">
+                    Liquid junction potential was calculated according to the stationary Nernst–Planck equation
+                    (<a href="https://arxiv.org/abs/1403.3640">Marino et al., 2014</a>)
+                    using LJPcalc software (<a href="https://swharden.com/LJPcalc">https://swharden.com/LJPcalc</a>).
+                </span>
+            </p>
+        </section>
+
+        <section class="my-5">
+            <h2>Calculation Method</h2>
+            <p>
+                <strong>
+                    LJPcalc calculates the liquid junction potential
+                    according to the stationary Nernst-Planck equation
+                </strong>
+
+                which is typically regarded as superior to the simpler Henderson equation used by most commercial
+                LJP calculators (<a href="https://arxiv.org/abs/1403.3640">Marino et al., 2014</a>).
+                Both equations produce similar values, but the Henderson equation under-estimates
+                the junction potential as ion concentrations increase (especially when solutions contain polyvalent
+                ions).
+                For these reasons the LJP reported by LJPcalc may be slightly greater in magnitude
+                than that reported by other LJP calculators.
+            </p>
+        </section>
+
+        <section class="my-5">
+            <h2>Final Concentrations</h2>
+
+            <p>
+                <strong>
+                    LJPcalc slightly adjusts ion concentrations as it calculates LJP.
+                </strong>
+                LJPcalc works to identify a solution that minimizes the difference between the
+                adjusted concentrations and the user-provided concentrations. Except for the penultimate ion,
+                only concentrations on side B are adjusted while calculating LJP.
+
+                A solution is considered
+                found when all adjusted side B concentrations are so close to the user-provided concentrations
+                that the difference no longer has a significant influence on LJP.
+
+                Note that the side A or side B concentration for the final and penultimate ions (respectively)
+                may be adjusted to achieve electroneutrality.
+            </p>
+        </section>
+
+        <section class="my-5">
+            <h2>Ion Order</h2>
+            <p>
+                <strong>
+                    LJPcalc automatically sorts the ions into an ideal order before calculating LJP.
+                </strong>
+                This is why the ions listed in the results table may appear
+                in a different order than originally provided.
+
+                The ion with the largest concentration difference is moved to the final position,
+                and its side A concentration may be adjusted as needed to achieve electroneutrality.
+
+                The remaining ion with the largest side B concentration is moved to the penultimate position,
+                and its side B concentration is be adjusted as needed to achieve electroneutrality.
+
+                Taken together, the ion-order-specific adjustments made to side B concentrations during the
+                solving process is why the calculated LJP often differs by a few microvolts when the original
+                list of ions is arranged in a different order.
+            </p>
+        </section>
+
+        <section class="my-5">
+            <h2>Calculation Time</h2>
+            <p>
+                <strong>
+                    Some ion sets are more difficult to analyze than others and may take longer to arrive at a
+                    solution.
+                </strong>
+
+                Users experiencing long calculation times are encouraged to re-sort the ion list randomly and try
+                again.
+                If the calculation runs
+                for a very long time without producing a solution, consider omitting ions with the smallest
+                concentrations
+                since they do not contribute greatly to LJP anyway.
+
+                Although I am not aware of any ion sets that LJPcalc cannot solve, if you think you have found one
+                you are invited to share via email
+                <a href="mailto:swharden@gmail.com">swharden@gmail.com</a> or by creating a
+                <a href="https://github.com/swharden/LJPcalc/issues">GitHub issue</a> and include a copy of
+                the ion table you are trying to solve including the temperature.
+            </p>
+        </section>
+
     </main>
 
-    <footer class="p-3" style="opacity: .5;">
-        <div class="container-fluid" style="max-width: 1000px; font-size: .9em;">
-            <div class="text-center">
-                <div id="footerMessage">
-                    LJPcalc running on .NET
-                </div>
-                <div>
-                    <a href="https://github.com/swharden/LJPcalc"
-                        class="text-dark">https://github.com/swharden/LJPcalc</a>
-                </div>
-            </div>
+    <footer class="my-5">
+        <div class="text-center" style="opacity: .5;">
+            LJPcalc 2.2.0 running on .NET 8
+            <br />
+            <a href="https://github.com/swharden/LJPcalc" class="text-dark">https://github.com/swharden/LJPcalc</a>
         </div>
     </footer>
 
-    <script src="js/bootstrap.bundle.min.js"></script>
-
-    <script src="_framework/blazor.webassembly.js?version=net6.0" autostart="false"></script>
-
-    <script>
-        function StartBlazor() {
-            let loadedCount = 0;
-            const resourcesToLoad = [];
-            Blazor.start({
-                loadBootResource:
-                    function (type, filename, defaultUri, integrity) {
-                        if (type == "dotnetjs")
-                            return defaultUri;
-
-                        const fetchResources = fetch(defaultUri, {
-                            cache: 'no-cache',
-                            integrity: integrity,
-                            headers: { 'MyCustomHeader': 'My custom value' }
-                        });
-
-                        resourcesToLoad.push(fetchResources);
-
-                        fetchResources.then((r) => {
-                            loadedCount += 1;
-                            if (filename == "blazor.boot.json")
-                                return;
-                            const totalCount = resourcesToLoad.length;
-                            const percentLoaded = 10 + parseInt((loadedCount * 90.0) / totalCount);
-                            const progressbar = document.getElementById('progressbar');
-                            progressbar.style.width = percentLoaded + '%';
-                            const progressLabel = document.getElementById('progressLabel');
-                            progressLabel.innerText = `Downloading ${loadedCount}/${totalCount}: ${filename}`;
-                        });
-
-                        return fetchResources;
-                    }
-            });
-        }
-
-        StartBlazor();
-    </script>
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 
 </html>

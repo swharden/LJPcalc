@@ -1,4 +1,9 @@
-﻿@using LJPcalc.Core;
+﻿@page "/"
+
+<PageTitle>LJPcalc</PageTitle>
+
+@using LJPcalc.Core;
+@using LJPcalc.Web.Shared
 
 @inject IJSRuntime JSRuntime
 
@@ -53,7 +58,7 @@
                     <td>@ion.InitialCL</td>
                     <td>
                         <a data-bs-toggle="modal" data-bs-target="#editIonModal" style="cursor: pointer"
-                       @onclick="@(()=>EditIon(ionIndex))">
+                           @onclick="@(()=>EditIon(ionIndex))">
                             ✏️
                         </a>
                     </td>
