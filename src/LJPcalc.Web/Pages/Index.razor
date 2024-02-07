@@ -24,11 +24,11 @@
                     <span class="fw-normal">S·cm<sup>2</sup>/mol</span>
                 </th>
                 <th>
-                    <span class="fw-strong">A</span><br />
+                    <span class="fw-strong">@NameA</span><br />
                     <span class="fw-normal">mM</span>
                 </th>
                 <th>
-                    <span class="fw-strong">B</span><br />
+                    <span class="fw-strong">@NameB</span><br />
                     <span class="fw-normal">mM</span>
                 </th>
                 <th>Edit</th>
@@ -58,34 +58,11 @@
     </table>
 </div>
 
-@if (KnownIonSet is not null)
-{
-    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-        <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
-        </symbol>
-    </svg>
-
-    <div class="alert alert-primary" role="alert">
-        <strong>The "@KnownIonSet.Name" ion set has been loaded.</strong>
-        @KnownIonSet.Details
-    </div>
-}
-
 <EditIonModal @ref="MyEditIonModal" OnSaveIon="EditedIonSave" />
 
 <EditTextModal @ref="MyEditTextModal" OnSave="@EditedTextSave" />
 
-<div class="d-flex justify-content-between">
-
-    <div>
-        <div class="d-inline-block">
-            <div class="input-group" style="width: 100px;">
-                <span class="input-group-text" id="basic-addon1">ºC</span>
-                <input type="text" class="form-control" @bind=TemperatureC>
-            </div>
-        </div>
-    </div>
+<div class="d-flex justify-content-end">
 
     <div class="mb-4">
         <div class="dropdown d-inline-block">
@@ -147,25 +124,46 @@
     </div>
 </div>
 
+<div class="d-flex py-3 align-items-center flex-wrap">
+    <div>
+        Model
+    </div>
+    <select class="form-select w-auto mx-2" @onchange=DoStuff>
+        <option value="cell">a cell</option>
+        <option value="solution">liquids</option>
+    </select>
+    <div>
+        at
+    </div>
+    <div class="input-group mx-2" style="width: 6em;">
+        <input type="text" class="form-control" @bind=TemperatureC>
+        <span class="input-group-text" id="basic-addon1">ºC</span>
+    </div>
+
+    @if (ContinueCalculating)
+    {
+        <button class="btn btn-secondary" @onclick=CalcStop>Calculating...</button>
+    }
+    else
+    {
+        <button class="btn btn-primary" @onclick=CalcStart disabled=@IsIonTableError>Calculate LJP</button>
+    }
+</div>
+
 @if (IsIonTableError)
 {
     <ErrorAlert Title="Error" Message=@IonTableErrorMessage />
 }
 
-@if (ContinueCalculating)
+@if (KnownIonSet is not null)
 {
-    <button class="btn btn-primary" type="button" disabled>
-        Calculating...
-        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-    </button>
-    <button class="btn btn-primary ms-1" @onclick=CalcStop>Stop</button>
-}
-else
-{
-    <button class="btn btn-primary" @onclick=CalcStart disabled=@IsIonTableError>Calculate LJP</button>
+    <div class="alert alert-primary text-break" role="alert">
+        <strong>The "@KnownIonSet.Name" ion set has been loaded.</strong>
+        @KnownIonSet.Details
+    </div>
 }
 
-<LjpResultTable LatestResult="LatestResult" BestResult="BestResult" />
+<LjpResultTable LatestResult="LatestResult" BestResult="BestResult" NameA="@NameA" NameB="@NameB" />
 
 @if (Calc is not null)
 {
@@ -203,6 +201,9 @@ else
     string IonTableErrorMessage { get; set; } = string.Empty;
 
     IKnownIonSet? KnownIonSet { get; set; } = null;
+
+    string NameA { get; set; } = "In";
+    string NameB { get; set; } = "Out";
 
     protected override void OnInitialized()
     {
@@ -246,6 +247,7 @@ else
 
     private async Task CalcStart()
     {
+        KnownIonSet = null;
         ContinueCalculating = true;
         await Task.Delay(1); // helps ensure a screen refresh happens
         StateHasChanged();
@@ -374,5 +376,19 @@ else
         ClearResults();
         ValidateIonSet();
         KnownIonSet = null;
+    }
+
+    private void DoStuff(ChangeEventArgs e)
+    {
+        if ($"{e.Value}" == "cell")
+        {
+            NameA = "In";
+            NameB = "Out";
+        }
+        else if ($"{e.Value}" == "solution")
+        {
+            NameA = "A";
+            NameB = "B";
+        }
     }
 }
