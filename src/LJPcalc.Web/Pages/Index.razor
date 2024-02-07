@@ -110,18 +110,13 @@
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
                 <li>
-                    <button class="dropdown-item" type="button" onclick="@(()=>{Ions = Ions.OrderBy(x=>x.Name).ToArray();})">
-                        Sort Alphabetically
-                    </button>
-                </li>
-                <li>
                     <button class="dropdown-item" type="button" onclick="@(()=>{Ions = Ions.OrderBy(x=>x.C0 + x.CL).ToArray();})">
-                        Sort by Concentration
+                        By Concentration
                     </button>
                 </li>
                 <li>
                     <button class="dropdown-item" type="button" onclick="@(()=>{Ions = Ions.OrderBy(x=>Random.Shared.NextDouble()).ToArray();})">
-                        Sort Randomly
+                        Randomize
                     </button>
                 </li>
             </ul>
