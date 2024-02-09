@@ -313,9 +313,10 @@ public static class IonLibrary
             MakeReferenceIonScaledToK("3-AP (3-aminopyridine)", +1, 0.46),
             MakeReferenceIonScaledToK("4-AP (4-aminopyridine)", +2, 0.29),
 
-            // TODO: decide how to report GTP, whose mobility is not reported last I checked
-            // https://github.com/swharden/LJPcalc/issues/25
-            MakeReferenceIon("GTP", 1, 0),
+            // NOTE: I'm struggling to locate a source for GTP electromobility so I'm copying ATP
+            MakeReferenceIonScaledToK("GTP (Guanosine-5'-triphosphate)", -2, 0.15),
+            MakeReferenceIonScaledToK("GTP (Guanosine-5'-triphosphate)", -3, 0.15),
+            MakeReferenceIonScaledToK("GTP (Guanosine-5'-triphosphate)", -4, 0.15),
 
             // By listing such molecules here we confirm we know they exist,
             // and remind users they are probably not important for caculating LJP.
