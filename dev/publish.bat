@@ -1,0 +1,1 @@
+dotnet publish ../src/LJPcalc.Web/ -o www
