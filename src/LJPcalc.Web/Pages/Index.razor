@@ -140,14 +140,16 @@
         <span class="input-group-text" id="basic-addon1">ºC</span>
     </div>
 
-    @if (ContinueCalculating)
-    {
-        <button class="btn btn-secondary" @onclick=CalcStop>Calculating...</button>
-    }
-    else
-    {
-        <button class="btn btn-primary" @onclick=CalcStart disabled=@IsIonTableError>Calculate LJP</button>
-    }
+    <div class="my-3">
+        @if (ContinueCalculating)
+        {
+            <button class="btn btn-secondary" @onclick=CalcStop>Calculating...</button>
+        }
+        else
+        {
+            <button class="btn btn-primary" @onclick=CalcStart disabled=@IsIonTableError>Calculate LJP</button>
+        }
+    </div>
 </div>
 
 @if (IsIonTableError)
