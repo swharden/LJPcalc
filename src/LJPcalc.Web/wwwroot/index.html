@@ -298,6 +298,47 @@
             </p>
         </section>
 
+        <section class="my-5" id="buffers-and-chelators">
+            <h2><a href="#buffers-and-chelators">Buffers and Chelators</a></h2>
+
+            <p>
+                <strong>EGTA:</strong>
+                Calcium chelators like EGTA bind calcium,
+                lowering the concentration of free charged EGTA and calcium.
+                Since only charged molecules influence LJP, the chelated EGTA and calcium
+                can be removed from the LJP calculations.
+
+                For example, consider a solution with 5 mM EGTA and 2 mM Ca<sup>2+</sup> at pH 7.4.
+                At this pH virtually all EGTA is in the form EGTA<sup>2-</sup>,
+                and it will bind all 2 mM of available Ca<sup>2+</sup>, bringing free Ca<sup>2+</sup>
+                concentration effectively to zero, and leaving 3 mM EGTA<sup>2-</sup> in solution.
+            </p>
+
+            <p>
+                <strong>HEPES:</strong>
+                Similarly, pH buffers must be considered for their ability to affect the milieu of ions in a solution.
+
+                As a zwitterion, free HEPES does not have a net charge, but its dipolarity allows it to
+                donate a proton to bases in solution, converting a neutral HEPES molecule into
+                its conjugate base, resulting in a HEPES molecule with a negative charge.
+
+                For example, consider a solution with 7 mM HEPES and 5 mM NaOH at pH 7.4.
+
+                The NaOH will disassociate into 5 mM Na<sup>1+</sup> and 5 mM OH<sup>1-</sup>, then
+                the uncharged HEPES will protonate the 5 mM OH<sup>1-</sup>, 
+                transforming 5 mM of the HEPES into the HEPES<sup>-1</sup> form.
+
+                The final solution is expected to contain 5 mM HEPES<sup>1-</sup>, 5 mM Na<sup>1+</sup>,
+                in addition to 2 mM uncharged HEPES and 5 mM H<sub>2</sub>O, neither of which contribute to LJP
+                because they have no charge.
+            </p>
+
+            <p>
+
+
+            </p>
+        </section>
+
         <section class="my-5" id="citing">
             <h2><a href="#citing">Citing LJPcalc</a></h2>
             <p>
