@@ -3,6 +3,7 @@
 @if (LatestResult is not null && BestResult is not null)
 {
     string ljpPrettyMillivolts = (BestResult.LjpMillivolts > 0 ? "+" : "") + $"{BestResult.LjpMillivolts:N3}";
+    string ljpPrettyMillivolts2 = $"{-70 - BestResult.LjpMillivolts:N3}";
 
     bool isSolved = BestResult.Error <= 1;
 
@@ -25,6 +26,28 @@
                 </div>
             </div>
             <div>Optimizing &Phi; to minimize solution B concentration error...</div>
+        </div>
+    }
+
+    @if (NameA == "In")
+    {
+        <div>
+            <strong>Note regarding cellular physiology experiments:</strong>
+            LJP reported is that of the bath relative to the pipette.
+            If an amplifier is "zeroed" when the pipette is in the bath,
+            a persistent voltage offset equal to the LJP will be present
+            in all readings made after the pipette is inserted into a cell.
+            To correct for this error, subtract the calculated LJP from all
+            voltage readings reported by the amplifier to yield the actual
+            voltage. For example, a cell measured at -70 mV
+            with a @ljpPrettyMillivolts mV LJP is actually at
+            @ljpPrettyMillivolts2 mV.
+        </div>
+    }
+    else
+    {
+        <div>
+            LJP reported is that of solution B relative to solution A.
         </div>
     }
 
