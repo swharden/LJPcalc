@@ -99,7 +99,22 @@
 
     public double Conductivity { get; set; }
 
-    public string Mobility { get => $"{Constants.Mobility(Conductivity, Charge):0.000E+0}"; set { return; } }
+    public string Mobility
+    {
+        get
+        {
+            double m = Constants.Mobility(Conductivity, Charge);
+
+            if (double.IsNaN(m))
+                return "0";
+
+            if (m == 0)
+                return "0";
+
+            return $"{m:0.000E+0}";
+        }
+        set { return; }
+    }
 
     public double ConcentrationA { get; set; }
 
@@ -156,6 +171,15 @@
 
     private void Validate()
     {
+        if (Charge == 0)
+        {
+            ValidationError = "Uncharged Molecule";
+            ValidationErrorDetails = "LJP is only affected by " +
+                "molecules which are charged in solution. If a molecule has " +
+                "no charge, it can be omitted from LJP calculations.";
+            return;
+        }
+
         if (ConcentrationA == 0 && ConcentrationB == 0)
         {
             ValidationError = "Zero Concentration";

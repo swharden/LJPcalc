@@ -313,13 +313,17 @@ public static class IonLibrary
             MakeReferenceIonScaledToK("3-AP (3-aminopyridine)", +1, 0.46),
             MakeReferenceIonScaledToK("4-AP (4-aminopyridine)", +2, 0.29),
 
+            // TODO: decide how to report GTP, whose mobility is not reported last I checked
+            // https://github.com/swharden/LJPcalc/issues/25
+            MakeReferenceIon("GTP", 1, 0),
+
             // By listing such molecules here we confirm we know they exist,
             // and remind users they are probably not important for caculating LJP.
-            MakeReferenceIon("GTP", 1, 0),
-            MakeReferenceIon("Glucose", 1, 0),
-            MakeReferenceIon("Sucrose", 1, 0),
-            MakeReferenceIon("Dextrose", 1, 0),
-            MakeReferenceIon("Phosphocreatine", 1, 0),
+            MakeReferenceIon("Glucose", 0, 0),
+            MakeReferenceIon("Sucrose", 0, 0),
+            MakeReferenceIon("Dextrose", 0, 0),
+            MakeReferenceIon("Phosphocreatine", 0, 0),
+            MakeReferenceIon("HEPES", 0, 0),
         };
 
         if (removeDuplicates)
