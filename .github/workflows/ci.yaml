@@ -27,3 +27,12 @@ jobs:
         run: dotnet test src --no-build
       - name: 🛠️ Build Website
         run: dotnet publish ./src/LJPcalc.Web --output ./public --configuration Release
+      - name: 🔑 Load SSH Keys
+        run: |
+          install -m 600 -D /dev/null ~/.ssh/id_rsa
+          echo "${{ secrets.PRIVATE_SSH_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+      - name: 🚀 Deploy WASM
+        run: rsync --archive --delete --stats -e 'ssh -p 18765' './public/wwwroot/_framework/' 'swharden.com@ssh.swharden.com:~/www/swharden.com/public_html/LJPcalc/_framework/'
+      - name: 🚀 Deploy index.html
+        run: rsync -e 'ssh -p 18765' './public/wwwroot/index.html' 'swharden.com@ssh.swharden.com:~/www/swharden.com/public_html/LJPcalc/index.html'
