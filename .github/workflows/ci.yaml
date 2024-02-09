@@ -31,10 +31,9 @@ jobs:
         run: |
           install -m 600 -D /dev/null ~/.ssh/id_rsa
           echo "${{ secrets.PRIVATE_SSH_KEY }}" > ~/.ssh/id_rsa
-          echo "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
       - name: 🚀 Deploy WASM
-        run: rsync --archive --delete --stats -e 'ssh -p 18765' './public/wwwroot/_framework/' 'swharden.com@ssh.swharden.com:~/www/swharden.com/public_html/LJPcalc/_framework/'
+        run: rsync --archive --delete --stats -e 'ssh -p 18765 -o StrictHostKeyChecking=no' './public/wwwroot/_framework/' 'swharden.com@ssh.swharden.com:~/www/swharden.com/public_html/LJPcalc/_framework/'
       - name: 🚀 Deploy index.html
-        run: rsync -e 'ssh -p 18765' './public/wwwroot/index.html' 'swharden.com@ssh.swharden.com:~/www/swharden.com/public_html/LJPcalc/index.html'
+        run: rsync -e 'ssh -p 18765 -o StrictHostKeyChecking=no' './public/wwwroot/index.html' 'swharden.com@ssh.swharden.com:~/www/swharden.com/public_html/LJPcalc/index.html'
       - name: 🧹 Clear Cache
         run: ssh swharden.com@ssh.swharden.com -p 18765 "site-tools-client domain update id=1 flush_cache=1"
