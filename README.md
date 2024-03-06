@@ -8,6 +8,10 @@
 
 [![](dev/website.png)](https://swharden.com/software/LJPcalc/app)
 
+## Citing LJPcalc
+
+**If you enjoy LJPcalc, consider citing it by name:** Liquid junction potential was calculated according to the stationary Nernst–Planck equation ([Marino et al., 2014](https://arxiv.org/abs/1403.3640)) using LJPcalc (https://swharden.com/LJPcalc/, RRID:SCR_025044).
+
 ## History
 LJPcalc was created by [Scott Harden](http://swharden.com/) as a C#/.NET adaptation of the Java application [JLJP](https://github.com/swharden/JLJP) originally written by [Doriano Brogioli](https://sites.google.com/site/dbrogioli/) as described in [Marino et al., 2014](https://arxiv.org/abs/1403.3640).
 
