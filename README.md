@@ -8,7 +8,7 @@
 
 ## Citing LJPcalc
 
-**If you enjoy LJPcalc, consider citing it by name:** Liquid junction potential was calculated according to the stationary Nernst–Planck equation ([Marino et al., 2014](https://arxiv.org/abs/1403.3640)) using LJPcalc (https://swharden.com/LJPcalc/, [RRID:SCR_025044](https://scicrunch.org/resources)).
+**If you enjoy LJPcalc, consider citing it by name:** Liquid junction potential was calculated according to the stationary Nernst–Planck equation ([Marino et al., 2014](https://arxiv.org/abs/1403.3640)) using LJPcalc (https://swharden.com/LJPcalc/, [RRID:SCR_025044](https://scicrunch.org/resolver/SCR_025044)).
 
 [Search "LJPcalc" on Google Scholar](https://scholar.google.com/scholar?q=ljpcalc) to see publications that cite LJPcalc.
 
